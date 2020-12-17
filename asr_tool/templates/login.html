@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <form action="" method="post">
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+         <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+        <input  type="submit" value="Login">
+      </form>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          {{ messages[0] }}
+      {% endif %}
+  {% endwith %}
+    </div>
+  </body>
+</html>

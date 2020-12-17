@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {{ messages[0] }}.</a>.
+        {% endif %}
+    {% endwith %}
+<form method="POST" action="/signup">
+        <form method="POST" action="/signup">
+            <div class="field">
+                <input type="email" name="email" placeholder="Email" autofocus="">
+            </div>
+
+            <div class="field">
+                <input type="text" name="name" placeholder="Name" autofocus="">
+            </div>
+
+            <div class="field">
+                <input type="password" name="password" placeholder="Password">
+            </div>
+
+            <!-- <iframe src="/static/consent_form.pdf"></iframe> -->
+            <object data="/static/consent_form.pdf" type="application/pdf">
+                <embed src="/static/consent_form.pdf" type="application/pdf" />
+            </object>
+
+            <div class="field">
+                <p><input type="checkbox" name="consent" placeholder="">I acknowledge etc</p>
+            </div>
+
+            <button>Sign Up</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
