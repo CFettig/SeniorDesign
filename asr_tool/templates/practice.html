@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %} 
-<img src="/static/images/img.jpg" width="50%">
-<a id="start-button" href="#">Stop</a>
-<textarea>
-    The picture is a possible prompt the learner can use as a starting point. 
-    Their speech will appear as text here as they talk.
-</textarea>
+    <script src="{{ url_for('static', filename='js/speech_to_text.js') }}"></script>
+
+    <img src="/static/images/img.jpg" width="50%">
+
+    <button type="button" id="mic-toggle" onclick="start_recording()">Record</button>
+
+    <span id="display-text"></span>
+    <span id="interim-text"></span>
 {% endblock %}

@@ -7,17 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ASR Tool</title>
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" /> -->
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- <script src="{{ url_for('static', filename='js/speech_to_text.js') }}"></script> -->
 </head>
 
 <body>
             <a href="{{ url_for('main.index') }}" class="navbar-item">
                 Home
             </a>
-            <a href="{{ url_for('main.profile') }}" class="navbar-item">
-                Profile
-            </a>
             {% if session['logged_in'] %}
+                <a href="{{ url_for('main.profile') }}" class="navbar-item">
+                    Profile
+                </a>
                 <a href="{{ url_for('main.practice') }}" class="navbar-item">
                     Practice
                 </a>
@@ -36,6 +37,6 @@
         {% block content %}
         {% endblock %}
         <!-- <div id="footer"> -->
-            <p class="blue">Claire Fettig & Simon Markus, 2021</p>
+            <p>Claire Fettig & Simon Markus, 2021</p>
         <!-- </div> -->
 </body>
