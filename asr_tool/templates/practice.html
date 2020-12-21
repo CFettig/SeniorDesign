@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 {% block content %} 
-    <script src="{{ url_for('static', filename='js/speech_to_text.js') }}"></script>
-
     <img src="/static/images/img.jpg" width="50%">
 
     <button type="button" id="mic-toggle" onclick="start_recording()">Record</button>
 
     <span id="display-text"></span>
     <span id="interim-text"></span>
+
+
+    <div id="context-menu" style="display: none"> 
+    <ul> 
+        <li id="user-selection"></li>
+        <li><a href="#">Element-1</a></li> 
+    </ul> 
+    </div> 
+
+    <script src="{{ url_for('static', filename='js/speech_to_text.js') }}"></script>
+
 {% endblock %}

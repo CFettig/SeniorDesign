@@ -44,3 +44,28 @@ asr.onresult = function(event) {
   display_text.innerHTML += transcript;
   interim_text.innerHTML = interim;
 }
+
+//custom context menu for selecting similar words
+var clickArea = document.getElementById('display-text')
+// console.log("clicked " + clickArea)
+clickArea.oncontextmenu = rightClick
+
+
+function rightClick(e) {
+  e.preventDefault();
+
+  context = document.getElementById('context-menu')
+
+  if (context.style.display == "block") {
+    document.getElementById('user-selection').innerHTML = ""
+    context.style.display = "none"
+  }
+  else {
+    var select = window.getSelection().toString();
+    document.getElementById('user-selection').innerHTML = "Wrong word: " + select
+
+    context.style.display = "block"
+    context.style.left = e.pageX + "px"; 
+    context.style.top = e.pageY + "px"; 
+  }
+}
