@@ -26,7 +26,7 @@ function stop_recording() {
 }
 
 asr.onresult = function(event) {
-  display_text = document.getElementById('display-text');
+  display_text = document.getElementById('final-text');
   interim_text = document.getElementById('interim-text');
   var transcript = '';
   var interim = '';
@@ -46,7 +46,7 @@ asr.onresult = function(event) {
 }
 
 //custom context menu for selecting similar words
-var clickArea = document.getElementById('display-text')
+var clickArea = document.getElementById('text-display')
 // console.log("clicked " + clickArea)
 clickArea.oncontextmenu = rightClick
 

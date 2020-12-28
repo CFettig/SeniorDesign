@@ -15,3 +15,7 @@ a {
 #context-menu::active {
     display: block;
 }
+
+#navbar #footer {
+    display: block;
+}
