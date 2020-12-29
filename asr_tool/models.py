@@ -21,3 +21,9 @@ class Transcript(db.Model):
     text = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
+
+    def serialize(self):
+        return {"id": self.id,
+                "text": self.text,
+                "user_id": self.user_id
+                }

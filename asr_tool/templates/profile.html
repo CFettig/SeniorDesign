@@ -4,4 +4,10 @@
 <h1 class="title">
   {{ name }}'s profile page
 </h1>
+<h3>Transcripts:</h3>
+<ul>
+  {% for post in posts %}
+    <li>{{ post.text }}</li>
+  {% endfor %}
+</ul>
 {% endblock %}

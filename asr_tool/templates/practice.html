@@ -3,19 +3,26 @@
     <img src="/static/images/img.jpg" width="50%">
 
     <button type="button" id="mic-toggle" onclick="start_recording()">Record</button>
-
-    <div id="text-display">
-        <span id="final-text"></span>
-        <span id="interim-text"></span>
-    </div>
+    <!-- <button type="button" id="mic-toggle" onclick="save_transcript()">Save</button> -->
+    <!-- <form action="" method="post"> -->
+        <div id="text-display">
+            <span id="final-text" value="{{ request.form.text }}"></span>
+            <span id="interim-text"></span>
+        </div>
+        <!-- <input  type="submit" value="Save">
+    </form> -->
 
     <div id="context-menu" style="display: none"> 
     <ul> 
-        <li id="user-selection"></li>
-        <li><a href="#">Element-1</a></li> 
+        <form action="" method="post">
+            <li>I see: <input type="text" id="user-selection" name="actual_word" value="" readonly></li>
+            <li>I meant: <input type="text" name="user_word"></li> 
+            <li><button type="submit" value="practice">Practice</button></li>
+        </form>
     </ul> 
     </div> 
 
     <script src="{{ url_for('static', filename='js/speech_to_text.js') }}"></script>
+    <!-- window.location.href='{{ url_for( 'main.save_transcript') }}'; -->
 
 {% endblock %}

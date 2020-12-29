@@ -58,11 +58,13 @@ function rightClick(e) {
 
   if (context.style.display == "block") {
     document.getElementById('user-selection').innerHTML = ""
+    document.getElementById('user-selection').value = ""
     context.style.display = "none"
   }
   else {
     var select = window.getSelection().toString();
-    document.getElementById('user-selection').innerHTML = "Wrong word: " + select
+    // document.getElementById('user-selection').innerHTML = "I see: " + select
+    document.getElementById('user-selection').value = select
 
     context.style.display = "block"
     context.style.left = e.pageX + "px"; 
