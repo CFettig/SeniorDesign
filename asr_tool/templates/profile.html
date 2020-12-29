@@ -7,7 +7,7 @@
 <h3>Transcripts:</h3>
 <ul>
   {% for post in posts %}
-    <li>{{ post.text }}</li>
+    <li>{{ post.serialize().date }} | {{ post.serialize().text }}</li>
   {% endfor %}
 </ul>
 {% endblock %}

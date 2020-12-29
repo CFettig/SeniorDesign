@@ -11,7 +11,7 @@ function start_recording() {
   //toggles mic button to stop
   mic = document.getElementById('mic-toggle');
   mic.setAttribute('onclick', 'stop_recording()');
-  mic.innerHTML = "Stop";
+  mic.innerHTML = "Pause";
 
   asr.start();
 }
@@ -47,7 +47,6 @@ asr.onresult = function(event) {
 
 //custom context menu for selecting similar words
 var clickArea = document.getElementById('text-display')
-// console.log("clicked " + clickArea)
 clickArea.oncontextmenu = rightClick
 
 
@@ -70,4 +69,10 @@ function rightClick(e) {
     context.style.left = e.pageX + "px"; 
     context.style.top = e.pageY + "px"; 
   }
+}
+
+function get_transcript() {
+  let transcript = document.getElementById('transcript');
+  transcript.value = document.getElementById('final-text').innerHTML + document.getElementById('interim-text').innerHTML
+  console.log(transcript.value)
 }
