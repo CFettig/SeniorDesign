@@ -9,3 +9,4 @@ TODO:
 - make photo prompts random
 - add written prompts
 - add styling
+- create machine learning model to get pronunciations for words not in cmudict (http://aguo.us/writings/g2p-conversion.html)
