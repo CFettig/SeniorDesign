@@ -8,3 +8,4 @@ TODO:
 - save data on users' preferences and practice
 - make photo prompts random
 - add written prompts
+- add styling
