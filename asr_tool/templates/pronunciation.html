@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>These were the sounds that were different! Which would you like to practice?</p>
+    {% for sound in sounds %}
+        <a href="{{ url_for('main.practice_sound', sound=sound) }}">{{ sound }}</a>
+    {% endfor %}
+
+{% endblock %}
