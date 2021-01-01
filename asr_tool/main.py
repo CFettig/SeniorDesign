@@ -6,6 +6,10 @@ from .phonetics import compare_words
 
 main = Blueprint('main', __name__)
 
+# @main.route('/test')
+# def test():
+#     return render_template('sound_practice.html')
+
 @main.route('/')
 def index():
     return render_template('index.html')
@@ -22,7 +26,6 @@ def practice():
     if request.method=='POST':
         if 'actual_word' in request.form:
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
-            # return 'comparing ' + request.form.get('actual_word') + ' and ' + request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
         else:
             save_transcript(request.form.get('transcript'))
@@ -33,7 +36,7 @@ def practice():
 @main.route('/practice/<sound>')
 @login_required
 def practice_sound(sound):
-    return "practice sound here"
+    return render_template('sound_practice.html', sound=sound)
 
 @main.route('/pronunciation/<actual>/<intended>')
 @login_required

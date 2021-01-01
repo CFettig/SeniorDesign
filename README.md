@@ -5,7 +5,7 @@ TODO (in no particular order):
 - ~~compare 2 words and get differing sounds (use cmudict/ARPAbet?)~~
 - create researcher view 
 - save data on users' preferences and practice
-- make photo prompts random
+- ~~make photo prompts random~~
 - add written prompts
 - add styling
 - redesign site to be less dependent on written instructions

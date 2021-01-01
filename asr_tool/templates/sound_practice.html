@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>The English [{{ sound }}] sound: </h1>
+    <p>Insert information here</p>
+
+    <!-- <img src="/static/images/{{ sound }}_illustration.jpg" width="10%"> -->
+    <img src="/static/images/r_illustration.jpg" width="10%">
+
+    <h3>Listen</h3>
+    <p>Listen to these words with the {{ sound }} sound</p>
+
+    <button>Voice 1</button>
+    <button>Voice 2</button>
+    <p>insert example words here</p>
+
+    <h3>Compare</h3>
+    <p>insert minimal pairs here</p>
+    <button>Listen</button>
+    <button>Same</button>
+    <button>Different</button>
+
+    <h3>Speak</h3>
+    <p>Now, it’s your turn. Try saying each of the words aloud. You can check each by turning on
+        recognition in the text box next to it. You can also listen to all of the words again and try repeating after
+        the speaker</p>
+    <button>Voice 1</button>
+    <button>Voice 2</button>
+
+    <p><b>List of practice words here</b></p>
+
+{% endblock content %}
