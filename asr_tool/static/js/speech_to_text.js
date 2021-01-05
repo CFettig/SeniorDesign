@@ -77,7 +77,12 @@ function get_transcript() {
   console.log(transcript.value)
 }
 
-// //javascript for audio
-// function play_audio(soundFile) {
-//   var audio = new Audio(soundFile)
-// }
+//checking on same-different activity
+function min_pair_check(user, actual) {
+  if (user==actual) {
+    console.log("correct")
+  }
+  else {
+    console.log("incorrect")
+  }
+}

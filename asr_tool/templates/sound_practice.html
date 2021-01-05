@@ -11,6 +11,7 @@
 
     <audio id="sound1" src="{{ url_for('static', filename=content.example_audio_male) }}" preload="auto"></audio>
     <button onclick="document.getElementById('sound1').play();">Voice 1</button>
+    
     <audio id="sound2" src="{{ url_for('static', filename=content.example_audio_female) }}" preload="auto"></audio>
     <button onclick="document.getElementById('sound2').play();">Voice 2</button>
     <p>insert example words here</p>
@@ -20,8 +21,8 @@
         <p>{{ pair.same }}</p>
         <audio id={{ pair.id }} src="{{ url_for('static', filename=pair.audio) }}" preload="auto"></audio>
         <button onclick="document.getElementById({{ pair.id }}).play();">Listen</button>
-        <button>Same</button>
-        <button>Different</button>
+        <button onclick="min_pair_check('True', '{{ pair.same }}')">Same</button>
+        <button onclick="min_pair_check('False', '{{ pair.same }}')">Different</button>
     {% endfor %}
 
     <h3>Speak</h3>
