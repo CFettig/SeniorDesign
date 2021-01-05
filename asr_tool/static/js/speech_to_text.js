@@ -76,3 +76,8 @@ function get_transcript() {
   transcript.value = document.getElementById('final-text').innerHTML + document.getElementById('interim-text').innerHTML
   console.log(transcript.value)
 }
+
+// //javascript for audio
+// function play_audio(soundFile) {
+//   var audio = new Audio(soundFile)
+// }
