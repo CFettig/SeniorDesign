@@ -41,6 +41,7 @@ class LessonContent(db.Model):
     illustration = db.Column(db.String(100))
     example_audio_male = db.Column(db.String(100))
     example_audio_female = db.Column(db.String(100))
+    quiz_words = db.Column(db.String(100))
     min_pair = db.relationship('MinPair', backref='lesson', lazy=True)
 
     def serialize(self):
