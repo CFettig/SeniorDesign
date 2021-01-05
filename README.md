@@ -14,3 +14,4 @@ TODO (in no particular order):
 - give user ability to return to general practice room when done with individual sound
 - find a better way to choose individual sound to practice than a list of links
 - finish activity 3 on sound practice page 
+- add error-checking
