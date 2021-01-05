@@ -76,13 +76,3 @@ function get_transcript() {
   transcript.value = document.getElementById('final-text').innerHTML + document.getElementById('interim-text').innerHTML
   console.log(transcript.value)
 }
-
-//checking on same-different activity
-function min_pair_check(user, actual) {
-  if (user==actual) {
-    console.log("correct")
-  }
-  else {
-    console.log("incorrect")
-  }
-}
