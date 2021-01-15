@@ -1,7 +1,7 @@
 from flask import Blueprint, session, redirect, render_template, url_for, request
 from flask_login import login_required, current_user
 from . import db
-from .models import Transcript
+from .models import Transcript, LessonContent, MinPair
 from .phonetics import compare_words
 
 main = Blueprint('main', __name__)
@@ -36,7 +36,10 @@ def practice():
 @main.route('/practice/<sound>')
 @login_required
 def practice_sound(sound):
-    return render_template('sound_practice.html', sound=sound)
+    content = LessonContent.query.filter_by(sound=sound).first()
+    min_pairs = MinPair.query.filter_by(lesson_id=content.id)
+
+    return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
 
 @main.route('/pronunciation/<actual>/<intended>')
 @login_required
