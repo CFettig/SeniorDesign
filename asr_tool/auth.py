@@ -16,7 +16,7 @@ def login():
         user = User.query.filter_by(name=username).first()
 
         if not user:
-            flash('This user does not exist') 
+            flash('This user does not exist.') 
             return redirect(url_for('auth.login'))
     
         if not check_password_hash(user.serialize()['password'], password):
@@ -40,7 +40,7 @@ def signup():
         consent = request.form.get('consent')
         
         if User.query.filter_by(email=email).first():
-            flash('Email address already exists')
+            flash('This email address is already associated with an existing account')
             return redirect(url_for('auth.signup'))
         if not consent:
             flash('Must sign consent form to use this tool')
