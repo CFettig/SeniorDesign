@@ -9,11 +9,11 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method=='POST':
-        username = request.form.get('username')
+        email = request.form.get('email')
         password = request.form.get('password')
         remember = True if request.form.get('remember') else False
     
-        user = User.query.filter_by(name=username).first()
+        user = User.query.filter_by(email=email).first()
 
         if not user:
             flash('This user does not exist.') 

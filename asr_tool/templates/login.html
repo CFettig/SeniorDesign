@@ -1,23 +1,30 @@
-<html>
-  <head>
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
-    <div class="container">
-      <form action="" method="post">
-        <input type="text" placeholder="Username" name="username" value="{{
-          request.form.username }}">
-         <input type="password" placeholder="Password" name="password" value="{{
-          request.form.password }}">
-        <input  type="submit" value="Login">
-      </form>
-      {% with messages = get_flashed_messages() %}
-      {% if messages %}
-          {{ messages[0] }}
-      {% endif %}
-  {% endwith %}
+{% extends "base.html" %}
+
+{% block content %}
+
+<br>
+<div style="padding: 30px;">
+  <form action="" method="post" style="background-color: white; width: 40%; border-radius: 10px; padding: 20px;">
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp"
+        placeholder="Enter email">
+      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
-  </body>
-</html>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {{ messages[0] }}
+    {% endif %}
+    {% endwith %}
+    <button type="submit" class="btn btn-primary" value="Login">Login</button>
+  </form>
+  <br>
+  <a href="/signup"><button type="button" class="btn btn-primary">Create New Account</button></a><br><br>
+  <button type="button" class="btn btn-primary">Forgot Password?</button>
+</div>
+
+{% endblock %}

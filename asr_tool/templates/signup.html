@@ -1,36 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {{ messages[0] }}.</a>.
-        {% endif %}
-    {% endwith %}
-<form method="POST" action="/signup">
-        <form method="POST" action="/signup">
-            <div class="field">
-                <input type="email" name="email" placeholder="Email" autofocus="">
-            </div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{{ messages[0] }}.</a>.
+{% endif %}
+{% endwith %}
 
-            <div class="field">
-                <input type="text" name="name" placeholder="Name" autofocus="">
-            </div>
-
-            <div class="field">
-                <input type="password" name="password" placeholder="Password">
-            </div>
-
-            <!-- <iframe src="/static/consent_form.pdf"></iframe> -->
+<br>
+<div style="padding: 30px;">
+    <form method="POST" action="/signup"
+        style="background-color: white; width: 40%; border-radius: 10px; padding: 20px;">
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp"
+                placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="Name">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+        </div>
+        <div class="form-group">
             <object data="/static/consent_form.pdf" type="application/pdf">
                 <embed src="/static/consent_form.pdf" type="application/pdf" />
             </object>
-
-            <div class="field">
-                <p><input type="checkbox" name="consent" placeholder="">I acknowledge etc</p>
-            </div>
-
-            <button>Sign Up</button>
-        </form>
-    </div>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">I acknowledge etc.</label>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
 </div>
+
 {% endblock %}
