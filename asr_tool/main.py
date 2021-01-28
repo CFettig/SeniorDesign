@@ -20,6 +20,16 @@ def profile():
     posts = Transcript.query.filter_by(user_id=current_user.id)
     return render_template('profile.html', name=current_user.name, posts=posts)
 
+@main.route('/profile/delete/<int:transcriptid>')
+@login_required
+def deleteTranscript(transcriptid):
+
+    post = Transcript.query.get_or_404(transcriptid)
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect('/profile')
+
 @main.route('/practice', methods=['GET', 'POST'])
 @login_required
 def practice():
