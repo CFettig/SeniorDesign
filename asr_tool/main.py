@@ -20,6 +20,16 @@ def profile():
     else:
         return render_template('teacher_profile.html', name=current_user.name)
 
+@main.route('/profile/delete/<int:transcriptid>')
+@login_required
+def deleteTranscript(transcriptid):
+
+    post = Transcript.query.get_or_404(transcriptid)
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect('/profile')
+
 @main.route('/practice', methods=['GET', 'POST'])
 @role_required(roles=['student'])
 def practice():
