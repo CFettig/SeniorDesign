@@ -1,6 +1,7 @@
-from flask import Blueprint, session, redirect, render_template, url_for, request, flash
+from flask import Blueprint, session, redirect, render_template, url_for, request, flash, abort
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
+from functools import wraps
 from . import db
 from .models import User
 
@@ -23,7 +24,8 @@ def login():
             flash('Password incorrect')
             return redirect(url_for('auth.login'))
 
-        login_user(user, remember=remember)
+        e = login_user(user, remember=remember)
+         
         session['logged_in'] = True
         return redirect(url_for('main.profile'))
 
@@ -38,6 +40,7 @@ def signup():
         name = request.form.get('name')
         password = request.form.get('password')
         consent = request.form.get('consent')
+        role = request.form.get('role')
         
         if User.query.filter_by(email=email).first():
             flash('This email address is already associated with an existing account')
@@ -46,7 +49,7 @@ def signup():
             flash('Must sign consent form to use this tool')
             return redirect(url_for('auth.signup'))
 
-        new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+        new_user = User(email=email, name=name, role=role, password=generate_password_hash(password, method='sha256'))
 
         db.session.add(new_user)
         db.session.commit()
@@ -62,3 +65,17 @@ def logout():
     logout_user()
     session['logged_in'] = False
     return redirect(url_for('main.index'))
+
+def role_required(roles):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if not current_user:
+                return redirect(url_for('login'))
+            elif (current_user.role not in roles): 
+                flash("You can't be here")
+                return redirect(url_for('main.index'))
+            else:
+                return func(*args, **kwargs) 
+        return wrapper
+    return decorator

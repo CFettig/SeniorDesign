@@ -18,3 +18,9 @@ VALUES ("audio/r/r_mp1.mp3", 0, 1),
     ("audio/r/r_mp8.mp3", 1, 1), 
     ("audio/r/r_mp9.mp3", 0, 1), 
     ("audio/r/r_mp10.mp3", 1, 1);
+
+INSERT INTO role("name") 
+VALUES ("student"), 
+        ("teacher"), 
+        ("researcher"), 
+        ("admin");
