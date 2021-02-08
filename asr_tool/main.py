@@ -47,14 +47,17 @@ def practice():
 @role_required(roles=['teacher', 'student', 'admin'])
 def practice_sound(sound):
     content = LessonContent.query.filter_by(sound=sound).first()
-    min_pairs = MinPair.query.filter_by(lesson_id=content.id)
+    min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
 
     return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
 
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
-    sounds = compare_words(actual, intended)
+    # symbols = compare_words(actual, intended)
+    sounds = []
+    for item in compare_words(actual, intended):
+        sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first()))
     return render_template('pronunciation.html', sounds=sounds)
 
 @main.route('/save_transcript')
