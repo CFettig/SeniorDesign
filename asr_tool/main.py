@@ -25,6 +25,10 @@ def profile():
 def deleteTranscript(transcriptid):
 
     post = Transcript.query.get_or_404(transcriptid)
+    
+    if session.get('transcript_id') == transcriptid:
+        session.pop('transcript_id')
+
     db.session.delete(post)
     db.session.commit()
 
@@ -34,12 +38,8 @@ def deleteTranscript(transcriptid):
 @role_required(roles=['student'])
 def practice():
     if request.method=='POST':
-        if 'actual_word' in request.form:
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
-        else:
-            save_transcript(request.form.get('transcript'))
-            return redirect(url_for('main.profile'))
     else:
         # if not session.get('transcript_id'):
         #     session['transcript_id'] = 1
@@ -66,15 +66,16 @@ def pronunciation(actual, intended):
 @main.route('/save_transcript', methods=['POST'])
 @role_required(roles=['student'])
 def save_transcript():
-    user_text = request.args.get('transcript')
+    # user_text = request.args.get('transcript')
     user_text = request.form['transcript']
-
+    print('&'*30 + user_text)
     transcript_id = session.get('transcript_id')
 
     #adding text to an existing transcript
     if transcript_id:
         transcript = Transcript.query.filter_by(id=transcript_id).one()
-        transcript.text += ' ' + user_text
+        print('*'*30 + transcript.text)
+        transcript.text = user_text
         db.session.add(transcript)
         db.session.commit()
 
