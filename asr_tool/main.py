@@ -41,7 +41,10 @@ def practice():
             save_transcript(request.form.get('transcript'))
             return redirect(url_for('main.profile'))
     else:
-        return render_template('practice.html', user=current_user)
+        # if not session.get('transcript_id'):
+        #     session['transcript_id'] = 1
+        transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+        return render_template('practice.html', user=current_user, transcript=transcript)
 
 @main.route('/practice/<sound>')
 @role_required(roles=['teacher', 'student', 'admin'])
@@ -60,12 +63,37 @@ def pronunciation(actual, intended):
         sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first()))
     return render_template('pronunciation.html', sounds=sounds)
 
-@main.route('/save_transcript')
-@login_required
-def save_transcript(user_text):
-    new_transcript = Transcript(text=user_text, user_id=current_user.id)
-    db.session.add(new_transcript)
-    db.session.commit()            
+@main.route('/save_transcript', methods=['POST'])
+@role_required(roles=['student'])
+def save_transcript():
+    user_text = request.args.get('transcript')
+    user_text = request.form['transcript']
+
+    transcript_id = session.get('transcript_id')
+
+    #adding text to an existing transcript
+    if transcript_id:
+        transcript = Transcript.query.filter_by(id=transcript_id).one()
+        transcript.text += ' ' + user_text
+        db.session.add(transcript)
+        db.session.commit()
+
+    #creating a new transcript and setting the session id
+    else:
+        new_transcript = Transcript(text=user_text, user_id=current_user.id, id=transcript_id)
+        db.session.add(new_transcript)
+        db.session.commit()
+        session['transcript_id'] = new_transcript.id
+    
+    return "transcript added"
+
+@main.route('/end_practice', methods=['GET'])
+@role_required(roles=['student'])
+def end_practice():
+    if session.get('transcript_id'):
+        session.pop('transcript_id')
+    #should we redirect to transcript detail page instead?
+    return redirect(url_for('main.profile'))        
 
 if __name__ == '__main__':
     main.run()

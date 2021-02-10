@@ -35,6 +35,7 @@ asr.onresult = function(event) {
     if (event.results[i].isFinal) {
       //adds string to the span for final text
       transcript += event.results[i][0].transcript;
+      // send_transcript(transcript)
     } 
     else {
       //adds string to the span for changing text
@@ -43,6 +44,8 @@ asr.onresult = function(event) {
   }
   display_text.innerHTML += transcript;
   interim_text.innerHTML = interim;
+  
+  send_transcript(display_text.innerHTML)
 }
 
 //custom context menu for selecting similar words
@@ -71,8 +74,27 @@ function rightClick(e) {
   }
 }
 
-function get_transcript() {
-  let transcript = document.getElementById('transcript');
-  transcript.value = document.getElementById('final-text').innerHTML + document.getElementById('interim-text').innerHTML
-  console.log(transcript.value)
+//ajax call to save transcription text to database
+function send_transcript(transcript) {
+  $.ajax({
+    data : {
+      "transcript": transcript,
+    },
+    type : 'POST',
+    url : '/save_transcript'
+  })
+  .done(function(data) {
+    if (data.error) {
+        $('#errorAlert').text(data.error).show();
+        $('#successAlert').hide();
+    }
+    else {
+        $('#successAlert').text(data.name).show();
+        $('#errorAlert').hide();
+    }
+});
+}
+
+function end_practice() {
+  window.location = "/end_practice";
 }
