@@ -1,7 +1,7 @@
 from flask import Blueprint, session, redirect, render_template, url_for, request, flash
 from flask_login import login_required, current_user
 from . import db
-from .models import Transcript, LessonContent, MinPair
+from .models import Transcript, LessonContent, MinPair, PracticedPair
 from .phonetics import compare_words
 from .auth import role_required
 
@@ -25,7 +25,7 @@ def profile():
 def deleteTranscript(transcriptid):
 
     post = Transcript.query.get_or_404(transcriptid)
-    
+
     if session.get('transcript_id') == transcriptid:
         session.pop('transcript_id')
 
@@ -49,6 +49,16 @@ def practice():
 @main.route('/practice/<sound>')
 @role_required(roles=['teacher', 'student', 'admin'])
 def practice_sound(sound):
+    transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+    if transcript.practiced_sounds:
+        if sound not in transcript.practiced_sounds:
+            transcript.practiced_sounds += sound + ','
+    else:
+        transcript.practiced_sounds = sound + ','
+
+    db.session.add(transcript)
+    db.session.commit()
+
     content = LessonContent.query.filter_by(sound=sound).first()
     min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
 
@@ -57,8 +67,12 @@ def practice_sound(sound):
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
-    # symbols = compare_words(actual, intended)
+    pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
+    db.session.add(pair)
+    db.session.commit()
+    
     sounds = []
+    
     for item in compare_words(actual, intended):
         sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first()))
     return render_template('pronunciation.html', sounds=sounds)
@@ -66,16 +80,13 @@ def pronunciation(actual, intended):
 @main.route('/save_transcript', methods=['POST'])
 @role_required(roles=['student'])
 def save_transcript():
-    # user_text = request.args.get('transcript')
     user_text = request.form['transcript']
-    print('&'*30 + user_text)
     transcript_id = session.get('transcript_id')
 
     #adding text to an existing transcript
     if transcript_id:
         transcript = Transcript.query.filter_by(id=transcript_id).one()
-        print('*'*30 + transcript.text)
-        transcript.text = user_text
+        transcript.text += user_text
         db.session.add(transcript)
         db.session.commit()
 

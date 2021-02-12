@@ -22,16 +22,29 @@ class Transcript(db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text)
-    date = db.Column(db.DateTime, nullable=False,
-        default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-        nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    practiced_sounds = db.Column(db.String(3))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def serialize(self):
         return {"id": self.id,
-                "text": self.text,
+                "text": self.text,      
                 "date": self.date,
+                "practiced_sounds": self.practiced_sounds,
                 "user_id": self.user_id
+                }
+
+class PracticedPair(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    transcript_id = db.Column(db.Integer, db.ForeignKey('transcript.id'), nullable=False)
+    actual_word = db.Column(db.String(100))
+    intended_word = db.Column(db.String(100))
+
+    def serialize(self):
+        return {"id": self.id,
+                "transcript_id": self.transcript_id,
+                "actual_word": self.actual_word,
+                "intended_word": self.intended_word
                 }
 
 class LessonContent(db.Model):

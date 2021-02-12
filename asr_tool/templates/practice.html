@@ -15,11 +15,10 @@
         </svg></a>
 
 <div id="text-display">
-    <span id="final-text">
         {% if transcript %}
-            {{ transcript.text}}
+            <span id="prev-text">{{ transcript.text}}</span>
         {% endif %}
-    </span>
+        <span id="new-text"></span>
     <span id="interim-text"></span>
 </div>
 
