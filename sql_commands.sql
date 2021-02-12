@@ -41,7 +41,36 @@ VALUES ("ɹ",
         "images/small_cap_i_illustration.jpg",
         "audio/small_cap_i/male.mp3",
         "audio/small_cap_i/female.mp3",
-        "itch,if,ill,miss,give,skin,bitter,middle,shiver");
+        "itch,if,ill,miss,give,skin,bitter,middle,shiver"),
+        ("ʃ",
+        "The English “sh” sound, [ʃ] is made by bringing the middle of tongue up slightly and puckering the lips. 
+        The vocal cords will not vibrate. The illustration below shows both ways to create the sound.
+        In American English, the “sh” sound can be expected most times that you see “sh” in spelling. 
+        It can also been seen some instances of “ti” and “ss” in American English.",
+        "images/esh_illustration.jpg", 
+        "audio/esh/male.mp3", 
+        "audio/esh/female.mp3",
+        "she,show,sure,portion,assure,fashion,splash,wish,brush"
+        ),
+        ("v",
+        "The English “v” sound, [v] is made by pressing the top teeth into the back of the bottom lip.
+        The illustration below shows both ways to create the sound.
+        In American English, the “v” sound can be expected most times that you see “v” in spelling.", 
+        "images/v_illustration.jpg", 
+        "audio/v/male.mp3", 
+        "audio/v/female.mp3",
+        "vent,vine,veer,waving,haven't,lives,serve,love,brave"
+        ),
+        ("w",
+        "The English “w” sound, [w] is made by forming a small, tight circle with your lips.
+        The illustration below shows both ways to create the sound.
+        In American English, the “w” sound can be expected most times that you see “w” or “wh” in spelling.",
+        "images/w_illustration.jpg", 
+        "audio/w/male.mp3", 
+        "audio/w/female.mp3",
+        "worse,wick,white,walkaway,always,kiwi,wow,window,now"
+        );
+
 
 INSERT INTO min_pair(audio, same, lesson_id) 
 VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"), 
