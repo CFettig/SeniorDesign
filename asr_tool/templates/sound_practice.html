@@ -22,8 +22,10 @@
         <li>
             <audio id={{ pair.id }} src="{{ url_for('static', filename=pair.audio) }}" preload="auto"></audio>
             <button onclick="document.getElementById({{ pair.id }}).play();">Listen</button>
-            <button onclick="min_pair_check('True', '{{ pair.same }}')">Same</button>
-            <button onclick="min_pair_check('False', '{{ pair.same }}')">Different</button>
+            <button onclick="min_pair_check('True', '{{ pair.same }}', {{pair.id}})">Same</button>
+            <button onclick="min_pair_check('False', '{{ pair.same }}', {{pair.id}})">Different</button>
+            <p id={{ pair.id ~ 'correct'}} style="display:none;">Correct!</p>
+            <p id={{ pair.id ~ 'incorrect'}} style="display:none;">Try again</p>
         </li>
     {% endfor %}
     </ul>
