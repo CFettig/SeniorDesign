@@ -16,20 +16,20 @@
                     </svg></button>
 
                 <br>
-                <div id="text-display">
+                <div id="text-display" >
                     {% if transcript %}
-                    <span id="prev-text">{{ transcript.text}}</span>
+                    <span id="prev-text">{{ transcript.text }}</span>
                     {% endif %}
                     <span id="new-text"></span>
                     <span id="interim-text"></span>
                 </div>
 
-                <div id="context-menu" style="display: none">
-                    <ul>
+                <div id="context-menu" style="display: none" >
+                    <ul class="list-group list-group-flush">
                         <form name="compare-words" method="post">
-                            <li>I see: <input type="text" id="user-selection" name="actual_word" value="" readonly></li>
-                            <li>I meant: <input type="text" name="user_word"></li>
-                            <li><button type="submit" value="practice">Practice</button></li>
+                            <li class="list-group-item">I see: <input type="text" id="user-selection" name="actual_word" value="" readonly></li>
+                            <li class="list-group-item">I meant: <input type="text" name="user_word"></li>
+                            <li class="list-group-item"><button type="submit" value="practice">Practice</button></li>
                         </form>
                     </ul>
                 </div>
@@ -59,7 +59,16 @@
 
     </div>
 </div>
-<br><br><br><br><br><br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
 
 <script src="{{ url_for('static', filename='js/speech_to_text.js') }}"></script>
 <script>
