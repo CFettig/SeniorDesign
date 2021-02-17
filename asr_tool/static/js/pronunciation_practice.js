@@ -9,9 +9,7 @@ function min_pair_check(user, actual, id) {
         incorrect_label.style.display = 'none'
       }
 
-      console.log('correct')
       correct_label.style.display = 'block'
-      
     }
 
     else {
@@ -20,26 +18,35 @@ function min_pair_check(user, actual, id) {
       }
 
       incorrect_label.style.display = "block"
-
-      console.log("incorrect")
     }
   }
 
 
 var asr = new webkitSpeechRecognition();
-
 //will continue to record even when speaker pauses
-asr.continuous = true;
+asr.continuous = false;
+
+var word = ''
 
 function listen(id) {
-    word = document.getElementById(id);
-    asr.start();
-  }
+  document.getElementById('mic-toggle' + id).innerHTML = 'Stop mic'
+  word = id;
+  asr.start();
+}
 
 asr.onresult = function(event) {
-  for (var i = event.resultIndex; i < e; i++) {
+  for (var i = event.resultIndex; i < event.results.length; ++i) {
     if (event.results[i].isFinal) {
-        transcript += event.results[i][0].transcript;
-      }
+        if (event.results[i][0].transcript == word) {
+          document.getElementById(word + 'incorrect').style.display = 'none'
+          document.getElementById(word + 'correct').style.display = 'block'
+        }
+        else {
+          document.getElementById(word + 'correct').style.display = 'none'
+          document.getElementById(word + 'incorrect').style.display = 'block'
+        }
+    }
   }
+  document.getElementById('mic-toggle' + word).innerHTML = 'Start mic'
+  asr.stop()
 }

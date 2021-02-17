@@ -2,7 +2,7 @@ from flask import Blueprint, session, redirect, render_template, url_for, reques
 from flask_login import login_required, current_user
 from . import db
 from .models import Transcript, LessonContent, MinPair, PracticedPair
-from .phonetics import compare_words
+from .phonetics import compare_words, get_phonemes
 from .auth import role_required
 
 main = Blueprint('main', __name__)
@@ -105,7 +105,8 @@ def end_practice():
     if session.get('transcript_id'):
         session.pop('transcript_id')
     #should we redirect to transcript detail page instead?
-    return redirect(url_for('main.profile'))        
+    return redirect(url_for('main.profile'))
+    
 
 if __name__ == '__main__':
     main.run()

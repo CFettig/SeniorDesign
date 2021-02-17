@@ -7,7 +7,7 @@ isleDict = ist.LexicalTool()
 
 #returns a list of all pronunciations for given word
 def get_phonemes(word):
-    return list(ist.transcribe(isleDict, word, preference='longest'))
+    return list(ist.transcribe(isleDict, word, preference='longest').replace(' ', ''))
  
 def compare_words(actual, intended):
     list_actual = list(ist.transcribe(isleDict, actual, preference='longest').replace(' ', ''))
