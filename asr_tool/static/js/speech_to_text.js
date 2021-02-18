@@ -85,6 +85,7 @@ function send_transcript(transcript) {
   $.ajax({
     data: {
       "transcript": transcript,
+      "prompt": document.getElementById('prompt').src
     },
     type: 'POST',
     url: '/save_transcript'

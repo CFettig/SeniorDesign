@@ -21,6 +21,7 @@ class User(UserMixin, db.Model):
 class Transcript(db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
+    prompt = db.Column(db.String(100))
     text = db.Column(db.Text)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     practiced_sounds = db.Column(db.String(3))

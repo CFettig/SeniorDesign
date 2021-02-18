@@ -1,5 +1,7 @@
 from flask import Blueprint, session, redirect, render_template, url_for, request, flash
 from flask_login import login_required, current_user
+import requests
+from random import randint
 from . import db
 from .models import Transcript, LessonContent, MinPair, PracticedPair
 from .phonetics import compare_words, get_phonemes
@@ -41,10 +43,14 @@ def practice():
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
     else:
-        # if not session.get('transcript_id'):
-        #     session['transcript_id'] = 1
         transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
-        return render_template('practice.html', user=current_user, transcript=transcript)
+
+        if transcript:
+            prompt = transcript.prompt
+        else: 
+            prompt = "https://picsum.photos/" + str(randint(0, 5000))
+        
+        return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
 
 @main.route('/practice/<sound>')
 @role_required(roles=['teacher', 'student', 'admin'])
@@ -81,12 +87,14 @@ def pronunciation(actual, intended):
 @role_required(roles=['student'])
 def save_transcript():
     user_text = request.form['transcript']
+    prompt = request.form['prompt']
     transcript_id = session.get('transcript_id')
 
     #adding text to an existing transcript
     if transcript_id:
         transcript = Transcript.query.filter_by(id=transcript_id).one()
         transcript.text += user_text
+        tanscript.prompt = prompt
         db.session.add(transcript)
         db.session.commit()
 
