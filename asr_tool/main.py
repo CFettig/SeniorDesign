@@ -1,6 +1,7 @@
 from flask import Blueprint, session, redirect, render_template, url_for, request, flash
 from flask_login import login_required, current_user
 import requests
+from datetime import datetime
 from random import randint
 from . import db
 from .models import Transcript, LessonContent, MinPair, PracticedPair
@@ -39,17 +40,22 @@ def deleteTranscript(transcriptid):
 @main.route('/practice', methods=['GET', 'POST'])
 @role_required(roles=['student'])
 def practice():
+    transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+
     if request.method=='POST':
+            transcript.main_practice_time += datetime.utcnow() - session.pop('practice_start_time')
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
     else:
-        transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+        # transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
 
         if transcript:
             prompt = transcript.prompt
         else: 
             prompt = "https://picsum.photos/" + str(randint(0, 5000))
-        
+
+        session['practice_start_time'] = datetime.utcnow()
+
         return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
 
 @main.route('/practice/<sound>')
@@ -92,9 +98,11 @@ def save_transcript():
 
     #adding text to an existing transcript
     if transcript_id:
+        print('*'*30 + str(transcript_id))
         transcript = Transcript.query.filter_by(id=transcript_id).one()
         transcript.text += user_text
-        tanscript.prompt = prompt
+        transcript.prompt = prompt
+        transcript.main_practice_time += 
         db.session.add(transcript)
         db.session.commit()
 
@@ -110,6 +118,9 @@ def save_transcript():
 @main.route('/end_practice', methods=['GET'])
 @role_required(roles=['student'])
 def end_practice():
+    #updating time spent in main practice room
+    Transcript.query.filter_by(id=transcript_id).one().main_practice_time += datetime.utcnow() - session.pop('practice_start_time')
+    
     if session.get('transcript_id'):
         session.pop('transcript_id')
     #should we redirect to transcript detail page instead?

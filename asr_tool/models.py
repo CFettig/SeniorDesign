@@ -9,7 +9,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
     role = db.Column(db.String(7))
-    transcripts = db.relationship('Transcript', backref='user', lazy=True)
+    # transcripts = db.relationship('Transcript', backref='user', lazy=True)
 
     def serialize(self):
         return {"id": self.id,
@@ -24,6 +24,7 @@ class Transcript(db.Model):
     prompt = db.Column(db.String(100))
     text = db.Column(db.Text)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    main_practice_time = db.Column(db.DateTime, nullable=True)
     practiced_sounds = db.Column(db.String(3))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
