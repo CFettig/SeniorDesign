@@ -10,9 +10,7 @@ function start_recording() {
   //toggles mic button to stop
   mic = document.getElementById('mic-toggle');
   mic.setAttribute('onclick', 'stop_recording()');
-  mic.innerHTML = `Pause ${<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause" viewBox="0 0 16 16">
-    <path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5z" />
-  </svg>}`;
+  mic.innerHTML = "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pause' viewBox='0 0 16 16'><path d='M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5z'/></svg>";
   asr.start();
 }
 
@@ -20,13 +18,7 @@ function stop_recording() {
   //toggles mic button to start
   mic = document.getElementById('mic-toggle');
   mic.setAttribute('onclick', 'start_recording()');
-  mic.innerHTML = `Record ${<svg
-    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-    class="bi bi-mic-fill" viewBox="0 0 16 16">
-    <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
-    <path fill-rule="evenodd"
-      d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-  </svg>}`;
+  mic.innerHTML = "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-mic-fill' viewBox='0 0 16 16'><path d='M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z' /><path fill-rule='evenodd' d='M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z' /></svg>";
 
   asr.stop();
 }
