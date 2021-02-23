@@ -1,0 +1,31 @@
+# @main.route('/update_time', methods=['GET'])
+#method to update total time spent on page. does not account for inactivity
+def update_page(page):
+    last_page = session.get('last_page')
+    
+    if last_page != page:
+        end_time = datetime.utcnow()
+        if last_page == 'main_practice':
+            transcript_id = session.get('transcript_id')
+
+            if transcript_id:
+                transcript == Transcript.query.filter_by(id=transcript_id).one()
+
+                if transcript.main_practice_time:
+                    transcript.main_practice_time += end_time - session.get['start_time']
+                else:
+                    transcript.main_practice_time = end_time - session.get['start_time']
+        elif last_page == 'sound_practice':
+            transcript_id = session.get('transcript_id')
+
+            if transcript_id:
+                transcript == Transcript.query.filter_by(id=transcript_id).one()
+
+                if transcript.sound_practice_time:
+                    transcript.sound_practice_time += end_time - session.get['start_time']
+                else:
+                    transcript.sound_practice_time = end_time - session.get['start_time']
+
+        session['start_time'] = end_time
+        
+    session['last_page'] = page

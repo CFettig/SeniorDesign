@@ -24,7 +24,8 @@ class Transcript(db.Model):
     prompt = db.Column(db.String(100))
     text = db.Column(db.Text)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    main_practice_time = db.Column(db.DateTime, nullable=True)
+    main_practice_time = db.Column(db.Float, default=0)
+    sound_practice_time = db.Column(db.Float, default=0)
     practiced_sounds = db.Column(db.String(3))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 

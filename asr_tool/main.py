@@ -1,4 +1,6 @@
-from flask import Blueprint, session, redirect, render_template, url_for, request, flash
+from flask import Blueprint, session, redirect, render_template, url_for, request, flash, current_app
+# from flask_apscheduler import APScheduler
+import flask
 from flask_login import login_required, current_user
 import requests
 from datetime import datetime
@@ -12,11 +14,14 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
+    update_page('index')
     return render_template('index.html')
 
 @main.route('/profile')
 @role_required(roles=['teacher', 'student'])
 def profile():
+    update_page('profile')
+    session['one_page'] = 'profile'
     if current_user.role == 'student':
         posts = Transcript.query.filter_by(user_id=current_user.id)
         return render_template('student_profile.html', name=current_user.name, posts=posts)
@@ -40,10 +45,11 @@ def deleteTranscript(transcriptid):
 @main.route('/practice', methods=['GET', 'POST'])
 @role_required(roles=['student'])
 def practice():
+    update_page('main_practice')
+
     transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
 
     if request.method=='POST':
-            transcript.main_practice_time += datetime.utcnow() - session.pop('practice_start_time')
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
     else:
@@ -54,13 +60,15 @@ def practice():
         else: 
             prompt = "https://picsum.photos/" + str(randint(0, 5000))
 
-        session['practice_start_time'] = datetime.utcnow()
+        # session['practice_start_time'] = datetime.utcnow()
 
         return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
 
 @main.route('/practice/<sound>')
 @role_required(roles=['teacher', 'student', 'admin'])
 def practice_sound(sound):
+    update_page('sound_practice')
+
     transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
     if transcript.practiced_sounds:
         if sound not in transcript.practiced_sounds:
@@ -79,6 +87,7 @@ def practice_sound(sound):
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
+    session['one_page'] = 'choose_sound'
     pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
     db.session.add(pair)
     db.session.commit()
@@ -98,11 +107,9 @@ def save_transcript():
 
     #adding text to an existing transcript
     if transcript_id:
-        print('*'*30 + str(transcript_id))
         transcript = Transcript.query.filter_by(id=transcript_id).one()
         transcript.text += user_text
         transcript.prompt = prompt
-        transcript.main_practice_time += 
         db.session.add(transcript)
         db.session.commit()
 
@@ -117,15 +124,41 @@ def save_transcript():
 
 @main.route('/end_practice', methods=['GET'])
 @role_required(roles=['student'])
-def end_practice():
-    #updating time spent in main practice room
-    Transcript.query.filter_by(id=transcript_id).one().main_practice_time += datetime.utcnow() - session.pop('practice_start_time')
-    
+def end_practice():   
+    update_page('end_practice')
     if session.get('transcript_id'):
         session.pop('transcript_id')
     #should we redirect to transcript detail page instead?
     return redirect(url_for('main.profile'))
+
+# @main.route('/update_time', methods=['GET'])
+#method to update total time spent on page. does not account for inactivity
+def update_page(page):
+    last_page = session.get('last_page')
     
+    if last_page != page:
+        print("*"*30 + str(last_page) + " " + page)
+        end_time = datetime.utcnow()
+
+        if last_page == 'main_practice' or last_page == 'sound_practice':
+            transcript_id = session.get('transcript_id')
+
+            if transcript_id:
+                transcript = Transcript.query.filter_by(id=transcript_id).one()
+
+                time_delta = end_time - session.get('start_time')
+
+                if last_page == 'main_practice':  
+                    transcript.main_practice_time += time_delta.seconds + time_delta.microseconds*0.000001
+                elif last_page == 'sound_practice':
+                    transcript.sound_practice_time += time_delta.seconds + time_delta.microseconds*0.000001
+
+                db.session.add(transcript)
+                db.session.commit()
+
+        session['start_time'] = end_time
+        
+    session['last_page'] = page
 
 if __name__ == '__main__':
     main.run()
