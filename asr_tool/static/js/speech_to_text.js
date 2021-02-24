@@ -42,7 +42,7 @@ asr.onresult = function (event) {
   }
   new_text.textContent += transcript;
   interim_text.innerHTML = interim;
-  console.log(JSON.stringify(new_text.textContent))
+  // console.log(JSON.stringify(new_text.textContent))
   send_transcript(transcript)
 }
 
@@ -77,6 +77,7 @@ function send_transcript(transcript) {
   $.ajax({
     data: {
       "transcript": transcript,
+      "prompt": document.getElementById('prompt').src
     },
     type: 'POST',
     url: '/save_transcript'
