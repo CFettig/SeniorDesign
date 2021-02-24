@@ -1,8 +1,7 @@
-from flask import Blueprint, session, redirect, render_template, url_for, request, flash, current_app
-# from flask_apscheduler import APScheduler
-import flask
+from flask import Blueprint, session, redirect, render_template, url_for, request, flash
+from flask import Response
 from flask_login import login_required, current_user
-import requests
+import csv, io
 from datetime import datetime
 from random import randint
 from . import db
@@ -53,14 +52,10 @@ def practice():
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
     else:
-        # transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
-
         if transcript:
             prompt = transcript.prompt
         else: 
             prompt = "https://picsum.photos/" + str(randint(0, 5000))
-
-        # session['practice_start_time'] = datetime.utcnow()
 
         return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
 
@@ -130,6 +125,41 @@ def end_practice():
         session.pop('transcript_id')
     #should we redirect to transcript detail page instead?
     return redirect(url_for('main.profile'))
+
+@main.route('/view_research_data', methods=['GET'])
+@role_required(roles=['researcher'])
+def view_research_data():
+    transcripts = []
+
+    for item in Transcript.query.all():
+        transcripts.append(item.serialize())
+    
+    return render_template('data_view.html', transcripts=transcripts)
+
+@main.route('/download_research_data', methods=['GET'])
+@role_required(roles=['researcher'])
+def download_research_data():
+    data = db.session.query(Transcript.id, 
+                            Transcript.date, 
+                            Transcript.text, 
+                            Transcript.practiced_sounds, 
+                            Transcript.main_practice_time, 
+                            Transcript.sound_practice_time).all()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    writer.writerow(['id','date','text','practiced_sounds','main_practice_time','sound_practice_time'])
+    for transcript in data:
+        line = [(",".join((str(transcript.id), 
+                str(transcript.date), 
+                transcript.text, 
+                str(transcript.practiced_sounds), 
+                str(transcript.main_practice_time), 
+                str(transcript.sound_practice_time))))]
+        writer.writerow(line)
+    output.seek(0)
+
+    return Response(output, mimetype="text/csv", headers={"Content-Disposition":"attachment;filename=practice_data.csv"})
 
 # @main.route('/update_time', methods=['GET'])
 #method to update total time spent on page. does not account for inactivity

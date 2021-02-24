@@ -34,6 +34,8 @@ class Transcript(db.Model):
                 "text": self.text,      
                 "date": self.date,
                 "practiced_sounds": self.practiced_sounds,
+                "main_practice_time": self.main_practice_time,
+                "sound_practice_time": self.sound_practice_time,
                 "user_id": self.user_id
                 }
 

@@ -1,0 +1,10 @@
+{% for piece in data %}
+    <ul>
+        <li>{{ piece.id }}</li>
+        <li>{{ piece.date }}</li>
+        <li>{{ piece.text }}</li>
+        <li>{{ piece.practiced_sounds }}</li>
+        <li>{{ piece.main_practice_time }}</li>
+        <li>{{ piece.sound_practice_time }}</li>
+    </ul>
+{% endfor %}
