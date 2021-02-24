@@ -11,6 +11,8 @@ from .auth import role_required
 
 main = Blueprint('main', __name__)
 
+
+
 @main.route('/')
 def index():
     update_page('index')
