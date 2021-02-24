@@ -69,6 +69,29 @@ VALUES ("ɹ",
         "audio/w/male.mp3", 
         "audio/w/female.mp3",
         "worse,wick,white,walkaway,always,kiwi,wow,window,now"
+        ),
+        ("ʤ",
+        "The English “j” sound, [ʤ] is made by pressing the tip of the tongue against the ridge behind the top teeth
+         and the sides of the tongue against the top side teeth. 
+         The vocal cords will vibrate. The illustration below shows both ways to create the sound.
+        In American English, the “j” sound can be expected most times that you see “j” in spelling. 
+        It can also be occur when you see “ge” or “gi” in American English."
+        "images/j_illustration.jpg", 
+        "audio/j/male.mp3", 
+        "audio/j/female.mp3",
+        "joy,just,giant,suggest,religion,major,large,huge,message"
+        ),
+        ("tʃ",
+        "The English “ch” sound, [tʃ] is made by pressing the tip of the tongue against the ridge behind the top teeth 
+        and the sides of the tongue against the top side teeth. The vocal cords will not vibrate. 
+        The illustration below shows both ways to create the sound.
+        In American English, the “ch” sound can be expected most times that you see “ch” or “tch” in spelling.
+        In American English, the “j” sound can be expected most times that you see “j” in spelling. 
+        It can also be occur when you see “ge” or “gi” in American English.",
+        "images/j_illustration.jpg", 
+        "audio/ch/male.mp3", 
+        "audio/ch/female.mp3",
+        "chin,choke,cheap,watching,kitchen,searches,batch,teach,rich"
         );
 
 
@@ -110,7 +133,27 @@ VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"),
     ("audio/small_cap_i/small_cap_i_7_f.mp3", 0, "ɪ"),
     ("audio/small_cap_i/small_cap_i_8_t.mp3", 1, "ɪ"),
     ("audio/small_cap_i/small_cap_i_9_f.mp3", 0, "ɪ"),
-    ("audio/small_cap_i/small_cap_i_10_t.mp3", 1, "ɪ");
+    ("audio/small_cap_i/small_cap_i_10_t.mp3", 1, "ɪ"),
+    ("audio/j/j_1_f.mp3", 0, "ʤ"),
+    ("audio/j/j_2_t.mp3", 1, "ʤ"),
+    ("audio/j/j_3_.mp3", 0, "ʤ"),
+    ("audio/j/j_4_.mp3", 0, "ʤ"),
+    ("audio/j/j_5_.mp3", 1, "ʤ"),
+    ("audio/j/j_6_.mp3", 0, "ʤ"),
+    ("audio/j/j_7_.mp3", 0, "ʤ"),
+    ("audio/j/j_8_.mp3", 1, "ʤ"),
+    ("audio/j/j_9_.mp3", 0, "ʤ"),
+    ("audio/j/j_10_.mp3", 1, "ʤ"),
+    ("audio/ch/ch_1_f", 0, "tʃ"),
+    ("audio/ch/ch_2_t", 1, "tʃ"),
+    ("audio/ch/ch_3_f", 0, "tʃ"),
+    ("audio/ch/ch_4_f", 0, "tʃ"),
+    ("audio/ch/ch_5_t", 1, "tʃ"),
+    ("audio/ch/ch_6_f", 0, "tʃ"),
+    ("audio/ch/ch_7_f", 0, "tʃ"),
+    ("audio/ch/ch_8_t", 1, "tʃ"),
+    ("audio/ch/ch_9_f", 0, "tʃ"),
+    ("audio/ch/ch_10_t", 1, "tʃ");
 
 
 INSERT INTO role("name") 

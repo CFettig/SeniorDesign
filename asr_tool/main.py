@@ -11,8 +11,6 @@ from .auth import role_required
 
 main = Blueprint('main', __name__)
 
-
-
 @main.route('/')
 def index():
     update_page('index')
@@ -84,7 +82,7 @@ def practice_sound(sound):
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
-    session['one_page'] = 'choose_sound'
+    # session['one_page'] = 'choose_sound'
     pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
     db.session.add(pair)
     db.session.commit()
@@ -169,7 +167,6 @@ def update_page(page):
     last_page = session.get('last_page')
     
     if last_page != page:
-        print("*"*30 + str(last_page) + " " + page)
         end_time = datetime.utcnow()
 
         if last_page == 'main_practice' or last_page == 'sound_practice':
