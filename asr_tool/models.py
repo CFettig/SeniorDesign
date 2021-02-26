@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from datetime import datetime
+import pytz
 
 class User(UserMixin, db.Model):
     extend_existing=True
@@ -23,7 +24,7 @@ class Transcript(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     prompt = db.Column(db.String(100))
     text = db.Column(db.Text)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow().replace(tzinfo=pytz.utc))
     main_practice_time = db.Column(db.Float, default=0)
     sound_practice_time = db.Column(db.Float, default=0)
     practiced_sounds = db.Column(db.String(3))
