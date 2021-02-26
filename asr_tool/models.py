@@ -27,6 +27,7 @@ class Transcript(db.Model):
     main_practice_time = db.Column(db.Float, default=0)
     sound_practice_time = db.Column(db.Float, default=0)
     practiced_sounds = db.Column(db.String(3))
+    practiced_pairs = db.relationship("PracticedPair")
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def serialize(self):
@@ -40,6 +41,7 @@ class Transcript(db.Model):
                 }
 
 class PracticedPair(db.Model):
+    extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
     transcript_id = db.Column(db.Integer, db.ForeignKey('transcript.id'), nullable=False)
     actual_word = db.Column(db.String(100))

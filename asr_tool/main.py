@@ -129,10 +129,18 @@ def end_practice():
 @main.route('/view_research_data', methods=['GET'])
 @role_required(roles=['researcher'])
 def view_research_data():
-    transcripts = []
+    # transcripts = db.session.query(Transcript,PracticedPair).filter(Transcript.id==PracticedPair.transcript_id).all()
+    transcripts = Transcript.query.all()
+    # transcripts = db.session.query(Transcript,PracticedPair).filter(Transcript.id==PracticedPair.transcript_id).all()
 
-    for item in Transcript.query.all():
-        transcripts.append(item.serialize())
+    # pairs = {}
+
+    # for transcript, pair in transcripts:
+    #     if transcript.id in pairs:
+    #         pairs[transcript.id].append(pair)
+    #         print(transcript)
+    #     else:
+    #         pairs[transcript.id] = [pair]
     
     return render_template('data_view.html', transcripts=transcripts)
 
