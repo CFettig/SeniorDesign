@@ -119,7 +119,7 @@ def save_transcript():
 
 @main.route('/end_practice', methods=['GET'])
 @role_required(roles=['student'])
-def end_practice():   
+def end_practice():
     update_page('end_practice')
     if session.get('transcript_id'):
         session.pop('transcript_id')

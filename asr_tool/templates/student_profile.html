@@ -10,6 +10,7 @@
     <img class="card-img-top" src="{{ post.prompt }}" alt="Card image cap">
     <div class="card-body">
       <h5 class="card-title">{{ post.serialize().text }}</h5>
+      <h5 class="card-title">{{ post.prompt }}</h5>
       <p class="card-text">
         {% if post.practiced_sounds %}
         <small>sounds you practiced during this session: practice again?
