@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
+
 {% block content %}
 <br><br><br>
 
 {% if posts %}
 {% for post in posts %}
-<div class="card-deck" style="width: 25em; justify-content: center; margin: 0 auto;">
+<div class="card-deck" style="display:inline-block; width: 25em; margin-left: 8px; margin-right: 8px; margin-bottom: 32px;">
   <div class="card">
     <img class="card-img-top" src="{{ post.prompt }}" alt="Card image cap">
     <div class="card-body">
@@ -32,8 +33,9 @@
       <small class="text-muted">Voiced on {{ post.serialize().date }} GMT</small>
     </div>
   </div>
-  {% endfor%}
 </div>
+{% endfor%}
+<br><br><br><br>
 {% else %}
 
 {% endif %}
