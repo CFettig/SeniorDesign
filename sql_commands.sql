@@ -131,7 +131,23 @@ VALUES ("ɹ",
         "audio/o/male.mp3", 
         "audio/o/female.mp3",
         "oat,opal,oboe,go,doe,slow,boat,home,phone"
-        );
+        ),
+        ("",
+        "There are two sounds that you commonly find with the “u” spelling. 
+        In this lesson, we focus on the sound [u] which can be found in the words, 
+        “rule”, “fool” and “useful”. [u] is considered a tense, high, back vowel. 
+        It is also rounded, which means the lips need to push out while creating a 
+        circle while making the sound.
+        In American English, you often see the [u] sound when the letter “u” 
+        is followed by a single consonant and then the letter “e”, 
+        like in “rule” or “tune”, or when you see a double “oo” like in “fool” or “pool”. 
+        Words that begin with a “u” in spelling may also have the [u]sound, 
+        but are likely to start with a [y] sound, like at the beginning “useful” 
+        which is pronounced [yusfəl]",
+        "images/u_illustration.jpg", 
+        "audio/u/male.mp3", 
+        "audio/u/female.mp3",
+        "rule,tune,cute,pool,fool,cool,useful,union,uniform");
 
 
 INSERT INTO min_pair(audio, same, lesson_id) 
@@ -222,7 +238,17 @@ VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"),
     ("audio/o/o_7_f", 0, "o"),
     ("audio/o/o_8_t", 1, "o"),
     ("audio/o/o_9_t", 1, "o"),
-    ("audio/o/o_10_f", 0, "");
+    ("audio/o/o_10_f", 0, "o"),
+    ("audio/u/u_1_t", 1, "u"),
+    ("audio/u/u_2_t", 1, "u"),
+    ("audio/u/u_3_f", 0, "u"),
+    ("audio/u/u_4_t", 1, "u"),
+    ("audio/u/u_5_f", 0, "u"),
+    ("audio/u/u_6_t", 1, "u"),
+    ("audio/u/u_7_f", 0, "u"),
+    ("audio/u/u_8_t", 1, "u"),
+    ("audio/u/u_9_f", 0, "u"),
+    ("audio/u/u_10_t", 1, "u");
 
 
 INSERT INTO role("name") 
