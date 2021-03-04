@@ -92,7 +92,19 @@ VALUES ("ɹ",
         "audio/ch/male.mp3", 
         "audio/ch/female.mp3",
         "chin,choke,cheap,watching,kitchen,searches,batch,teach,rich"
-        );
+        ),
+        ("ʌ",
+        "There are two sounds that you commonly find with the “u” spelling. 
+        In this lesson, we focus on the sound [ʌ] which can be found in the words, 
+        “cut”, “fund” and “shut”. [ʌ] is considered a lax, mid, central vowel. 
+        In American English, you often see the [ʌ] sound when the letter “u” is followed by two consonants, 
+        like in “fund” or “luck” or when you see “u” followed by a single consonant at the end of a word, 
+        like in “cut” and “up”.",
+        "images/caret_illustration.jpg", 
+        "audio/caret/male.mp3", 
+        "audio/caret/female.mp3",
+        "up,ugly,uncle,cut,fund,luck,crutch,sputter,cuddle"
+        )
 
 
 INSERT INTO min_pair(audio, same, lesson_id) 
