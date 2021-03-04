@@ -118,6 +118,19 @@ VALUES ("ɹ",
         "audio/e/male.mp3", 
         "audio/e/female.mp3",
         "aid,ace,ape,race,save,lake,played,sprayed,failed"
+        ),
+        ("o",
+        "There are two sounds that you commonly find with the “o” spelling. 
+        In this lesson, we focus on the sound [o] which can be found in the words, 
+        “home”, “phone” and “boat”. [o] is considered a tense, mid, back vowel.
+        It is also rounded, which means the lips need to push out while creating a circle to make the sound.
+        In American English, you often see the [o] sound when the letter “o” is followed by a single consonant 
+        and then the letter “e”, like in “home” or “phone” or when you see an “o” 
+        followed by another vowel letter, like in “boat” or “coat.” ",
+        "images/o_illustration.jpg", 
+        "audio/o/male.mp3", 
+        "audio/o/female.mp3",
+        "oat,opal,oboe,go,doe,slow,boat,home,phone"
         );
 
 
@@ -199,7 +212,17 @@ VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"),
     ("audio/e/e_7_f", 0, "tʃ"),
     ("audio/e/e_8_t", 1, "tʃ"),
     ("audio/e/e_9_f", 0, "tʃ"),
-    ("audio/e/e_10_t", 1, "tʃ");
+    ("audio/e/e_10_t", 1, "tʃ"),
+    ("audio/o/o_1_t", 1, "o"),
+    ("audio/o/o_2_f", 0, "o"),
+    ("audio/o/o_3_f", 0, "o"),
+    ("audio/o/o_4_t", 1, "o"),
+    ("audio/o/o_5_f", 0, "o"),
+    ("audio/o/o_6_t", 1, "o"),
+    ("audio/o/o_7_f", 0, "o"),
+    ("audio/o/o_8_t", 1, "o"),
+    ("audio/o/o_9_t", 1, "o"),
+    ("audio/o/o_10_f", 0, "");
 
 
 INSERT INTO role("name") 
