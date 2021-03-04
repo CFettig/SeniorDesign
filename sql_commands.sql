@@ -104,7 +104,21 @@ VALUES ("ɹ",
         "audio/caret/male.mp3", 
         "audio/caret/female.mp3",
         "up,ugly,uncle,cut,fund,luck,crutch,sputter,cuddle"
-        )
+        ),
+        ("e",
+        "There are two sounds that you commonly find with the “a” spelling. 
+        In this lesson, we focus on the sound [e] which can be found in the words, 
+        “aid”, “lake” and “save”. [e] is considered a tense, mid, front vowel. 
+        Lips will be close to a rest position but may be slightly spread.
+        In American English, you often see the [e] sound when the letter “a”
+        is followed by a single consonant and then the letter “e”, 
+        like in “fate” or “sale” or when the letter “a” is followed 
+        by another vowel letter (most commonly an “i”, like in “aid” or “rain”.",
+        "images/e_illustration.jpg", 
+        "audio/e/male.mp3", 
+        "audio/e/female.mp3",
+        "aid,ace,ape,race,save,lake,played,sprayed,failed"
+        );
 
 
 INSERT INTO min_pair(audio, same, lesson_id) 
@@ -165,7 +179,27 @@ VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"),
     ("audio/ch/ch_7_f", 0, "tʃ"),
     ("audio/ch/ch_8_t", 1, "tʃ"),
     ("audio/ch/ch_9_f", 0, "tʃ"),
-    ("audio/ch/ch_10_t", 1, "tʃ");
+    ("audio/ch/ch_10_t", 1, "tʃ"),
+    ("audio/caret/caret_1_f", 0, "ʌ"),
+    ("audio/caret/caret_2_t", 1, "ʌ"),
+    ("audio/caret/caret_3_f", 0, "ʌ"),
+    ("audio/caret/caret_4_t", 1, "ʌ"),
+    ("audio/caret/caret_5_f", 0, "ʌ"),
+    ("audio/caret/caret_6_f", 0, "ʌ"),
+    ("audio/caret/caret_7_t", 1, "ʌ"),
+    ("audio/caret/caret_8_t", 1, "ʌ"),
+    ("audio/caret/caret_9_f", 0, "ʌ"),
+    ("audio/caret/caret_10_t", 1, "ʌ"),
+    ("audio/e/e_1_f", 0, "tʃ"),
+    ("audio/e/e_2_t", 1, "tʃ"),
+    ("audio/e/e_3_f", 0, "tʃ"),
+    ("audio/e/e_4_f", 0, "tʃ"),
+    ("audio/e/e_5_t", 1, "tʃ"),
+    ("audio/e/e_6_t", 1, "tʃ"),
+    ("audio/e/e_7_f", 0, "tʃ"),
+    ("audio/e/e_8_t", 1, "tʃ"),
+    ("audio/e/e_9_f", 0, "tʃ"),
+    ("audio/e/e_10_t", 1, "tʃ");
 
 
 INSERT INTO role("name") 
