@@ -5,7 +5,7 @@ import csv, io
 from datetime import datetime
 from random import randint
 from . import db
-from .models import Transcript, LessonContent, MinPair, PracticedPair
+from .models import Transcript, LessonContent, MinPair, PracticedPair, User
 from .phonetics import compare_words, get_phonemes
 from .auth import role_required
 
@@ -23,7 +23,8 @@ def profile():
     session['one_page'] = 'profile'
     if current_user.role == 'student':
         posts = Transcript.query.filter_by(user_id=current_user.id)
-        return render_template('student_profile.html', name=current_user.name, posts=posts)
+        # return render_template('student_profile.html', name=current_user.name, posts=posts)
+        return render_template('student_profile.html', posts=posts)
     else:
         return render_template('teacher_profile.html', name=current_user.name)
 
@@ -65,11 +66,8 @@ def practice_sound(sound):
     update_page('sound_practice')
 
     transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
-    if transcript.practiced_sounds:
-        if sound not in transcript.practiced_sounds:
-            transcript.practiced_sounds += sound + ','
-    else:
-        transcript.practiced_sounds = sound + ','
+    if sound not in transcript.practiced_sounds:
+        transcript.practiced_sounds+= sound + ':'
 
     db.session.add(transcript)
     db.session.commit()
@@ -129,42 +127,41 @@ def end_practice():
 @main.route('/view_research_data', methods=['GET'])
 @role_required(roles=['researcher'])
 def view_research_data():
-    # transcripts = db.session.query(Transcript,PracticedPair).filter(Transcript.id==PracticedPair.transcript_id).all()
-    transcripts = Transcript.query.all()
-    # transcripts = db.session.query(Transcript,PracticedPair).filter(Transcript.id==PracticedPair.transcript_id).all()
+    data = {}
+    pairs = {}
+    transcripts = db.session.query(Transcript).filter(Transcript.user_id).all()
 
-    # pairs = {}
-
-    # for transcript, pair in transcripts:
-    #     if transcript.id in pairs:
-    #         pairs[transcript.id].append(pair)
-    #         print(transcript)
-    #     else:
-    #         pairs[transcript.id] = [pair]
-    
-    return render_template('data_view.html', transcripts=transcripts)
+    for transcript in transcripts:
+        if transcript.user_id in data:
+            data[transcript.user_id].append(transcript)
+        else:
+            data[transcript.user_id] = [transcript]
+            
+        if transcript.practiced_pairs:
+            pairs[transcript.id] = ''
+            for pair in PracticedPair.query.filter(PracticedPair.transcript_id==transcript.id):
+                pairs[transcript.id] += '|actual: ' + pair.actual_word + '|intended: ' + pair.intended_word
+    return render_template('data_view.html', data=data, pairs=pairs)
 
 @main.route('/download_research_data', methods=['GET'])
 @role_required(roles=['researcher'])
 def download_research_data():
-    data = db.session.query(Transcript.id, 
-                            Transcript.date, 
-                            Transcript.text, 
-                            Transcript.practiced_sounds, 
-                            Transcript.main_practice_time, 
-                            Transcript.sound_practice_time).all()
+    transcripts = db.session.query(Transcript).filter(User.id==Transcript.user_id).all()
+
     output = io.StringIO()
-    writer = csv.writer(output)
-    
-    writer.writerow(['id','date','text','practiced_sounds','main_practice_time','sound_practice_time'])
-    for transcript in data:
-        line = [(",".join((str(transcript.id), 
-                str(transcript.date), 
-                transcript.text, 
-                str(transcript.practiced_sounds), 
-                str(transcript.main_practice_time), 
-                str(transcript.sound_practice_time))))]
-        writer.writerow(line)
+    writer = csv.writer(output, delimiter=";")
+    writer.writerow(['user', 'date','text','practiced_sounds','main_practice_time','sound_practice_time', 'practiced pairs'])
+
+    for transcript in transcripts:
+        print('*'*30 + transcript.practiced_sounds)
+        line =  str(transcript.id) + ';' + str(transcript.date) + ';' +transcript.text + ';' +str(transcript.practiced_sounds) + ';' + str(transcript.main_practice_time) + ';' + str(transcript.sound_practice_time)
+            
+        if transcript.practiced_pairs:
+            for pair in PracticedPair.query.filter(PracticedPair.transcript_id==transcript.id):
+                line += ',' + 'actual: ' + pair.actual_word + '  intended: ' + pair.intended_word
+
+        writer.writerow([line])
+
     output.seek(0)
 
     return Response(output, mimetype="text/csv", headers={"Content-Disposition":"attachment;filename=practice_data.csv"})

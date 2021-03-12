@@ -7,7 +7,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100))
-    name = db.Column(db.String(1000))
+    # name = db.Column(db.String(1000))
     role = db.Column(db.String(7))
     # transcripts = db.relationship('Transcript', backref='user', lazy=True)
 
@@ -15,8 +15,14 @@ class User(UserMixin, db.Model):
         return {"id": self.id,
                 "email": self.email,
                 "password": self.password,
-                "name": self.name
+                # "name": self.name
                 }
+
+# class Student(User):
+#     extend_existing=True
+#     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+#     transcripts = db.relationship('Transcript', backref='student', lazy=True)
+
 
 class Transcript(db.Model):
     extend_existing=True
@@ -26,7 +32,7 @@ class Transcript(db.Model):
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     main_practice_time = db.Column(db.Float, default=0)
     sound_practice_time = db.Column(db.Float, default=0)
-    practiced_sounds = db.Column(db.String(3))
+    practiced_sounds = db.Column(db.String(3), default="")
     practiced_pairs = db.relationship("PracticedPair")
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 

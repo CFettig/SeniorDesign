@@ -3,30 +3,22 @@
 {% block content %} 
 
 <a class="btn btn-primary" href="{{ url_for('main.download_research_data') }}" role="button">Download data<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M10 22a2 2 0 01-2-2V4a2 2 0 012-2h11a2 2 0 012 2v16a2 2 0 01-2 2H10zm-.5-2a.5.5 0 00.5.5h11a.5.5 0 00.5-.5V4a.5.5 0 00-.5-.5H10a.5.5 0 00-.5.5v16zM6.17 4.165a.75.75 0 01-.335 1.006c-.228.114-.295.177-.315.201a.037.037 0 00-.008.016.387.387 0 00-.012.112v13c0 .07.008.102.012.112a.03.03 0 00.008.016c.02.024.087.087.315.201a.75.75 0 11-.67 1.342c-.272-.136-.58-.315-.81-.598C4.1 19.259 4 18.893 4 18.5v-13c0-.393.1-.759.355-1.073.23-.283.538-.462.81-.598a.75.75 0 011.006.336zM2.15 5.624a.75.75 0 01-.274 1.025c-.15.087-.257.17-.32.245C1.5 6.96 1.5 6.99 1.5 7v10c0 .01 0 .04.056.106.063.074.17.158.32.245a.75.75 0 11-.752 1.298C.73 18.421 0 17.907 0 17V7c0-.907.73-1.42 1.124-1.65a.75.75 0 011.025.274z"></path></svg></a>
-    {% for transcript in transcripts %}
-        <!-- <h1>Transcript {{ transcript.id }}</h1> -->
-        <h1>Date: {{ transcript.date }}</h1>
-        {% if transcript.practiced_sounds %}
-            <p>Sounds practiced during session: {{ transcript['practiced_sounds'].join(', ') }}</p>
-        {% endif %}
-        <p>In this session, the student spent {{ transcript.main_practice_time }} seconds in the main practice room</p>
-        <p>The student spend {{ transcript.sound_practice_time }} seconds practicing individual sounds</p>
-        {% if transcript.practiced_pairs %}
-            <h3>Word pairs</h3>
-            {% for pair in transcript.practiced_pairs %}
-                <p>Actual: {{ pair.actual_word }}  Intended: {{ pair.intended_word }}</p>
+    {% for user in data %}
+        <button class="btn btn-primary" onclick="display_data('{{ user }}')">Student {{ user }}</button>
+        <div id={{ 'user' ~ user }} style="display:none;">
+            {% for transcript in data[user] %}
+                <b>date: {{ transcript.date.strftime('%m/%d/%Y, %H:%M')  }}</b>
+                <p>text: {{ transcript.text }}</p>
+                <p>prompt: {{ transcript.prompt  }}</p>
+                <p>time spent in main room: {{ transcript.main_practice_time }} seconds</p>
+                <p>time spent practicing sounds: {{ transcript.sound_practice_time }} seconds</p>
+                {% if transcript.practiced_pairs %}
+                    <p>pairs practiced: {{ pairs[transcript.id] }}</p>
+                {% endif %}
             {% endfor %}
-        {% else %}
-            <p>The user did not select any words to practice during this session</p>
-        {% endif %} 
-        <!-- {% if transcript.id in pairs %}
-            <h3>Word pairs</h3>
-            {% for pair in pairs[transcript.id] %}
-                <p>Actual: {{ pair.actual_word }}  Intended: {{ pair.intended_word }}</p>
-            {% endfor %}
-        {% endif %}
-        <p>text:{{ transcript.text }}</p> -->
+        </div>
+    {% endfor %}
 
-{% endfor%}
+<script type="text/javascript" src="{{ url_for('static', filename='js/dataview.js') }}"></script>
 
-{% endblock %}
+{% endblock content %}
