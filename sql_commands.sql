@@ -132,7 +132,7 @@ VALUES ("ɹ",
         "audio/o/female.mp3",
         "oat,opal,oboe,go,doe,slow,boat,home,phone"
         ),
-        ("",
+        ("u",
         "There are two sounds that you commonly find with the “u” spelling. 
         In this lesson, we focus on the sound [u] which can be found in the words, 
         “rule”, “fool” and “useful”. [u] is considered a tense, high, back vowel. 
@@ -147,8 +147,33 @@ VALUES ("ɹ",
         "images/u_illustration.jpg", 
         "audio/u/male.mp3", 
         "audio/u/female.mp3",
-        "rule,tune,cute,pool,fool,cool,useful,union,uniform");
-
+        "rule,tune,cute,pool,fool,cool,useful,union,uniform"),
+        ("b",
+        "The English “b” sound, [b] is made by briefly closing the lips. 
+        The sound is made when the air is released through the mouth. The vocal cords will vibrate. 
+        The illustration below shows both ways to create the sound.
+        In American English, the “b” sound can be expected most times that you see “b” in spelling. ",
+        "images/b_illustration.jpg", 
+        "audio/b/male.mp3", 
+        "audio/b/female.mp3",
+        "buy,bear,bore,ribbed,pubs,mobbed,tribe,cub,lab"),
+        ("m",
+        "The English “m” sound, [m] is made by briefly closing the lips. Air passes through the nose.
+        The vocal cords will vibrate. The illustration below shows how to create the sound.
+        In American English, the “m” sound can be expected most times that you see “m” in spelling.",
+        "images/m_illustration.jpg", 
+        "audio/m/male.mp3", 
+        "audio/m/female.mp3",
+        "map,mow,mail,homes,scammer,gamed,foam,sum,gleam"),
+        ("n",
+        "The English “n” sound, [n] is made by pressing the tip of the tongue against the ridge behind
+        the top teeth and the sides of the tongue against the top side teeth. Air passes through the nose.
+        The vocal cords will vibrate. The illustration below shows both ways to create the sound.
+        In American English, the “n” sound can be expected most times that you see “n” in spelling.",
+        "images/n_illustration.jpg", 
+        "audio/n/male.mp3", 
+        "audio/n/female.mp3",
+        "nap,no,nail,hones,scanner,gained,phone,sun,glean");
 
 INSERT INTO min_pair(audio, same, lesson_id) 
 VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"), 
@@ -249,10 +274,3 @@ VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"),
     ("audio/u/u_8_t", 1, "u"),
     ("audio/u/u_9_f", 0, "u"),
     ("audio/u/u_10_t", 1, "u");
-
-
-INSERT INTO role("name") 
-VALUES ("student"), 
-        ("teacher"), 
-        ("researcher"), 
-        ("admin");
