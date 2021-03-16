@@ -37,7 +37,7 @@ def login():
 def signup():
     if request.method=='POST': 
         email = request.form.get('email')
-        name = request.form.get('name')
+        # name = request.form.get('name')
         password = request.form.get('password')
         consent = request.form.get('consent')
         role = request.form.get('role')
@@ -49,7 +49,9 @@ def signup():
             flash('Must sign consent form to use this tool')
             return redirect(url_for('auth.signup'))
 
-        new_user = User(email=email, name=name, role=role, password=generate_password_hash(password, method='sha256'))
+        # new_user = User(email=email, name=name, role=role, password=generate_password_hash(password, method='sha256'))
+        new_user = User(email=email, role=role, password=generate_password_hash(password, method='sha256'))
+
 
         db.session.add(new_user)
         db.session.commit()
