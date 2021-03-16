@@ -4,10 +4,11 @@ from flask_login import login_required, current_user
 import csv, io
 from datetime import datetime
 from random import randint
-from . import db
+from .extensions import db
 from .models import Transcript, LessonContent, MinPair, PracticedPair, User
 from .phonetics import compare_words, get_phonemes
 from .auth import role_required
+from .mailing import send_email
 
 main = Blueprint('main', __name__)
 
@@ -80,7 +81,7 @@ def practice_sound(sound):
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
-    session['one_page'] = 'choose_sound'
+    # session['one_page'] = 'choose_sound'
     pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
     db.session.add(pair)
     db.session.commit()
@@ -117,12 +118,32 @@ def save_transcript():
 
 @main.route('/end_practice', methods=['GET'])
 @role_required(roles=['student'])
-def end_practice():   
+def end_practice():
     update_page('end_practice')
     if session.get('transcript_id'):
         session.pop('transcript_id')
     #should we redirect to transcript detail page instead?
     return redirect(url_for('main.profile'))
+
+@main.route('/email_practice_report', methods=['POST'])
+@role_required(roles=['student'])
+def email_practice_report():
+    recipient = request.form['recipient']
+    trans_id = request.form['trans_id']
+
+    #FIX THIS    
+    transcript = Transcript.query.filter_by(id=trans_id).one()
+
+
+    report = {
+                'name': transcript.user_id, 
+                'time': transcript.main_practice_time/60,
+                'sounds': transcript.practiced_sounds
+                }
+
+    send_email(recipient, 'PRACTICE REPORT', 'practice_report.html', report=report)
+    
+    return 'success'
 
 @main.route('/view_research_data', methods=['GET'])
 @role_required(roles=['researcher'])
@@ -149,6 +170,7 @@ def download_research_data():
     transcripts = db.session.query(Transcript).filter(User.id==Transcript.user_id).all()
 
     output = io.StringIO()
+
     writer = csv.writer(output, delimiter=";")
     writer.writerow(['user', 'date','text','practiced_sounds','main_practice_time','sound_practice_time', 'practiced pairs'])
 
@@ -166,13 +188,11 @@ def download_research_data():
 
     return Response(output, mimetype="text/csv", headers={"Content-Disposition":"attachment;filename=practice_data.csv"})
 
-# @main.route('/update_time', methods=['GET'])
 #method to update total time spent on page. does not account for inactivity
 def update_page(page):
     last_page = session.get('last_page')
     
     if last_page != page:
-        print("*"*30 + str(last_page) + " " + page)
         end_time = datetime.utcnow()
 
         if last_page == 'main_practice' or last_page == 'sound_practice':

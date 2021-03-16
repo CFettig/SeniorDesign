@@ -69,8 +69,111 @@ VALUES ("ɹ",
         "audio/w/male.mp3", 
         "audio/w/female.mp3",
         "worse,wick,white,walkaway,always,kiwi,wow,window,now"
-        );
-
+        ),
+        ("ʤ",
+        "The English “j” sound, [ʤ] is made by pressing the tip of the tongue against the ridge behind the top teeth
+         and the sides of the tongue against the top side teeth. 
+         The vocal cords will vibrate. The illustration below shows both ways to create the sound.
+        In American English, the “j” sound can be expected most times that you see “j” in spelling. 
+        It can also be occur when you see “ge” or “gi” in American English."
+        "images/j_illustration.jpg", 
+        "audio/j/male.mp3", 
+        "audio/j/female.mp3",
+        "joy,just,giant,suggest,religion,major,large,huge,message"
+        ),
+        ("tʃ",
+        "The English “ch” sound, [tʃ] is made by pressing the tip of the tongue against the ridge behind the top teeth 
+        and the sides of the tongue against the top side teeth. The vocal cords will not vibrate. 
+        The illustration below shows both ways to create the sound.
+        In American English, the “ch” sound can be expected most times that you see “ch” or “tch” in spelling.
+        In American English, the “j” sound can be expected most times that you see “j” in spelling. 
+        It can also be occur when you see “ge” or “gi” in American English.",
+        "images/j_illustration.jpg", 
+        "audio/ch/male.mp3", 
+        "audio/ch/female.mp3",
+        "chin,choke,cheap,watching,kitchen,searches,batch,teach,rich"
+        ),
+        ("ʌ",
+        "There are two sounds that you commonly find with the “u” spelling. 
+        In this lesson, we focus on the sound [ʌ] which can be found in the words, 
+        “cut”, “fund” and “shut”. [ʌ] is considered a lax, mid, central vowel. 
+        In American English, you often see the [ʌ] sound when the letter “u” is followed by two consonants, 
+        like in “fund” or “luck” or when you see “u” followed by a single consonant at the end of a word, 
+        like in “cut” and “up”.",
+        "images/caret_illustration.jpg", 
+        "audio/caret/male.mp3", 
+        "audio/caret/female.mp3",
+        "up,ugly,uncle,cut,fund,luck,crutch,sputter,cuddle"
+        ),
+        ("e",
+        "There are two sounds that you commonly find with the “a” spelling. 
+        In this lesson, we focus on the sound [e] which can be found in the words, 
+        “aid”, “lake” and “save”. [e] is considered a tense, mid, front vowel. 
+        Lips will be close to a rest position but may be slightly spread.
+        In American English, you often see the [e] sound when the letter “a”
+        is followed by a single consonant and then the letter “e”, 
+        like in “fate” or “sale” or when the letter “a” is followed 
+        by another vowel letter (most commonly an “i”, like in “aid” or “rain”.",
+        "images/e_illustration.jpg", 
+        "audio/e/male.mp3", 
+        "audio/e/female.mp3",
+        "aid,ace,ape,race,save,lake,played,sprayed,failed"
+        ),
+        ("o",
+        "There are two sounds that you commonly find with the “o” spelling. 
+        In this lesson, we focus on the sound [o] which can be found in the words, 
+        “home”, “phone” and “boat”. [o] is considered a tense, mid, back vowel.
+        It is also rounded, which means the lips need to push out while creating a circle to make the sound.
+        In American English, you often see the [o] sound when the letter “o” is followed by a single consonant 
+        and then the letter “e”, like in “home” or “phone” or when you see an “o” 
+        followed by another vowel letter, like in “boat” or “coat.” ",
+        "images/o_illustration.jpg", 
+        "audio/o/male.mp3", 
+        "audio/o/female.mp3",
+        "oat,opal,oboe,go,doe,slow,boat,home,phone"
+        ),
+        ("u",
+        "There are two sounds that you commonly find with the “u” spelling. 
+        In this lesson, we focus on the sound [u] which can be found in the words, 
+        “rule”, “fool” and “useful”. [u] is considered a tense, high, back vowel. 
+        It is also rounded, which means the lips need to push out while creating a 
+        circle while making the sound.
+        In American English, you often see the [u] sound when the letter “u” 
+        is followed by a single consonant and then the letter “e”, 
+        like in “rule” or “tune”, or when you see a double “oo” like in “fool” or “pool”. 
+        Words that begin with a “u” in spelling may also have the [u]sound, 
+        but are likely to start with a [y] sound, like at the beginning “useful” 
+        which is pronounced [yusfəl]",
+        "images/u_illustration.jpg", 
+        "audio/u/male.mp3", 
+        "audio/u/female.mp3",
+        "rule,tune,cute,pool,fool,cool,useful,union,uniform"),
+        ("b",
+        "The English “b” sound, [b] is made by briefly closing the lips. 
+        The sound is made when the air is released through the mouth. The vocal cords will vibrate. 
+        The illustration below shows both ways to create the sound.
+        In American English, the “b” sound can be expected most times that you see “b” in spelling. ",
+        "images/b_illustration.jpg", 
+        "audio/b/male.mp3", 
+        "audio/b/female.mp3",
+        "buy,bear,bore,ribbed,pubs,mobbed,tribe,cub,lab"),
+        ("m",
+        "The English “m” sound, [m] is made by briefly closing the lips. Air passes through the nose.
+        The vocal cords will vibrate. The illustration below shows how to create the sound.
+        In American English, the “m” sound can be expected most times that you see “m” in spelling.",
+        "images/m_illustration.jpg", 
+        "audio/m/male.mp3", 
+        "audio/m/female.mp3",
+        "map,mow,mail,homes,scammer,gamed,foam,sum,gleam"),
+        ("n",
+        "The English “n” sound, [n] is made by pressing the tip of the tongue against the ridge behind
+        the top teeth and the sides of the tongue against the top side teeth. Air passes through the nose.
+        The vocal cords will vibrate. The illustration below shows both ways to create the sound.
+        In American English, the “n” sound can be expected most times that you see “n” in spelling.",
+        "images/n_illustration.jpg", 
+        "audio/n/male.mp3", 
+        "audio/n/female.mp3",
+        "nap,no,nail,hones,scanner,gained,phone,sun,glean");
 
 INSERT INTO min_pair(audio, same, lesson_id) 
 VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"), 
@@ -110,11 +213,64 @@ VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"),
     ("audio/small_cap_i/small_cap_i_7_f.mp3", 0, "ɪ"),
     ("audio/small_cap_i/small_cap_i_8_t.mp3", 1, "ɪ"),
     ("audio/small_cap_i/small_cap_i_9_f.mp3", 0, "ɪ"),
-    ("audio/small_cap_i/small_cap_i_10_t.mp3", 1, "ɪ");
-
-
-INSERT INTO role("name") 
-VALUES ("student"), 
-        ("teacher"), 
-        ("researcher"), 
-        ("admin");
+    ("audio/small_cap_i/small_cap_i_10_t.mp3", 1, "ɪ"),
+    ("audio/j/j_1_f.mp3", 0, "ʤ"),
+    ("audio/j/j_2_t.mp3", 1, "ʤ"),
+    ("audio/j/j_3_.mp3", 0, "ʤ"),
+    ("audio/j/j_4_.mp3", 0, "ʤ"),
+    ("audio/j/j_5_.mp3", 1, "ʤ"),
+    ("audio/j/j_6_.mp3", 0, "ʤ"),
+    ("audio/j/j_7_.mp3", 0, "ʤ"),
+    ("audio/j/j_8_.mp3", 1, "ʤ"),
+    ("audio/j/j_9_.mp3", 0, "ʤ"),
+    ("audio/j/j_10_.mp3", 1, "ʤ"),
+    ("audio/ch/ch_1_f", 0, "tʃ"),
+    ("audio/ch/ch_2_t", 1, "tʃ"),
+    ("audio/ch/ch_3_f", 0, "tʃ"),
+    ("audio/ch/ch_4_f", 0, "tʃ"),
+    ("audio/ch/ch_5_t", 1, "tʃ"),
+    ("audio/ch/ch_6_f", 0, "tʃ"),
+    ("audio/ch/ch_7_f", 0, "tʃ"),
+    ("audio/ch/ch_8_t", 1, "tʃ"),
+    ("audio/ch/ch_9_f", 0, "tʃ"),
+    ("audio/ch/ch_10_t", 1, "tʃ"),
+    ("audio/caret/caret_1_f", 0, "ʌ"),
+    ("audio/caret/caret_2_t", 1, "ʌ"),
+    ("audio/caret/caret_3_f", 0, "ʌ"),
+    ("audio/caret/caret_4_t", 1, "ʌ"),
+    ("audio/caret/caret_5_f", 0, "ʌ"),
+    ("audio/caret/caret_6_f", 0, "ʌ"),
+    ("audio/caret/caret_7_t", 1, "ʌ"),
+    ("audio/caret/caret_8_t", 1, "ʌ"),
+    ("audio/caret/caret_9_f", 0, "ʌ"),
+    ("audio/caret/caret_10_t", 1, "ʌ"),
+    ("audio/e/e_1_f", 0, "tʃ"),
+    ("audio/e/e_2_t", 1, "tʃ"),
+    ("audio/e/e_3_f", 0, "tʃ"),
+    ("audio/e/e_4_f", 0, "tʃ"),
+    ("audio/e/e_5_t", 1, "tʃ"),
+    ("audio/e/e_6_t", 1, "tʃ"),
+    ("audio/e/e_7_f", 0, "tʃ"),
+    ("audio/e/e_8_t", 1, "tʃ"),
+    ("audio/e/e_9_f", 0, "tʃ"),
+    ("audio/e/e_10_t", 1, "tʃ"),
+    ("audio/o/o_1_t", 1, "o"),
+    ("audio/o/o_2_f", 0, "o"),
+    ("audio/o/o_3_f", 0, "o"),
+    ("audio/o/o_4_t", 1, "o"),
+    ("audio/o/o_5_f", 0, "o"),
+    ("audio/o/o_6_t", 1, "o"),
+    ("audio/o/o_7_f", 0, "o"),
+    ("audio/o/o_8_t", 1, "o"),
+    ("audio/o/o_9_t", 1, "o"),
+    ("audio/o/o_10_f", 0, "o"),
+    ("audio/u/u_1_t", 1, "u"),
+    ("audio/u/u_2_t", 1, "u"),
+    ("audio/u/u_3_f", 0, "u"),
+    ("audio/u/u_4_t", 1, "u"),
+    ("audio/u/u_5_f", 0, "u"),
+    ("audio/u/u_6_t", 1, "u"),
+    ("audio/u/u_7_f", 0, "u"),
+    ("audio/u/u_8_t", 1, "u"),
+    ("audio/u/u_9_f", 0, "u"),
+    ("audio/u/u_10_t", 1, "u");
