@@ -1,7 +1,7 @@
 from flask import Blueprint, session, redirect, render_template, url_for, request, flash
 from flask import Response
 from flask_login import login_required, current_user
-import csv, io
+import csv, io, requests as req
 from datetime import datetime
 from random import randint
 from .extensions import db
@@ -57,9 +57,23 @@ def practice():
         if transcript:
             prompt = transcript.prompt
         else: 
-            prompt = "https://picsum.photos/" + str(randint(0, 5000))
-
+            # prompt = "https://picsum.photos/" + str(randint(0, 5000))
+            prompt = req.get("https://source.unsplash.com/random").url
+            
         return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
+
+@main.route('/practice/new_prompt', methods=['GET'])
+@role_required(roles=['student'])
+def new_prompt():
+    prompt = req.get("https://source.unsplash.com/random").url
+    
+    transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+    transcript.prompt = prompt
+    
+    db.session.add(transcript)
+    db.session.commit()
+
+    return redirect(url_for('main.practice'))
 
 @main.route('/practice/<sound>')
 @role_required(roles=['teacher', 'student', 'admin'])

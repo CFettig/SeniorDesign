@@ -173,7 +173,17 @@ VALUES ("ɹ",
         "images/n_illustration.jpg", 
         "audio/n/male.mp3", 
         "audio/n/female.mp3",
-        "nap,no,nail,hones,scanner,gained,phone,sun,glean");
+        "nap,no,nail,hones,scanner,gained,phone,sun,glean"),
+        ("d",
+        "The English “d” sound, [d] is made by pressing the tip of the tongue against
+         the ridge behind the top teeth and the sides of the tongue against the top side teeth.
+         The vocal cords will vibrate. The illustration below shows how to create the sound.
+         In American English, the “d” sound can be expected most times that you see “d” in spelling.",
+        "images/d_illustration.gif",
+        "audio/d/male.mp3", 
+        "audio/d/female.mp3",
+        "down,faded,card,drain,codes,said,den,beds,weighed"
+        )
 
 INSERT INTO min_pair(audio, same, lesson_id) 
 VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"), 
