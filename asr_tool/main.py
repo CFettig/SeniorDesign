@@ -12,23 +12,26 @@ from .mailing import send_email
 
 main = Blueprint('main', __name__)
 
+#home page
 @main.route('/')
 def index():
     update_page('index')
     return render_template('index.html')
 
+#student profile. Displays past transcripts
 @main.route('/profile')
 @role_required(roles=['teacher', 'student'])
 def profile():
     update_page('profile')
     session['one_page'] = 'profile'
-    if current_user.role == 'student':
-        posts = Transcript.query.filter_by(user_id=current_user.id)
+    # if current_user.role == 'student':
+    posts = Transcript.query.filter_by(user_id=current_user.id)
         # return render_template('student_profile.html', name=current_user.name, posts=posts)
-        return render_template('student_profile.html', posts=posts)
-    else:
-        return render_template('teacher_profile.html', name=current_user.name)
+    return render_template('student_profile.html', posts=posts)
+    # else:
+        # return render_template('teacher_profile.html', name=current_user.name)
 
+#Delete transcript
 @main.route('/profile/delete/<int:transcriptid>')
 @login_required
 def deleteTranscript(transcriptid):
@@ -43,25 +46,29 @@ def deleteTranscript(transcriptid):
 
     return redirect('/profile')
 
+#Main practice room 
 @main.route('/practice', methods=['GET', 'POST'])
 @role_required(roles=['student'])
 def practice():
     update_page('main_practice')
 
-    transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
-
     if request.method=='POST':
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
     else:
+        transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+
+        #if there is a current transcript, use transcript prompt
         if transcript:
             prompt = transcript.prompt
+
+        #if creating new transcript, generate random prompt
         else: 
-            # prompt = "https://picsum.photos/" + str(randint(0, 5000))
             prompt = req.get("https://source.unsplash.com/random").url
             
         return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
 
+#generates new prompt for current transcript
 @main.route('/practice/new_prompt', methods=['GET'])
 @role_required(roles=['student'])
 def new_prompt():
@@ -75,14 +82,16 @@ def new_prompt():
 
     return redirect(url_for('main.practice'))
 
+#individual sound practice room
 @main.route('/practice/<sound>')
 @role_required(roles=['teacher', 'student', 'admin'])
 def practice_sound(sound):
     update_page('sound_practice')
 
     transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+
     if sound not in transcript.practiced_sounds:
-        transcript.practiced_sounds+= sound + ':'
+        transcript.practiced_sounds += sound + ':'
 
     db.session.add(transcript)
     db.session.commit()
@@ -92,25 +101,31 @@ def practice_sound(sound):
 
     return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
 
+#extracting sounds for user to practice
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
-    # session['one_page'] = 'choose_sound'
+    #saving word pair to transcript
     pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
     db.session.add(pair)
     db.session.commit()
     
     sounds = []
     
+    #getting sounds differing between two words
     for item in compare_words(actual, intended):
         sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first()))
+
     return render_template('pronunciation.html', sounds=sounds)
 
+#saving transcript
 @main.route('/save_transcript', methods=['POST'])
 @role_required(roles=['student'])
 def save_transcript():
     user_text = request.form['transcript']
     prompt = request.form['prompt']
+
+    #getting current transcript id from session
     transcript_id = session.get('transcript_id')
 
     #adding text to an existing transcript
@@ -126,19 +141,25 @@ def save_transcript():
         new_transcript = Transcript(text=user_text, user_id=current_user.id, id=transcript_id)
         db.session.add(new_transcript)
         db.session.commit()
+
+        #adding new transcript as current transcript in session
         session['transcript_id'] = new_transcript.id
     
     return "transcript added"
 
+#ending current practice room
 @main.route('/end_practice', methods=['GET'])
 @role_required(roles=['student'])
 def end_practice():
     update_page('end_practice')
+
+    #removing current transcript from session
     if session.get('transcript_id'):
         session.pop('transcript_id')
-    #should we redirect to transcript detail page instead?
+   
     return redirect(url_for('main.profile'))
 
+#email practice report to teacher
 @main.route('/email_practice_report', methods=['POST'])
 @role_required(roles=['student'])
 def email_practice_report():
@@ -150,7 +171,7 @@ def email_practice_report():
 
 
     report = {
-                'name': transcript.user_id, 
+                'name': current_user.email, 
                 'time': transcript.main_practice_time/60,
                 'sounds': transcript.practiced_sounds
                 }
@@ -159,6 +180,7 @@ def email_practice_report():
     
     return 'success'
 
+#displays transcript information for all users
 @main.route('/view_research_data', methods=['GET'])
 @role_required(roles=['researcher'])
 def view_research_data():
@@ -176,8 +198,10 @@ def view_research_data():
             pairs[transcript.id] = ''
             for pair in PracticedPair.query.filter(PracticedPair.transcript_id==transcript.id):
                 pairs[transcript.id] += '|actual: ' + pair.actual_word + '|intended: ' + pair.intended_word
+    
     return render_template('data_view.html', data=data, pairs=pairs)
 
+#downloads all transcript data as csv file
 @main.route('/download_research_data', methods=['GET'])
 @role_required(roles=['researcher'])
 def download_research_data():
@@ -189,7 +213,6 @@ def download_research_data():
     writer.writerow(['user', 'date','text','practiced_sounds','main_practice_time','sound_practice_time', 'practiced pairs'])
 
     for transcript in transcripts:
-        print('*'*30 + transcript.practiced_sounds)
         line =  str(transcript.id) + ';' + str(transcript.date) + ';' +transcript.text + ';' +str(transcript.practiced_sounds) + ';' + str(transcript.main_practice_time) + ';' + str(transcript.sound_practice_time)
             
         if transcript.practiced_pairs:
