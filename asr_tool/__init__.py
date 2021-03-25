@@ -1,6 +1,6 @@
 from flask import Flask
 # from flask_sqlalchemy import SQLAlchemy
-from .extensions import mail, login_manager, db
+from .extensions import mail, login_manager, db, admin
 # from flask_login import LoginManager
 # from flask_apscheduler import APScheduler
 # from flask_mail import Mail
@@ -27,8 +27,10 @@ def create_app():
 
     mail.init_app(app)
 
+    admin.init_app(app)
+
     with app.app_context():
-        from .models import User, Transcript
+        from .models import User, Transcript, PracticedPair, LessonContent, MinPair
         db.create_all()
 
         # login_manager = LoginManager()
@@ -40,7 +42,13 @@ def create_app():
         def load_user(user_id):
             user = User.query.get(int(user_id))
             return User.query.get(int(user_id))
-        
+
+        from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView
+        admin.add_view(UserView(User, db.session))
+        admin.add_view(TranscriptView(Transcript, db.session))
+        admin.add_view(PracticedPairView(PracticedPair, db.session))
+        admin.add_view(MinPairView(MinPair, db.session))
+
     # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
