@@ -9,6 +9,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100))
     role = db.Column(db.String(10))
+    info = db.relationship("UserInfo", uselist=False, back_populates="user")
 
     def serialize(self):
         return {"id": self.id,
@@ -27,7 +28,7 @@ class UserInfo(db.Model):
     self_assessed_eng_ability = db.Column(db.String(13))
     how_found_site = db.Column(db.String(200))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('userinfo', lazy='dynamic'))
+    user = db.relationship('User', back_populates='info')
 
 class Transcript(db.Model):
     extend_existing=True
@@ -68,7 +69,6 @@ class PracticedPair(db.Model):
 
 class LessonContent(db.Model):
     extend_existing=True
-    # id = db.Column(db.Integer, primary_key=True)
     sound = db.Column(db.String(3), primary_key=True)
     intro_text = db.Column(db.Text)
     illustration = db.Column(db.String(100))
