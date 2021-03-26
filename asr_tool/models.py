@@ -8,9 +8,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100))
-    # name = db.Column(db.String(1000))
     role = db.Column(db.String(10))
-    # transcripts = db.relationship('Transcript', backref='transcript', lazy=True)
 
     def serialize(self):
         return {"id": self.id,
@@ -18,6 +16,18 @@ class User(UserMixin, db.Model):
                 "password": self.password,
                 # "name": self.name
                 }
+
+class UserInfo(db.Model):
+    extend_existing=True
+    id = db.Column(db.Integer, primary_key=True)
+    age = db.Column(db.Integer)
+    gender = db.Column(db.String(25))
+    native_lang = db.Column(db.String(100))
+    time_studying_english = db.Column(db.Integer)
+    self_assessed_eng_ability = db.Column(db.String(13))
+    how_found_site = db.Column(db.String(200))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('userinfo', lazy='dynamic'))
 
 class Transcript(db.Model):
     extend_existing=True

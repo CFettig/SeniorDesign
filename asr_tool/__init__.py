@@ -1,9 +1,8 @@
 from flask import Flask
-# from flask_sqlalchemy import SQLAlchemy
 from .extensions import mail, login_manager, db, admin
-# from flask_login import LoginManager
-# from flask_apscheduler import APScheduler
-# from flask_mail import Mail
+from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView
+from .models import User, Transcript, PracticedPair, LessonContent, MinPair, UserInfo
+
 
 # init SQLAlchemy 
 # db = SQLAlchemy()
@@ -29,25 +28,24 @@ def create_app():
 
     admin.init_app(app)
 
+    admin.add_view(UserView(User, db.session))
+    admin.add_view(TranscriptView(Transcript, db.session))
+    admin.add_view(PracticedPairView(PracticedPair, db.session))
+    admin.add_view(MinPairView(MinPair, db.session))
+
     with app.app_context():
-        from .models import User, Transcript, PracticedPair, LessonContent, MinPair
+        # from .models import User, Transcript, PracticedPair, LessonContent, MinPair
         db.create_all()
 
         # login_manager = LoginManager()
         login_manager.login_view = 'auth.login'
         login_manager.init_app(app)
 
-        from .models import User
+        # from .models import User
         @login_manager.user_loader
         def load_user(user_id):
             user = User.query.get(int(user_id))
             return User.query.get(int(user_id))
-
-        from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView
-        admin.add_view(UserView(User, db.session))
-        admin.add_view(TranscriptView(Transcript, db.session))
-        admin.add_view(PracticedPairView(PracticedPair, db.session))
-        admin.add_view(MinPairView(MinPair, db.session))
 
     # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint

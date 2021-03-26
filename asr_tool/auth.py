@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from functools import wraps
 from . import db
-from .models import User
+from .models import User, UserInfo
 
 auth = Blueprint('auth', __name__)
 
@@ -24,7 +24,7 @@ def login():
             flash('Password incorrect')
             return redirect(url_for('auth.login'))
 
-        e = login_user(user, remember=remember)
+        login_user(user, remember=remember)
          
         session['logged_in'] = True
         return redirect(url_for('main.profile'))
@@ -56,10 +56,43 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.demographics'))
 
     else:
         return render_template('signup.html')
+
+@auth.route('/demographics', methods=['GET', 'POST'])
+@login_required
+def demographics():
+    if request.method=='POST':
+        age = request.form.get('age')
+
+        gender = request.form.get('gender')
+        if gender == 'other':
+            gender = request.form.get('gender-other')
+
+        native_lang = request.form.get('native-lang1') + ';'
+        native_lang += request.form.get('native-lang2') + ';'
+        native_lang += request.form.get('native-lang3') + ';'
+
+        time_studying = request.form.get('time-studying')
+        ability = request.form.get('level')
+
+        found_site = request.form.get('found-site')
+        if found_site == 'other':
+            found_site = request.form.get('found-site-other')
+
+        new_info = UserInfo(age=age, gender=gender, native_lang=native_lang, time_studying_english=time_studying, 
+                            self_assessed_eng_ability=ability, how_found_site=found_site, user_id=current_user.id)
+
+        db.session.add(new_info)
+        db.session.commit()
+
+        return ""
+
+    else:
+        return render_template('demographics.html')
+
 
 @auth.route('/logout')
 @login_required
