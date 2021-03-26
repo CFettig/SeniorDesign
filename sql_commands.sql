@@ -183,7 +183,7 @@ VALUES ("ɹ",
         "audio/d/male.mp3", 
         "audio/d/female.mp3",
         "down,faded,card,drain,codes,said,den,beds,weighed"
-        )
+        );
 
 INSERT INTO min_pair(audio, same, lesson_id) 
 VALUES ("audio/r/r_mp1.mp3", 0, "ɹ"), 
