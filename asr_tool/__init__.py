@@ -1,6 +1,6 @@
 from flask import Flask
 from .extensions import mail, login_manager, db, admin
-from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView
+from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView, UserInfoView
 from .models import User, Transcript, PracticedPair, LessonContent, MinPair, UserInfo
 
 
@@ -29,6 +29,7 @@ def create_app():
     admin.init_app(app)
 
     admin.add_view(UserView(User, db.session))
+    admin.add_view(UserInfoView(UserInfo, db.session))
     admin.add_view(TranscriptView(Transcript, db.session))
     admin.add_view(PracticedPairView(PracticedPair, db.session))
     admin.add_view(MinPairView(MinPair, db.session))
