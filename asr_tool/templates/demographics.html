@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Page 2</h1>
+<p>Before you start, we'd like to collect some info. You are not required to answer any of these questions</p>
+<div style="padding: 30px;">
+    <form method="POST" action="/demographics"
+        style="background-color: white; width: 40%; border-radius: 10px; padding: 20px;">
+        <div class="form-group">
+            <label for="age">What is your age?</label>
+            <input type="number" name="age" class="form-control" id="age" min="1" max="120" placeholder="Enter age">
+        </div><br>
+        <div class="form-check">
+            <p>What is your gender?</p>
+            <label class="form-check-label" for="genderChoice1">Male</label>
+            <input type="radio" class="" id="genderChoice1" name="gender" value="male"><br>
+            <label class="form-check-label" for="genderChoice2">Female</label>
+            <input type="radio" class="" id="genderChoice2" name="gender" value="female"><br>
+            <label class="form-check-label" for="genderChoice3">Other: </label>
+            <input type="text" class="" id="genderChoice3" name="gender-other" value="">
+            <input type="radio" class="" id="genderChoice3" name="gender" value="other">
+        </div><br>
+        <div class="form-group">
+            <label for="native-lang">What is your native language(s)?</label>
+            <input type="text" name="native-lang1" class="form-control" id="native-lang1" placeholder="Enter language">
+            <input type="text" name="native-lang2" class="form-control" id="native-lang2" placeholder="Enter language">
+            <input type="text" name="native-lang3" class="form-control" id="native-lang3" placeholder="Enter language">
+        </div>
+        <div class="form-group">
+            <label for="time-studying">How long have you been studying English?</label>
+            <p><input type="number" name="time-studying" class="form-control" id="time-studying"> years</p>
+        </div><br>
+        <div class="form-check">
+            <p>Which do you think best represents your current English ability?</p>
+            <label class="form-check-label" for="lvlChoice1">Beginner</label>
+            <input type="radio" class="" id="lvlChoice1" name="level" value="beginner"><br>
+            <label class="form-check-label" for="lvlChocie2">Intermediate</label>
+            <input type="radio" class="" id="lvlChoice2" name="level" value="intermediate"><br>
+            <label class="form-check-label" for="lvlChoice3">Advanced</label>
+            <input type="radio" class="" id="lvlChoice3" name="level" value="advanced">
+        </div><br>
+        <div class="form-check">
+            <p>How did you learn about this site?</p>
+            <label class="form-check-label" for="foundSite1">A teacher recommended it</label>
+            <input type="radio" class="" id="foundSite1" name="found-site" value="teacher-recommended"><br>
+            <label class="form-check-label" for="foundSite2">A teacher is requiring it for class</label>
+            <input type="radio" class="" id="foundSite2" name="found-site" value="teacher-required"><br>
+            <label class="form-check-label" for="foundSite3">A friend or family member recommended it</label>
+            <input type="radio" class="" id="foundSite3" name="found-site" value="friend-family"><br>
+            <label class="form-check-label" for="foundSite4">I found it through an online search</label>
+            <input type="radio" class="" id="foundSite4" name="found-site" value="online"><br>
+            <label class="form-check-label" for="foundSite5">Other: </label>
+            <input type="text" class="" id="foundSite5" name="found-site-other" value="">
+            <input type="radio" class="" id="foundSite5" name="found-site" value="other">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+</div>
+{% endblock %}

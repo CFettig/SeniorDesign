@@ -131,19 +131,26 @@ def practice_sound(sound):
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
-    #saving word pair to transcript
-    # Here the correct session transcript id is returned
-    pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
-    db.session.add(pair)
-    db.session.commit()
-    
-    sounds = []
-    
-    #getting sounds differing between two words
-    for item in compare_words(actual, intended):
-        sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first()))
+    try:
+        difference = compare_words(actual, intended)
 
-    return render_template('pronunciation.html', sounds=sounds)
+        #saving word pair to transcript
+        pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
+        db.session.add(pair)
+        db.session.commit()
+        
+        sounds = []
+        
+        #getting sounds differing between two words
+        for item in compare_words(actual, intended):
+            sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first()))
+    
+        return render_template('pronunciation.html', sounds=sounds)
+
+    except Exception as e:
+        flash(str(e))    
+        return redirect(url_for('main.practice'))
+
 
 #saving transcript
 @main.route('/save_transcript', methods=['POST'])

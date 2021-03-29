@@ -8,9 +8,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100))
-    # name = db.Column(db.String(1000))
-    role = db.Column(db.String(7))
-    # transcripts = db.relationship('Transcript', backref='user', lazy=True)
+    role = db.Column(db.String(10))
+    info = db.relationship("UserInfo", uselist=False, back_populates="user")
 
     def serialize(self):
         return {"id": self.id,
@@ -19,11 +18,17 @@ class User(UserMixin, db.Model):
                 # "name": self.name
                 }
 
-# class Student(User):
-#     extend_existing=True
-#     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-#     transcripts = db.relationship('Transcript', backref='student', lazy=True)
-
+class UserInfo(db.Model):
+    extend_existing=True
+    id = db.Column(db.Integer, primary_key=True)
+    age = db.Column(db.Integer)
+    gender = db.Column(db.String(25))
+    native_lang = db.Column(db.String(100))
+    time_studying_english = db.Column(db.Integer)
+    self_assessed_eng_ability = db.Column(db.String(13))
+    how_found_site = db.Column(db.String(200))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='info')
 
 class Transcript(db.Model):
     extend_existing=True
@@ -34,8 +39,9 @@ class Transcript(db.Model):
     main_practice_time = db.Column(db.Float, default=0)
     sound_practice_time = db.Column(db.Float, default=0)
     practiced_sounds = db.Column(db.String(3), default="")
-    practiced_pairs = db.relationship("PracticedPair")
+    practiced_pair = db.relationship('PracticedPair', backref=db.backref('transcript', lazy='select'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('transcript', lazy='dynamic'))
 
     def serialize(self):
         return {"id": self.id,
@@ -50,9 +56,9 @@ class Transcript(db.Model):
 class PracticedPair(db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
-    transcript_id = db.Column(db.Integer, db.ForeignKey('transcript.id'), nullable=False)
     actual_word = db.Column(db.String(100))
     intended_word = db.Column(db.String(100))
+    transcript_id = db.Column(db.Integer, db.ForeignKey('transcript.id'), nullable=False)
 
     def serialize(self):
         return {"id": self.id,
@@ -63,7 +69,6 @@ class PracticedPair(db.Model):
 
 class LessonContent(db.Model):
     extend_existing=True
-    # id = db.Column(db.Integer, primary_key=True)
     sound = db.Column(db.String(3), primary_key=True)
     intro_text = db.Column(db.Text)
     illustration = db.Column(db.String(100))

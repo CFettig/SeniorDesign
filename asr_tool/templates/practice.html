@@ -6,6 +6,18 @@
 <div class="card" style="width: 25rem; border-radius: 20px;" id="mydiv">
     <img id="prompt" src="{{ prompt }}" style="border-radius: 20px;" class="card-img-top" alt="practicePic">
     <div class="card-body">
+        <div>
+            <!-- <h5>{{ prompt }}</h5> -->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <ul class=flashes>
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+              </ul>
+            {% endif %}
+          {% endwith %}
+        </div>
         <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-secondary" id="mic-toggle" onclick="start_recording()"><svg
                     xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill"
