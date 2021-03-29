@@ -24,11 +24,10 @@ function stop_recording() {
 }
 
 asr.onresult = function (event) {
-  interim_text = document.getElementById('interim-text');
   var new_text = document.getElementById('new-text');
-  var interim = '';
+  interim_text = document.getElementById('interim-text');
   var transcript = '';
-
+  var interim = '';
 
   for (var i = event.resultIndex; i < event.results.length; ++i) {
     if (event.results[i].isFinal) {
@@ -40,6 +39,8 @@ asr.onresult = function (event) {
       interim += event.results[i][0].transcript;
     }
   }
+  // Adding a space at the end of the transcript to avoid words being concatenated
+  transcript += " ";
   new_text.textContent += transcript;
   interim_text.innerHTML = interim;
   // console.log(JSON.stringify(new_text.textContent))

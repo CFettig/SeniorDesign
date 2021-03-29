@@ -78,6 +78,6 @@ def role_required(roles):
                 flash("You can't be here")
                 return redirect(url_for('main.index'))
             else:
-                return func(*args, **kwargs) 
+                return func(*args, **kwargs)
         return wrapper
     return decorator
