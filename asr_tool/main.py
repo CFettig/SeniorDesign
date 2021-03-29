@@ -18,14 +18,26 @@ def index():
     update_page('index')
     return render_template('index.html')
 
-#student profile. Displays past transcripts
-@main.route('/profile')
+# Student profile. Displays past transcripts
+@main.route('/profile', methods=['GET'])
+# This means that the session must be logged in and must be associated with one of the roles
 @role_required(roles=['teacher', 'student'])
 def profile():
     update_page('profile')
     session['one_page'] = 'profile'
     # if current_user.role == 'student':
     posts = Transcript.query.filter_by(user_id=current_user.id)
+
+    # This loop serves a purpose to remove all of the transcripts that are insufficient
+    # For example, a transcript with no prompt or no text would be frequently posted to the profile page
+    # This is so that they do not show up, and are automatically deleted
+    for post in posts:
+        # If statement to check if prompt exists and the text of the transcript is not just a blank space
+        if post.prompt == None or post.text.isspace():
+            deleteTranscript(post.id)
+        else:
+            pass
+
         # return render_template('student_profile.html', name=current_user.name, posts=posts)
     return render_template('student_profile.html', posts=posts)
     # else:
@@ -33,6 +45,7 @@ def profile():
 
 #Delete transcript
 @main.route('/profile/delete/<int:transcriptid>')
+# This means that the session must be logged in
 @login_required
 def deleteTranscript(transcriptid):
 
@@ -41,6 +54,14 @@ def deleteTranscript(transcriptid):
     if session.get('transcript_id') == transcriptid:
         session.pop('transcript_id')
 
+    # Check if transcript in question has practiced pairs and if so delete them first
+    if PracticedPair.query.filter_by(transcript_id=transcriptid).first():
+        practicepairs = PracticedPair.query.filter_by(transcript_id=transcriptid).all()
+        for practicepair in practicepairs:
+            db.session.delete(practicepair)
+        db.session.commit()
+
+    # Delete the transcript and commit
     db.session.delete(post)
     db.session.commit()
 
@@ -56,8 +77,8 @@ def practice():
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
     else:
-        transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
 
+        transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
         #if there is a current transcript, use transcript prompt
         if transcript:
             prompt = transcript.prompt
@@ -72,13 +93,16 @@ def practice():
 @main.route('/practice/new_prompt', methods=['GET'])
 @role_required(roles=['student'])
 def new_prompt():
-    prompt = req.get("https://source.unsplash.com/random").url
+
+    # This had no effect because the new_prompt function returns the practice function
+    #which then assignes a url to the prompt variable
+    #prompt = req.get("https://source.unsplash.com/random").url
     
-    transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
-    transcript.prompt = prompt
-    
-    db.session.add(transcript)
-    db.session.commit()
+    # This code does not work because the transcript is not added to the session
+    #before the user practices
+    #transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+    #db.session.add(transcript)
+    #db.session.commit()
 
     return redirect(url_for('main.practice'))
 
@@ -97,9 +121,11 @@ def practice_sound(sound):
     db.session.commit()
 
     content = LessonContent.query.filter_by(sound=sound).first()
-    min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
+    print(LessonContent.query.all())
+    # The line below fails because LessonContent is empty
+    #min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
 
-    return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
+    #return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
 
 #extracting sounds for user to practice
 @main.route('/pronunciation/<actual>/<intended>')
@@ -130,7 +156,8 @@ def pronunciation(actual, intended):
 @main.route('/save_transcript', methods=['POST'])
 @role_required(roles=['student'])
 def save_transcript():
-    user_text = request.form['transcript']
+    # Adding space after transcript so that words dont get concatenated
+    user_text = request.form['transcript'] + " "
     prompt = request.form['prompt']
 
     #getting current transcript id from session
