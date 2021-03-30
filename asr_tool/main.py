@@ -115,7 +115,7 @@ def practice_sound(sound):
 
     trans_id = session.get('transcript_id')
     if trans_id:
-        transcript = Transcript.query.filter_by(id=session.get(trans_id)).first()
+        transcript = Transcript.query.filter_by(id=trans_id).first()
 
         if sound not in transcript.practiced_sounds:
             transcript.practiced_sounds += sound + ':'
@@ -200,8 +200,11 @@ def end_practice():
         session.pop('transcript_id')
    
     user = UserInfo.query.filter_by(user_id=current_user.id).one()
-
-    if (user.num_practice_sess == 1) or (user.num_practice_sess % 10 == 0):
+    user.num_practice_sess += 1
+    db.session.add(user)
+    db.session.commit()
+    
+    if (user.num_practice_sess == 1) or (user.num_practice_sess % 10 == 1):
         return redirect(url_for('main.get_feedback'))
     else:
         return redirect(url_for('main.profile'))

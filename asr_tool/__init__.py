@@ -1,7 +1,7 @@
 from flask import Flask
 from .extensions import mail, login_manager, db, admin
-from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView, UserInfoView
-from .models import User, Transcript, PracticedPair, LessonContent, MinPair, UserInfo
+from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView, UserInfoView, RatingView
+from .models import User, Transcript, PracticedPair, LessonContent, MinPair, UserInfo, Rating
 
 
 # init SQLAlchemy 
@@ -30,6 +30,7 @@ def create_app():
 
     admin.add_view(UserView(User, db.session))
     admin.add_view(UserInfoView(UserInfo, db.session))
+    admin.add_view(RatingView(Rating, db.session))
     admin.add_view(TranscriptView(Transcript, db.session))
     admin.add_view(PracticedPairView(PracticedPair, db.session))
     admin.add_view(MinPairView(MinPair, db.session))

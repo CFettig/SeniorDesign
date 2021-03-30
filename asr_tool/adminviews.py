@@ -9,11 +9,21 @@ class UserView(ModelView):
     can_create = True
     can_edit = True
 
+    form_columns = ['email', 'role']
     column_exclude_list = ['password', 'id',]
 
 class UserInfoView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and (current_user.role=='admin' or current_user.role=='researcher')
+
+    can_delete = False 
+    can_create = False
+    can_edit = False
+    can_export = True
+
+class RatingView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.role=='admin'
 
     can_delete = False 
     can_create = False

@@ -27,7 +27,11 @@ def login():
         login_user(user, remember=remember)
          
         session['logged_in'] = True
-        return redirect(url_for('main.profile'))
+
+        if user.role == 'student':
+            return redirect(url_for('main.profile'))
+        else:
+            return redirect(url_for('admin.index'))
 
     else:
         return render_template('login.html')
@@ -69,9 +73,9 @@ def demographics(user):
         if gender == 'other':
             gender = request.form.get('gender-other')
 
-        native_lang = request.form.get('native-lang1') + ';'
-        native_lang += request.form.get('native-lang2') + ';'
-        native_lang += request.form.get('native-lang3') + ';'
+        native_lang = request.form.get('native-lang1') + '-'
+        native_lang += request.form.get('native-lang2') + '-'
+        native_lang += request.form.get('native-lang3') + '-'
 
         time_studying = request.form.get('time-studying')
         ability = request.form.get('level')
