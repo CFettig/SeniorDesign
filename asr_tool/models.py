@@ -27,8 +27,16 @@ class UserInfo(db.Model):
     time_studying_english = db.Column(db.Integer)
     self_assessed_eng_ability = db.Column(db.String(13))
     how_found_site = db.Column(db.String(200))
+    num_practice_sess = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', back_populates='info')
+
+class Rating(db.Model):
+    extend_existing=True
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow().replace(tzinfo=pytz.utc))
+    rating = db.Column(db.Integer)
+    feedback = db.Column(db.String(1048))
 
 class Transcript(db.Model):
     extend_existing=True

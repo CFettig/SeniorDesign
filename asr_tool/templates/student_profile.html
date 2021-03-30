@@ -16,7 +16,7 @@
       <p class="card-text">
         {% if post.practiced_sounds %}
         <small>sounds you practiced during this session: practice again?
-          {% for sound in post.serialize().practiced_sounds.split(',') %}
+          {% for sound in post.serialize().practiced_sounds.split(':') %}
           <a href="{{ url_for('main.practice_sound', sound=sound) }}">{{ sound }}</a>
           {% endfor %}
         </small>
