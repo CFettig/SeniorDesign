@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="padding: 30px;">
+    <p>Before you go...<br>How would you rate this site for practicing your pronunciation in English?</p>
+    <form method="POST" action="{{ url_for('main.get_feedback') }}"
+        style="background-color: white; width: 40%; border-radius: 10px; padding: 20px;">
+       
+        <div class="form-group">
+            <input type="radio" class="" id="rating1" name="rating" value="1">
+            <input type="radio" class="" id="rating2" name="rating" value="2">
+            <input type="radio" class="" id="rating3" name="rating" value="3">
+            <input type="radio" class="" id="rating4" name="rating" value="4">
+            <input type="radio" class="" id="rating5" name="rating" value="5">
+            <br>
+            <br>
+            <label for="feedback">Please leave feedback</label>
+            <input type="text" name="feedback" class="form-control" id="feedback" placeholder="leave comments here">
+        </div><br>
+
+        <button type="submit" class="btn btn-primary">Ok</button>
+    </form>
+{% endblock %}

@@ -52,18 +52,16 @@ def signup():
         # new_user = User(email=email, name=name, role=role, password=generate_password_hash(password, method='sha256'))
         new_user = User(email=email, role=role, password=generate_password_hash(password, method='sha256'))
 
-
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect(url_for('auth.demographics'))
+        return redirect(url_for('auth.demographics', user=new_user.id))
 
     else:
         return render_template('signup.html')
 
-@auth.route('/demographics', methods=['GET', 'POST'])
-@login_required
-def demographics():
+@auth.route('/demographics/<user>', methods=['GET', 'POST'])
+def demographics(user):
     if request.method=='POST':
         age = request.form.get('age')
 
@@ -83,15 +81,14 @@ def demographics():
             found_site = request.form.get('found-site-other')
 
         new_info = UserInfo(age=age, gender=gender, native_lang=native_lang, time_studying_english=time_studying, 
-                            self_assessed_eng_ability=ability, how_found_site=found_site, user_id=current_user.id)
+                            self_assessed_eng_ability=ability, how_found_site=found_site, user_id=user)
 
         db.session.add(new_info)
         db.session.commit()
-
-        return ""
+        return redirect(url_for('auth.login'))
 
     else:
-        return render_template('demographics.html')
+        return render_template('demographics.html', user=user)
 
 
 @auth.route('/logout')

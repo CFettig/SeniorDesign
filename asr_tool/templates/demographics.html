@@ -3,7 +3,7 @@
 <h1>Page 2</h1>
 <p>Before you start, we'd like to collect some info. You are not required to answer any of these questions</p>
 <div style="padding: 30px;">
-    <form method="POST" action="/demographics"
+    <form method="POST" action="{{ url_for('auth.demographics', user=user) }}"
         style="background-color: white; width: 40%; border-radius: 10px; padding: 20px;">
         <div class="form-group">
             <label for="age">What is your age?</label>

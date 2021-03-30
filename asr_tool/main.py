@@ -5,7 +5,8 @@ import csv, io, requests as req
 from datetime import datetime
 from random import randint
 from .extensions import db
-from .models import Transcript, LessonContent, MinPair, PracticedPair, User
+from .models import Transcript, LessonContent, MinPair, PracticedPair, UserInfo, Rating   
+# from .models import *
 from .phonetics import compare_words, get_phonemes
 from .auth import role_required
 from .mailing import send_email
@@ -112,20 +113,26 @@ def new_prompt():
 def practice_sound(sound):
     update_page('sound_practice')
 
-    transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+    trans_id = session.get('transcript_id')
+    if trans_id:
+        transcript = Transcript.query.filter_by(id=session.get(trans_id)).first()
 
-    if sound not in transcript.practiced_sounds:
-        transcript.practiced_sounds += sound + ':'
+        if sound not in transcript.practiced_sounds:
+            transcript.practiced_sounds += sound + ':'
 
-    db.session.add(transcript)
-    db.session.commit()
+        db.session.add(transcript)
+        db.session.commit()
 
     content = LessonContent.query.filter_by(sound=sound).first()
-    print(LessonContent.query.all())
-    # The line below fails because LessonContent is empty
-    #min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
+    if content:
+        min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
 
-    #return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
+        return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
+    
+    else:
+        return "this lesson content has not been made   "
+
+    
 
 #extracting sounds for user to practice
 @main.route('/pronunciation/<actual>/<intended>')
@@ -192,7 +199,12 @@ def end_practice():
     if session.get('transcript_id'):
         session.pop('transcript_id')
    
-    return redirect(url_for('main.profile'))
+    user = UserInfo.query.filter_by(user_id=current_user.id).one()
+
+    if (user.num_practice_sess == 1) or (user.num_practice_sess % 10 == 0):
+        return redirect(url_for('main.get_feedback'))
+    else:
+        return redirect(url_for('main.profile'))
 
 #email practice report to teacher
 @main.route('/email_practice_report', methods=['POST'])
@@ -214,6 +226,22 @@ def email_practice_report():
     send_email(recipient, 'PRACTICE REPORT', 'practice_report.html', report=report)
     
     return 'success'
+
+@main.route('/get_feedback', methods=['GET', 'POST'])
+def get_feedback():
+    if request.method=='POST':
+        rating = request.form.get('rating')
+        feedback = request.form.get('feedback')
+
+        new_rating = Rating(rating=rating, feedback=feedback)
+
+        db.session.add(new_rating)
+        db.session.commit()
+
+        return redirect(url_for('main.profile'))
+
+    else:
+        return render_template('rating.html')
 
 #displays transcript information for all users
 @main.route('/view_research_data', methods=['GET'])
