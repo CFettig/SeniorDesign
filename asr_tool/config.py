@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 # basedir = path.abspath(path.dirname(__file__))
 # load_dotenv(path.join(basedir, '.env'))
 
-DEBUG = False
+DEBUG = True
 TESTING = False
 CSRF_ENABLED = True
 SQLALCHEMY_TRACK_MODIFICATIONS = False
