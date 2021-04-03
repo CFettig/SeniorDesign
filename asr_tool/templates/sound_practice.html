@@ -1,65 +1,72 @@
 {% extends 'base.html' %}
 {% block content %}
 <br><br><br>
+<div class="container">
     <a href="{{ url_for('main.practice') }}">Go back to practice room</a>
-    <h1>The English [{{ content.sound }}] sound: </h1>
-    <p>{{ content.intro_text}}</p>
+    <h1 style="color: white;">The English [{{ content.sound }}] sound: </h1>
+    <p style="color: white;">{{ content.intro_text}}</p>
 
     <img src="{{ url_for('static', filename=content.illustration) }}" width="10%">
 
-    <h3>Listen</h3>
-    <p>Listen to these words with the {{ content.sound }} sound</p>
+    <h3 style="color: white;">Listen</h3>
+    <p style="color: white;">Listen to these words with the {{ content.sound }} sound</p>
 
     <audio id="sound1" src="{{ url_for('static', filename=content.example_audio_male) }}" preload="auto"></audio>
-    <button onclick="document.getElementById('sound1').play();">Voice 1</button>
+    <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound1').play();">Voice 1</button>
 
     <audio id="sound2" src="{{ url_for('static', filename=content.example_audio_female) }}" preload="auto"></audio>
-    <button onclick="document.getElementById('sound2').play();">Voice 2</button>
+    <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound2').play();">Voice 2</button>
 
-    <h3>Compare</h3>
-    <ul>
-    {% for pair in min_pairs %}
-        <li>
+    <h3 style="color: white;">Compare</h3>
+    <ul class="list-group">
+        {% for pair in min_pairs %}
+        <li class="list-group-item" style="display: inline-block;">
             <audio id={{ pair.id }} src="{{ url_for('static', filename=pair.audio) }}" preload="auto"></audio>
-            <button onclick="document.getElementById({{ pair.id }}).play();">Listen</button>
-            <button onclick="min_pair_check('True', '{{ pair.same }}', {{pair.id}})">Same</button>
-            <button onclick="min_pair_check('False', '{{ pair.same }}', {{pair.id}})">Different</button>
-            <p id={{ pair.id ~ 'correct'}} style="display:none;">Correct!</p>
-            <p id={{ pair.id ~ 'incorrect'}} style="display:none;">Try again</p>
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById({{ pair.id }}).play();">Listen</button>
+            <button type="button" class="btn btn-secondary" onclick="min_pair_check('True', '{{ pair.same }}', {{pair.id}})">Same</button>
+            <button type="button" class="btn btn-secondary" onclick="min_pair_check('False', '{{ pair.same }}', {{pair.id}})">Different</button>
+            <p style="color: white;" id={{ pair.id ~ 'correct'}} style="display:none;">Correct!</p>
+            <p style="color: white;" id={{ pair.id ~ 'incorrect'}} style="display:none;">Try again</p>
         </li>
-    {% endfor %}
+        {% endfor %}
     </ul>
 
 
-    <h3>Speak</h3>
-    <p>Now, it’s your turn. Try saying each of the words aloud. 
-        You can check each by turning on recognition in the text box next to it. 
+    <h3 style="color: white;">Speak</h3>
+    <p style="color: white;">Now, it’s your turn. Try saying each of the words aloud.
+        You can check each by turning on recognition in the text box next to it.
         You can also listen to all of the words again and try repeating after the speaker</p>
-    <button onclick="document.getElementById('sound1').play();">Voice 1</button>
-    <button onclick="document.getElementById('sound2').play();">Voice 2</button>
-    <ul>
-    {% for word in content.quiz_words.split(',') %}
-        <li>
-            <p id={{ word }}>say: <large>{{ word }}</large></p>
+    <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound1').play();">Voice 1</button>
+    <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound2').play();">Voice 2</button>
+    <ul class="list-group">
+        {% for word in content.quiz_words.split(',') %}
+        <li class="list-group-item" style="display: inline-block;">
+            <p style="color: white;" id={{ word }}>say: <large>{{ word }}</large>
+            </p>
             <!-- <button onclick="listen({{ word }})">Listen</button> -->
-            <button type="button" id="mic-toggle" onclick="listen('{{ word }}')"><p id={{ 'mic-toggle' ~ word }} style="display:inline;">Start Mic</p> <svg
-                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-mic-fill" viewBox="0 0 16 16">
-                <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
-                <path fill-rule="evenodd"
-                    d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-            </svg></button>
-            <p id={{ word ~ 'correct'}} style="display:none;">Correct!</p>
-            <p id={{ word ~ 'incorrect'}} style="display:none;">Try again</p>
+            <button type="button" class="btn btn-secondary" type="button" id="mic-toggle" onclick="listen('{{ word }}')">
+                <p style="color: white;" id={{ 'mic-toggle' ~ word }} style="display:inline;">Start Mic</p> <svg
+                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill"
+                    viewBox="0 0 16 16">
+                    <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
+                    <path fill-rule="evenodd"
+                        d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+                </svg>
+            </button>
+            <p style="color: white;" id={{ word ~ 'correct'}} style="display:none;">Correct!</p>
+            <p style="color: white;" id={{ word ~ 'incorrect'}} style="display:none;">Try again</p>
         </li>
-    {% endfor %}
+        {% endfor %}
     </ul>
+</div>
 
-    <p>Ready to continue your practice? <a href="{{ url_for('main.practice') }}">Return to practice room</a></p>
-        
-    <script src="{{ url_for('static', filename='js/pronunciation_practice.js') }}"></script>
-    <style>
-        body {background-color: black;}
-      </style>
+<p style="color: white;">Ready to continue your practice? <a href="{{ url_for('main.practice') }}">Return to practice room</a></p>
+
+<script src="{{ url_for('static', filename='js/pronunciation_practice.js') }}"></script>
+<style>
+    body {
+        background-color: black;
+    }
+</style>
 
 {% endblock content %}

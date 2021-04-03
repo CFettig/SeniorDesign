@@ -10,6 +10,7 @@ from .models import *
 from .phonetics import compare_words, get_phonemes
 from .auth import role_required
 from .mailing import send_email
+from asr_tool.models import User
 
 main = Blueprint('main', __name__)
 
