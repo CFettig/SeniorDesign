@@ -5,8 +5,8 @@ import csv, io, requests as req
 from datetime import datetime
 from random import randint
 from .extensions import db
-from .models import Transcript, LessonContent, MinPair, PracticedPair, UserInfo, Rating   
-# from .models import *
+# from .models import Transcript, LessonContent, MinPair, PracticedPair, UserInfo, Rating   
+from .models import *
 from .phonetics import compare_words, get_phonemes
 from .auth import role_required
 from .mailing import send_email
@@ -39,10 +39,7 @@ def profile():
         else:
             pass
 
-        # return render_template('student_profile.html', name=current_user.name, posts=posts)
     return render_template('student_profile.html', posts=posts)
-    # else:
-        # return render_template('teacher_profile.html', name=current_user.name)
 
 #Delete transcript
 @main.route('/profile/delete/<int:transcriptid>')
@@ -74,6 +71,7 @@ def deleteTranscript(transcriptid):
 def practice():
     update_page('main_practice')
 
+    #POST request comes when user enters pair of words to practice
     if request.method=='POST':
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
@@ -94,16 +92,16 @@ def practice():
 @main.route('/practice/new_prompt', methods=['GET'])
 @role_required(roles=['student'])
 def new_prompt():
+    trans_id = session.get('transcript_id')
 
-    # This had no effect because the new_prompt function returns the practice function
-    #which then assignes a url to the prompt variable
-    #prompt = req.get("https://source.unsplash.com/random").url
-    
-    # This code does not work because the transcript is not added to the session
-    #before the user practices
-    #transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
-    #db.session.add(transcript)
-    #db.session.commit()
+    #only generates new prompt is there is a current transcript
+    if trans_id:
+        new_prompt = req.get("https://source.unsplash.com/random").url
+
+        transcript = Transcript.query.filter_by(id=trans_id).first()
+        transcript.prompt = new_prompt
+        db.session.add(transcript)
+        db.session.commit()
 
     return redirect(url_for('main.practice'))
 
@@ -130,7 +128,7 @@ def practice_sound(sound):
         return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
     
     else:
-        return "this lesson content has not been made   "
+        return "this lesson content has not been made"
 
     
 
@@ -146,14 +144,15 @@ def pronunciation(actual, intended):
         db.session.add(pair)
         db.session.commit()
         
-        sounds = []
-        
         #getting sounds differing between two words
+        #adds min_pair for using as link sound
+        sounds = []
         for item in compare_words(actual, intended):
             sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first()))
     
         return render_template('pronunciation.html', sounds=sounds)
 
+    #one or both of the words was not in the dictionary
     except Exception as e:
         flash(str(e))    
         return redirect(url_for('main.practice'))
@@ -165,7 +164,7 @@ def pronunciation(actual, intended):
 def save_transcript():
     # Adding space after transcript so that words dont get concatenated
     user_text = request.form['transcript'] + " "
-    prompt = request.form['prompt']
+    # prompt = request.form['prompt']
 
     #getting current transcript id from session
     transcript_id = session.get('transcript_id')
@@ -174,7 +173,6 @@ def save_transcript():
     if transcript_id:
         transcript = Transcript.query.filter_by(id=transcript_id).one()
         transcript.text += user_text
-        transcript.prompt = prompt
         db.session.add(transcript)
         db.session.commit()
 
@@ -194,16 +192,19 @@ def save_transcript():
 @role_required(roles=['student'])
 def end_practice():
     update_page('end_practice')
+    print("%"*30 + "done")
 
     #removing current transcript from session
     if session.get('transcript_id'):
         session.pop('transcript_id')
    
+    #updating number of practice sessions the user has done
     user = UserInfo.query.filter_by(user_id=current_user.id).one()
     user.num_practice_sess += 1
     db.session.add(user)
     db.session.commit()
     
+    #prompting user for feedback after every 10 sessions
     if (user.num_practice_sess == 1) or (user.num_practice_sess % 10 == 1):
         return redirect(url_for('main.get_feedback'))
     else:
@@ -215,8 +216,7 @@ def end_practice():
 def email_practice_report():
     recipient = request.form['recipient']
     trans_id = request.form['trans_id']
-
-    #FIX THIS    
+    
     transcript = Transcript.query.filter_by(id=trans_id).one()
 
 
@@ -230,6 +230,7 @@ def email_practice_report():
     
     return 'success'
 
+#saves site feedback from users
 @main.route('/get_feedback', methods=['GET', 'POST'])
 def get_feedback():
     if request.method=='POST':
@@ -245,6 +246,9 @@ def get_feedback():
 
     else:
         return render_template('rating.html')
+        
+"""
+the following routes replaced by admin routes
 
 #displays transcript information for all users
 @main.route('/view_research_data', methods=['GET'])
@@ -290,6 +294,7 @@ def download_research_data():
     output.seek(0)
 
     return Response(output, mimetype="text/csv", headers={"Content-Disposition":"attachment;filename=practice_data.csv"})
+"""
 
 #method to update total time spent on page. does not account for inactivity
 def update_page(page):
