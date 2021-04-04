@@ -198,18 +198,16 @@ def end_practice():
     #removing current transcript from session
     if session.get('transcript_id'):
         session.pop('transcript_id')
-   
-    #updating number of practice sessions the user has done
-    user = UserInfo.query.filter_by(user_id=current_user.id).one()
-    user.num_practice_sess += 1
-    db.session.add(user)
-    db.session.commit()
-    
-    #prompting user for feedback after every 10 sessions
-    if (user.num_practice_sess == 1) or (user.num_practice_sess % 10 == 1):
-        return redirect(url_for('main.get_feedback'))
-    else:
-        return redirect(url_for('main.profile'))
+
+    if UserInfo.query.filter_by(user_id=current_user.id).first():
+        user = UserInfo.query.filter_by(user_id=current_user.id).first()
+        user.num_practice_sess += 1
+        db.session.add(user)
+        db.session.commit()
+        if (user.num_practice_sess == 1) or (user.num_practice_sess % 10 == 1):
+            return redirect(url_for('main.get_feedback'))
+
+    return redirect(url_for('main.profile'))
 
 #email practice report to teacher
 @main.route('/email_practice_report', methods=['POST'])

@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<br><br><br>
 <div style="padding: 30px;">
-    <p>Before you go...<br>How would you rate this site for practicing your pronunciation in English?</p>
+    <p style="color: white;">Before you go...<br>How would you rate this site for practicing your pronunciation in English?</p>
     <form method="POST" action="{{ url_for('main.get_feedback') }}"
         style="background-color: white; width: 40%; border-radius: 10px; padding: 20px;">
-       
+
         <div class="form-group">
             <input type="radio" class="" id="rating1" name="rating" value="1">
             <input type="radio" class="" id="rating2" name="rating" value="2">
@@ -20,4 +21,11 @@
 
         <button type="submit" class="btn btn-primary">Ok</button>
     </form>
+</div>
+
+<style>
+    body {
+        background-color: black;
+    }
+</style>
 {% endblock %}

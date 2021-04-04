@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Page 2</h1>
-<p>Before you start, we'd like to collect some info. You are not required to answer any of these questions</p>
+<br><br><br>
+<div style="margin-left: 10px;">
+    <p style="color: white;">Before you start, we'd like to collect some info. You are not required to answer any of these questions</p>
+    <p style="color: white;">Click "Sign Up" if you want to skip.</p>
+</div>
 <div style="padding: 30px;">
     <form method="POST" action="{{ url_for('auth.demographics', user=user) }}"
         style="background-color: white; width: 40%; border-radius: 10px; padding: 20px;">
@@ -56,4 +59,10 @@
         <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>
 </div>
+
+<style>
+    body {
+        background-color: black;
+    }
+</style>
 {% endblock %}
