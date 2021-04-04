@@ -1,7 +1,11 @@
 from flask import Flask
+import os.path as path
+from flask_admin.contrib.fileadmin import FileAdmin
 from .extensions import mail, login_manager, db, admin
-from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView, UserInfoView, RatingView
-from .models import User, Transcript, PracticedPair, LessonContent, MinPair, UserInfo, Rating
+# from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView, UserInfoView, RatingView
+from .adminviews import *
+# from .models import User, Transcript, PracticedPair, LessonContent, MinPair, UserInfo, Rating
+from .models import *
 
 
 # init SQLAlchemy 
@@ -11,31 +15,21 @@ def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
 
-    # app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-
-    # #email configurations
-    # app.config['MAIL_SERVER']='smtp.gmail.com'
-    # app.config['MAIL_PORT'] = 587
-    # app.config['MAIL_USERNAME'] = os.environ.get("MAIL_USERNAME")
-    # app.config['MAIL_PASSWORD'] = os.environ.get("MAIL_PASSWORD")
-    # app.config['MAIL_DEFAULT_SENDER'] = os.environ.get("DEFAULT_SENDER")
-    # app.config['MAIL_USE_TLS'] = True
-    # app.config['MAIL_USE_SSL'] = False
-
     db.init_app(app)
 
     mail.init_app(app)
 
     admin.init_app(app)
 
-    admin.add_view(UserView(User, db.session))
-    admin.add_view(UserInfoView(UserInfo, db.session))
-    admin.add_view(RatingView(Rating, db.session))
-    admin.add_view(TranscriptView(Transcript, db.session))
-    admin.add_view(PracticedPairView(PracticedPair, db.session))
-    admin.add_view(LessonContentView(LessonContent, db.session))
-    admin.add_view(MinPairView(MinPair, db.session))
+    file_path = path.join(path.dirname(__file__), 'static', 'admin_uploads')
+    admin.add_view(FileView(file_path, '/static/', name='Files', category="Lessons"))
+    admin.add_view(UserView(User, db.session, category="Students"))
+    admin.add_view(UserInfoView(UserInfo, db.session, category="Students"))
+    admin.add_view(RatingView(Rating, db.session, category="Feedback"))
+    admin.add_view(TranscriptView(Transcript, db.session, category="Students"))
+    admin.add_view(PracticedPairView(PracticedPair, db.session, category="Students"))
+    admin.add_view(LessonContentView(LessonContent, db.session, category="Lessons"))
+    admin.add_view(MinPairView(MinPair, db.session, category="Lessons"))
 
     with app.app_context():
         db.create_all()
