@@ -29,7 +29,7 @@ def login():
         session['logged_in'] = True
 
         if user.role == 'student':
-            return redirect(url_for('main.profile'))
+            return redirect(url_for('main.profile')) 
         else:
             return redirect(url_for('admin.index'))
 
