@@ -25,6 +25,8 @@ def login():
             return redirect(url_for('auth.login'))
 
         login_user(user, remember=remember)
+        print("%"*100)
+        print(current_user.role)
          
         session['logged_in'] = True
 
@@ -43,9 +45,13 @@ def signup():
         email = request.form.get('email')
         # name = request.form.get('name')
         password = request.form.get('password')
+        password_check = request.form.get('password_check')
         consent = request.form.get('consent')
-        role = request.form.get('role')
+        # role = request.form.get('role')
         
+        if password != password_check:
+            flash('passwords do not match')
+            return redirect(url_for('auth.signup'))
         if User.query.filter_by(email=email).first():
             flash('This email address is already associated with an existing account')
             return redirect(url_for('auth.signup'))
@@ -53,19 +59,22 @@ def signup():
             flash('Must sign consent form to use this tool')
             return redirect(url_for('auth.signup'))
 
-        # new_user = User(email=email, name=name, role=role, password=generate_password_hash(password, method='sha256'))
-        new_user = User(email=email, role=role, password=generate_password_hash(password, method='sha256'))
+        new_user = User(email=email, role='student', password=generate_password_hash(password, method='sha256'))
 
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect(url_for('auth.demographics', user=new_user.id))
+        login_user(new_user, remember=True)
+         
+        session['logged_in'] = True
+
+        return redirect(url_for('auth.demographics'))
 
     else:
         return render_template('signup.html')
 
-@auth.route('/demographics/<user>', methods=['GET', 'POST'])
-def demographics(user):
+@auth.route('/demographics', methods=['GET', 'POST'])
+def demographics():
     if request.method=='POST':
         age = request.form.get('age')
 
@@ -85,14 +94,15 @@ def demographics(user):
             found_site = request.form.get('found-site-other')
 
         new_info = UserInfo(age=age, gender=gender, native_lang=native_lang, time_studying_english=time_studying, 
-                            self_assessed_eng_ability=ability, how_found_site=found_site, user_id=user)
+                            self_assessed_eng_ability=ability, how_found_site=found_site, user_id=current_user.id)
 
         db.session.add(new_info)
         db.session.commit()
-        return redirect(url_for('auth.login'))
+
+        return redirect(url_for('main.profile'))
 
     else:
-        return render_template('demographics.html', user=user)
+        return render_template('demographics.html')
 
 
 @auth.route('/logout')
@@ -106,8 +116,8 @@ def role_required(roles):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if not current_user:
-                return redirect(url_for('login'))
+            if not current_user.is_authenticated:
+                return redirect(url_for('auth.login'))
             elif (current_user.role not in roles): 
                 flash("You can't be here")
                 return redirect(url_for('main.index'))

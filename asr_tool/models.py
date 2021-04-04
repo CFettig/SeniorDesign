@@ -3,6 +3,8 @@ from flask_login import UserMixin
 from datetime import datetime
 import pytz
 
+
+# User login info
 class User(UserMixin, db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
@@ -18,6 +20,8 @@ class User(UserMixin, db.Model):
                 # "name": self.name
                 }
 
+#User demographics info
+#Only users with student role have associated UserInfo 
 class UserInfo(db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +35,7 @@ class UserInfo(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', back_populates='info')
 
+#User ratings
 class Rating(db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
@@ -38,11 +43,12 @@ class Rating(db.Model):
     rating = db.Column(db.Integer)
     feedback = db.Column(db.String(1048))
 
+#Transcript of a practice session
 class Transcript(db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
     prompt = db.Column(db.String(100))
-    text = db.Column(db.Text)
+    text = db.Column(db.Text, default="")
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow().replace(tzinfo=pytz.utc))
     main_practice_time = db.Column(db.Float, default=0)
     sound_practice_time = db.Column(db.Float, default=0)
