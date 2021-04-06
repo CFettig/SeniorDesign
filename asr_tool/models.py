@@ -85,6 +85,7 @@ class LessonContent(db.Model):
     extend_existing=True
     sound = db.Column(db.String(3), primary_key=True)
     intro_text = db.Column(db.Text)
+    audio_folder = db.Column(db.String(100))
     illustration = db.Column(db.String(100))
     example_audio_male = db.Column(db.String(100))
     example_audio_female = db.Column(db.String(100))
@@ -106,6 +107,7 @@ class MinPair(db.Model):
     same = db.Column(db.Boolean)
     lesson_id = db.Column(db.String(3), db.ForeignKey(LessonContent.sound),
         nullable=False)
+    audio_folder = db.Column(db.String(100))
 
     def serialize(self):
         return {"id": self.id,

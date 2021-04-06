@@ -6,22 +6,23 @@
     <h1 style="color: white;">The English [{{ content.sound }}] sound: </h1>
     <p style="color: white;">{{ content.intro_text}}</p>
 
-    <img src="{{ url_for('static', filename=content.illustration) }}" width="10%">
+    <img src="{{ url_for('static', filename='/admin_uploads/images/' + content.illustration) }}" width="20%">
+
 
     <h3 style="color: white;">Listen</h3>
     <p style="color: white;">Listen to these words with the {{ content.sound }} sound</p>
 
-    <audio id="sound1" src="{{ url_for('static', filename=content.example_audio_male) }}" preload="auto"></audio>
+    <audio id="sound1" src="{{ url_for('static', filename=('admin_uploads/' + content.audio_folder + content.example_audio_male)) }}" preload="auto"></audio>
     <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound1').play();">Voice 1</button>
 
-    <audio id="sound2" src="{{ url_for('static', filename=content.example_audio_female) }}" preload="auto"></audio>
+    <audio id="sound2" src="{{ url_for('static', filename='admin_uploads/' + content.audio_folder + content.example_audio_female) }}" preload="auto"></audio>
     <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound2').play();">Voice 2</button>
 
     <h3 style="color: white;">Compare</h3>
     <ul class="list-group">
         {% for pair in min_pairs %}
         <li class="list-group-item" style="display: inline-block;">
-            <audio id={{ pair.id }} src="{{ url_for('static', filename=pair.audio) }}" preload="auto"></audio>
+            <audio id={{ pair.id }} src="{{ url_for('static', filename='admin_uploads/' + content.audio_folder + pair.audio) }}" preload="auto"></audio>
             <button type="button" class="btn btn-secondary" onclick="document.getElementById({{ pair.id }}).play();">Listen</button>
             <button type="button" class="btn btn-secondary" onclick="min_pair_check('True', '{{ pair.same }}', {{pair.id}})">Same</button>
             <button type="button" class="btn btn-secondary" onclick="min_pair_check('False', '{{ pair.same }}', {{pair.id}})">Different</button>

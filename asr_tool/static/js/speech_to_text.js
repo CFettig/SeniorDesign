@@ -75,6 +75,7 @@ function rightClick(e) {
 
 //ajax call to save transcription text to database
 function send_transcript(transcript) {
+  console.log(transcript)
   $.ajax({
     data: {
       "transcript": transcript,
