@@ -34,9 +34,9 @@ def profile():
     # This is so that they do not show up, and are automatically deleted
     for post in posts:
         # If statement to check if prompt exists and the text of the transcript is not just a blank space
-        # if post.prompt == None or post.text.isspace():
-        if post.text == "":
-            print(post.text)
+        if post.prompt == None or post.text.isspace() or post.text == "":
+        #if post.text == "":
+            #print(post.text)
             deleteTranscript(post.id)
         else:
             pass
