@@ -5,7 +5,6 @@ import csv, io, requests as req
 from datetime import datetime
 from random import randint
 from .extensions import db
-# from .models import Transcript, LessonContent, MinPair, PracticedPair, UserInfo, Rating   
 from .models import *
 from .phonetics import compare_words, get_phonemes
 from .auth import role_required
@@ -35,7 +34,9 @@ def profile():
     # This is so that they do not show up, and are automatically deleted
     for post in posts:
         # If statement to check if prompt exists and the text of the transcript is not just a blank space
-        if post.prompt == None or post.text.isspace():
+        # if post.prompt == None or post.text.isspace():
+        if post.text == "":
+            print(post.text)
             deleteTranscript(post.id)
         else:
             pass
@@ -77,17 +78,44 @@ def practice():
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
             return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
     else:
+        trans_id = session.get('transcript_id')
 
-        transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
-        #if there is a current transcript, use transcript prompt
-        if transcript:
+        #getting existing transcript
+        if trans_id:
+            transcript = Transcript.query.filter_by(id=trans_id).first()
             prompt = transcript.prompt
-
-        #if creating new transcript, generate random prompt
-        else: 
+        
+        #creating new transcript
+        else:
             prompt = req.get("https://source.unsplash.com/random").url
-            
+
+            transcript = Transcript(user_id=current_user.id, prompt=prompt)
+            db.session.add(transcript)
+            db.session.commit()
+
+            #adding new transcript as current transcript in session
+            session['transcript_id'] = transcript.id
+
         return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
+
+    # update_page('main_practice')
+
+    # #POST request comes when user enters pair of words to practice
+    # if request.method=='POST':
+    #         actual, intended = request.form.get('actual_word'), request.form.get('user_word')
+    #         return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
+    # else:
+
+    #     transcript = Transcript.query.filter_by(id=session.get('transcript_id')).first()
+    #     #if there is a current transcript, use transcript prompt
+    #     if transcript:
+    #         prompt = transcript.prompt
+
+    #     #if creating new transcript, generate random prompt
+    #     else: 
+    #         prompt = req.get("https://source.unsplash.com/random").url
+            
+    #     return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
 
 #generates new prompt for current transcript
 @main.route('/practice/new_prompt', methods=['GET'])

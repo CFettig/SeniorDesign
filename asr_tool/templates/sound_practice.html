@@ -42,7 +42,7 @@
     <ul class="list-group">
         {% for word in content.quiz_words.split(',') %}
         <li class="list-group-item" style="display: inline-block;">
-            <p style="color: white;" id={{ word }}>say: <large>{{ word }}</large>
+            <p style="color: black;" id={{ word }}>say: <large>{{ word }}</large>
             </p>
             <!-- <button onclick="listen({{ word }})">Listen</button> -->
             <button type="button" class="btn btn-secondary" type="button" id="mic-toggle" onclick="listen('{{ word }}')">

@@ -2,17 +2,12 @@ from flask import Flask
 import os.path as path
 from flask_admin.contrib.fileadmin import FileAdmin
 from .extensions import mail, login_manager, db, admin
-# from .adminviews import UserView, TranscriptView, PracticedPairView, LessonContentView, MinPairView, UserInfoView, RatingView
 from .adminviews import *
-# from .models import User, Transcript, PracticedPair, LessonContent, MinPair, UserInfo, Rating
 from .models import *
-
-
-# init SQLAlchemy 
-# db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config.from_pyfile('config.py')
 
     db.init_app(app)

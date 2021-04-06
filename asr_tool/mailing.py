@@ -9,6 +9,6 @@ def send_email(to, subject, template, **kwargs):
         subject,
         recipients=[to],
         html=render_template(template, **kwargs),
-        sender=current_app.config['MAIL_DEFAULT_SENDER']
+        sender=current_app.config['MAIL_USERNAME']
     )
     mail.send(msg)
