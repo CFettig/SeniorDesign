@@ -17,11 +17,6 @@
       <label for="password">Password</label>
       <input type="password" class="form-control" id="password" name="password" placeholder="Password">
     </div>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {{ messages[0] }}
-    {% endif %}
-    {% endwith %}
     <button type="submit" class="btn btn-primary" value="Login">Login</button>
   </form>
   <br>

@@ -22,13 +22,12 @@ def index():
 # Student profile. Displays past transcripts
 @main.route('/profile', methods=['GET'])
 # This means that the session must be logged in and must be associated with one of the roles
-@role_required(roles=['teacher', 'student'])
+@role_required(roles=['student'])
 def profile():
     update_page('profile')
     session['one_page'] = 'profile'
     # if current_user.role == 'student':
     posts = Transcript.query.filter_by(user_id=current_user.id)
-
     # This loop serves a purpose to remove all of the transcripts that are insufficient
     # For example, a transcript with no prompt or no text would be frequently posted to the profile page
     # This is so that they do not show up, and are automatically deleted

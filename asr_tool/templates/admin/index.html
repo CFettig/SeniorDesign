@@ -2,7 +2,7 @@
 
 {% block body %}
     <a href={{ url_for('auth.logout' )}}>Logout</a>
-
+    <a href={{ url_for('auth.reset_password' ) }}>Reset your password</a>
     {% if current_user.role == "admin" %}
         <a href={{ url_for('main.all_lessons' ) }}>View Lessons</a>
     {% endif %}

@@ -47,13 +47,12 @@ def signup():
         password = request.form.get('password')
         password_check = request.form.get('password_check')
         consent = request.form.get('consent')
-        # role = request.form.get('role')
         
         if password != password_check:
             flash('passwords do not match')
             return redirect(url_for('auth.signup'))
         if User.query.filter_by(email=email).first():
-            flash('This email address is already associated with an existing account')
+            flash('There is already an account with this email')
             return redirect(url_for('auth.signup'))
         if not consent:
             flash('Must sign consent form to use this tool')
@@ -74,6 +73,7 @@ def signup():
         return render_template('signup.html')
 
 @auth.route('/demographics', methods=['GET', 'POST'])
+@login_required
 def demographics():
     if request.method=='POST':
         age = request.form.get('age')
@@ -104,6 +104,37 @@ def demographics():
     else:
         return render_template('demographics.html')
 
+@auth.route('/reset_password', methods=['GET', 'POST'])
+@login_required
+def reset_password():
+    if request.method=='POST':
+        old_password = request.form.get('password')
+        new_password = request.form.get('new_password')
+        new_password_check = request.form.get('new_password_check')
+
+        user = User.query.filter_by(id=current_user.id).first()
+
+        if not check_password_hash(user.serialize()['password'], old_password):
+            flash('Password incorrect')
+            return redirect(url_for('auth.reset_password'))
+        
+        elif new_password != new_password_check:
+            flash('Password confirmation does not match')
+            return redirect(url_for('auth.reset_password'))
+
+        else:
+            user.password = generate_password_hash(new_password, method='sha256')
+
+            db.session.add(user)
+            db.session.commit()
+
+            flash('password changed')
+
+            return redirect(url_for('main.profile'))
+
+    else:
+        return render_template('reset_password.html')
+
 
 @auth.route('/logout')
 @login_required
@@ -117,9 +148,10 @@ def role_required(roles):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if not current_user.is_authenticated:
+                flash("please login to access this page")
                 return redirect(url_for('auth.login'))
             elif (current_user.role not in roles): 
-                flash("You can't be here")
+                flash("You do not have access to this page")
                 return redirect(url_for('main.index'))
             else:
                 return func(*args, **kwargs)
