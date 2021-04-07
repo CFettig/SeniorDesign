@@ -4,6 +4,7 @@ from flask_admin.contrib.fileadmin import FileAdmin
 from .extensions import mail, login_manager, db, admin
 from .adminviews import *
 from .models import *
+from flask_sqlalchemy import SQLAlchemy
 
 def create_app():
     app = Flask(__name__)
