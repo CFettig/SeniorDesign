@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <br><br><br>
+    <p style="color: white;">Lessons: </p>
+    <ul class="list-group">
+        {% for sound in sounds %}
+        <li class="list-group-item" style="display: inline-block;">
+            <a href="{{ url_for('main.practice_sound', sound=sound[0]) }}">{{ sound[0] }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<style>
+    body {
+        background-color: black;
+    }
+</style>
+
+{% endblock %}

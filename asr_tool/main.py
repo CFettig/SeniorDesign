@@ -159,7 +159,13 @@ def practice_sound(sound):
     else:
         return "this lesson content has not been made"
 
-    
+#page of links to all sound lessons
+@main.route('/all_lessons')
+@role_required(roles=['admin'])
+def all_lessons():
+    sounds = db.session.query(LessonContent.sound)
+
+    return render_template('all_lessons.html', sounds=sounds)    
 
 #extracting sounds for user to practice
 @main.route('/pronunciation/<actual>/<intended>')
@@ -221,7 +227,6 @@ def save_transcript():
 @role_required(roles=['student'])
 def end_practice():
     update_page('end_practice')
-    print("%"*30 + "done")
 
     #removing current transcript from session
     if session.get('transcript_id'):

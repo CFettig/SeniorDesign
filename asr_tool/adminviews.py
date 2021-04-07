@@ -1,18 +1,23 @@
 from flask_admin.contrib.sqla import ModelView
-from flask_admin import expose
+from flask_admin import expose, AdminIndexView, BaseView
 from flask_login import current_user
 from flask_admin.contrib.fileadmin import FileAdmin
+from flask import redirect, url_for
 import os.path as path
 
+class AdminView(AdminIndexView):
+    def is_accessible(self):
+        return current_user.is_authenticated and (current_user.role=='admin' or current_user.role=='researcher')
 
-# @expose('/admin')                                                                   
-# def index(self):
-#     if current_user.is_authenticated and (current_user.role=='admin' or current_user.role=='researcher'):
-#         print("$"*100)
-#         return self.render('/admin/index.html')
-#     else:   
-#         print("#"*100)
-#         return redirect(url_for('auth.login'))
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('auth.login'))
+
+class HomeView(BaseView):
+    def index(self):
+        def is_accessible(self):
+            return current_user.is_authenticated and current_user.role=='admin'
+        
+        return self.render('admin/index.html')
 
 class FileView(FileAdmin):
     def is_accessible(self):
