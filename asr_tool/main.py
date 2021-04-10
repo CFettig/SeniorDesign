@@ -171,8 +171,6 @@ def all_lessons():
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
     try:
-        difference = compare_words(actual, intended)
-
         #saving word pair to transcript
         pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
         db.session.add(pair)
@@ -257,7 +255,7 @@ def email_practice_report():
                 'sounds': transcript.practiced_sounds
                 }
 
-    send_email(recipient, 'PRACTICE REPORT', 'practice_report.html', report=report)
+    send_email(recipient, 'SALUKISPEECH PRACTICE REPORT', 'practice_report.html', report=report)
     
     return 'success'
 
