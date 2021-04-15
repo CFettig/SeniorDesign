@@ -180,8 +180,13 @@ def pronunciation(actual, intended):
         #getting sounds differing between two words
         #adds min_pair for using as link sound
         sounds = []
+        audio_folder = None
         for item in compare_words(actual, intended):
-            audio_folder = LessonContent.query.filter_by(sound=item).first().audio_folder
+            lesson_content = LessonContent.query.filter_by(sound=item).first()
+            
+            if lesson_content:
+                audio_folder = lesson_content.audio_folder
+
             sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first(), audio_folder))
     
         return render_template('pronunciation.html', sounds=sounds)
@@ -242,7 +247,7 @@ def end_practice():
     db.session.add(user_info)
     db.session.commit()
 
-    if (user_info.num_practice_sess == 1) or (user.num_practice_sess % 10 == 1):
+    if (user_info.num_practice_sess == 1) or (user_info.num_practice_sess % 10 == 1):
         return redirect(url_for('main.get_feedback'))
 
     return redirect(url_for('main.profile'))
