@@ -26,20 +26,18 @@ def index():
 def profile():
     update_page('profile')
     session['one_page'] = 'profile'
-    # if current_user.role == 'student':
+
     posts = Transcript.query.filter_by(user_id=current_user.id)
     # This loop serves a purpose to remove all of the transcripts that are insufficient
     # For example, a transcript with no prompt or no text would be frequently posted to the profile page
     # This is so that they do not show up, and are automatically deleted
     for post in posts:
-        # If statement to check if prompt exists and the text of the transcript is not just a blank space
         if post.prompt == None or post.text.isspace() or post.text == "":
-        #if post.text == "":
-            #print(post.text)
             deleteTranscript(post.id)
         else:
             pass
 
+    # Sends all transcripts from current user id so that they are printed to the page
     return render_template('student_profile.html', posts=posts)
 
 #Delete transcript
@@ -54,6 +52,7 @@ def deleteTranscript(transcriptid):
         session.pop('transcript_id')
 
     # Check if transcript in question has practiced pairs and if so delete them first
+    # The PracticedPair relation uses a foreign key from Transcript therefore it must be removed first
     if PracticedPair.query.filter_by(transcript_id=transcriptid).first():
         practicepairs = PracticedPair.query.filter_by(transcript_id=transcriptid).all()
         for practicepair in practicepairs:

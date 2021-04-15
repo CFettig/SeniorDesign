@@ -3,10 +3,11 @@
 {% block content %}
 <div class="container">
     <br><br><br>
-    <p style="color: white;">These were the sounds that were different! Which would you like to practice?</p>
+    <p style="color: white;">You failed to pronounce these sounds. Which would you like to practice?</p>
+    <p style="color: white;">Hovering over a sound will play it.</p>
     <ul class="list-group">
         {% for sound in sounds %}
-        <li class="list-group-item" style="display: inline-block;">
+        <li class="list-group-item" style="text-align: center; width: 50%;">
             <audio id={{ sound[1].id }} src="{{ url_for('static', filename=sound[1].audio) }}" preload="auto"></audio>
             <a href="{{ url_for('main.practice_sound', sound=sound[0]) }}"
                 onmouseenter="document.getElementById({{ sound[1].id }}).play()">{{ sound[0] }}</a>
@@ -18,6 +19,18 @@
 <style>
     body {
         background-color: black;
+    }
+
+    li {
+        padding: 0px;
+    }
+
+    li a,
+    audio {
+        margin: 0px;
+        display: block;
+        width: 100%;
+        height: 100%;
     }
 </style>
 

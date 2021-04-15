@@ -21,7 +21,7 @@ def login():
             return redirect(url_for('auth.login'))
     
         if not check_password_hash(user.serialize()['password'], password):
-            flash('Password incorrect')
+            flash('Password incorrect.')
             return redirect(url_for('auth.login'))
 
         login_user(user, remember=remember)
@@ -31,7 +31,7 @@ def login():
         session['logged_in'] = True
 
         if user.role == 'student':
-            return redirect(url_for('main.profile')) 
+            return redirect(url_for('main.profile'))
         else:
             return redirect(url_for('admin.index'))
 
@@ -49,13 +49,13 @@ def signup():
         consent = request.form.get('consent')
         
         if password != password_check:
-            flash('passwords do not match')
+            flash('Passwords do not match.')
             return redirect(url_for('auth.signup'))
         if User.query.filter_by(email=email).first():
-            flash('There is already an account with this email')
+            flash('There is already an account with this email.')
             return redirect(url_for('auth.signup'))
         if not consent:
-            flash('Must sign consent form to use this tool')
+            flash('Must sign consent form to use this tool.')
             return redirect(url_for('auth.signup'))
 
         new_user = User(email=email, role='student', password=generate_password_hash(password, method='sha256'))
