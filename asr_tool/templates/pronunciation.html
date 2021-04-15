@@ -7,7 +7,7 @@
     <ul class="list-group">
         {% for sound in sounds %}
         <li class="list-group-item" style="display: inline-block;">
-            <audio id={{ sound[1].id }} src="{{ url_for('static', filename=sound[1].audio) }}" preload="auto"></audio>
+            <audio id={{ sound[1].id }} src="{{ url_for('static', filename='admin_uploads/' + sound[2] + '/' + sound[1].audio) }}" preload="auto"></audio>
             <a href="{{ url_for('main.practice_sound', sound=sound[0]) }}"
                 onmouseenter="document.getElementById({{ sound[1].id }}).play()">{{ sound[0] }}</a>
         </li>

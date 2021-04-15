@@ -172,7 +172,7 @@ def all_lessons():
 def pronunciation(actual, intended):
     try:
         difference = compare_words(actual, intended)
-
+        print("%"*30 + str(difference))
         #saving word pair to transcript
         pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
         db.session.add(pair)
@@ -182,7 +182,8 @@ def pronunciation(actual, intended):
         #adds min_pair for using as link sound
         sounds = []
         for item in compare_words(actual, intended):
-            sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first()))
+            audio_folder = LessonContent.query.filter_by(sound=item).first().audio_folder
+            sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first(), audio_folder))
     
         return render_template('pronunciation.html', sounds=sounds)
 
@@ -230,14 +231,20 @@ def end_practice():
     #removing current transcript from session
     if session.get('transcript_id'):
         session.pop('transcript_id')
+    
+    user_info = UserInfo.query.filter_by(user_id=current_user.id).first()
 
-    if UserInfo.query.filter_by(user_id=current_user.id).first():
-        user = UserInfo.query.filter_by(user_id=current_user.id).first()
-        user.num_practice_sess += 1
-        db.session.add(user)
-        db.session.commit()
-        if (user.num_practice_sess == 1) or (user.num_practice_sess % 10 == 1):
-            return redirect(url_for('main.get_feedback'))
+    if not user_info:
+        user_info = UserInfo(user_id=current_user.id, num_practice_sess=1)
+        
+    else:
+        user_info.num_practice_sess += 1 
+
+    db.session.add(user_info)
+    db.session.commit()
+
+    if (user_info.num_practice_sess == 1) or (user.num_practice_sess % 10 == 1):
+        return redirect(url_for('main.get_feedback'))
 
     return redirect(url_for('main.profile'))
 

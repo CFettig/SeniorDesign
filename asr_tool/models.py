@@ -109,7 +109,7 @@ class MinPair(db.Model):
     same = db.Column(db.Boolean)
     lesson_id = db.Column(db.String(3), db.ForeignKey(LessonContent.sound),
         nullable=False)
-    audio_folder = db.Column(db.String(100))
+    # audio_folder = db.Column(db.String(100))
 
     def serialize(self):
         return {"id": self.id,
