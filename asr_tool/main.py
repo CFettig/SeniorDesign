@@ -186,8 +186,13 @@ def pronunciation(actual, intended):
         #getting sounds differing between two words
         #adds min_pair for using as link sound
         sounds = []
+        audio_folder = None
         for item in compare_words(actual, intended):
-            audio_folder = LessonContent.query.filter_by(sound=item).first().audio_folder
+            lesson_content = LessonContent.query.filter_by(sound=item).first()
+            
+            if lesson_content:
+                audio_folder = lesson_content.audio_folder
+
             sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first(), audio_folder))
     
         return render_template('pronunciation.html', sounds=sounds)
