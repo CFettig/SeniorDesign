@@ -45,6 +45,17 @@ class Rating(db.Model):
     rating = db.Column(db.Integer)
     feedback = db.Column(db.String(1048))
 
+class Feedback(db.Model):
+    extend_existing=True
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow().replace(tzinfo=pytz.utc))   
+    easy_to_use = db.Column(db.String(10))
+    fun_to_use = db.Column(db.Integer)
+    provides_feedback = db.Column(db.Integer)
+    is_helpful = db.Column(db.Integer)
+    likes = db.Column(db.String(1048))
+    dislikes = db.Column(db.String(1048))
+
 #Transcript of a practice session
 class Transcript(db.Model):
     extend_existing=True

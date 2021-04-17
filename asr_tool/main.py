@@ -13,6 +13,10 @@ from asr_tool.models import User
 
 main = Blueprint('main', __name__)
 
+# @main.route('/test')
+# def test():
+#     return render_template('feedback.html')
+
 #home page
 @main.route('/')
 def index():
@@ -169,7 +173,7 @@ def all_lessons():
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
-    try:
+    # try:
         difference = compare_words(actual, intended)
 
         #saving word pair to transcript
@@ -192,9 +196,9 @@ def pronunciation(actual, intended):
         return render_template('pronunciation.html', sounds=sounds)
 
     #one or both of the words was not in the dictionary
-    except Exception as e:
-        flash(str(e))    
-        return redirect(url_for('main.practice'))
+    # except Exception as e:
+    #     flash(str(e))    
+    #     return redirect(url_for('main.practice'))
 
 
 #saving transcript
@@ -248,6 +252,8 @@ def end_practice():
     db.session.commit()
 
     if (user_info.num_practice_sess == 1) or (user_info.num_practice_sess % 10 == 1):
+        return redirect(url_for('main.get_rating'))
+    elif (user_info.num_practice_sess == 4) or (user_info.num_practice_sess % 15 == 1):
         return redirect(url_for('main.get_feedback'))
 
     return redirect(url_for('main.profile'))
@@ -273,8 +279,9 @@ def email_practice_report():
     return 'success'
 
 #saves site feedback from users
-@main.route('/get_feedback', methods=['GET', 'POST'])
-def get_feedback():
+@main.route('/get_rating', methods=['GET', 'POST'])
+@role_required(roles=['student', 'admin', 'researcher'])
+def get_rating():
     if request.method=='POST':
         rating = request.form.get('rating')
         feedback = request.form.get('feedback')
@@ -288,6 +295,32 @@ def get_feedback():
 
     else:
         return render_template('rating.html')
+
+@main.route('/get_feedback', methods=['GET', 'POST'])
+@role_required(roles=['student', 'admin', 'researcher'])
+def get_feedback():
+    if request.method=='POST':
+        easy_to_use = request.form.get('easy_to_use') 
+        fun_to_use = request.form.get('fun_to_use')
+        provides_feedback = request.form.get('provides_feedback')
+        is_helpful = request.form.get('is_helpful')
+        likes = request.form.get('likes')
+        dislikes = request.form.get('dislikes')
+
+        new_feedback = Feedback(easy_to_use=easy_to_use, 
+                                fun_to_use=fun_to_use, 
+                                provides_feedback=provides_feedback,
+                                is_helpful=is_helpful,
+                                likes=likes,
+                                dislikes=dislikes)
+
+        db.session.add(new_feedback)
+        db.session.commit()
+
+        return redirect(url_for('main.profile'))
+
+    else:
+        return render_template('feedback.html')
         
 """
 the following routes replaced by admin routes

@@ -1,0 +1,83 @@
+<!-- {% extends 'base.html' %}
+
+{% block content %} -->
+<br><br><br>
+<div style="padding: 30px;">
+    <p style="color: white;">We would appreciate your feedback on the site so that we can continue to improve it:</p>
+    <form method="POST" action="{{ url_for('main.get_feedback') }}"
+        style="background-color: white; width: 40%; border-radius: 10px; padding: 20px;">
+        <table>
+            <thead>
+                <th>SalukiSpeech</th>
+                <th>Strongly Disagree</th>
+                <th>Slightly Disagree</th>
+                <th>Neutral</th>
+                <th>Slightly Agree</th>
+                <th>Strongly Agree</th>
+            </thead><br>
+            <tr>
+                <div class="form-group">
+                    <td>is easy to use</td>
+                    <td><input type="radio" class="" id="rating1" name="easy_to_use" value="1"></td>
+                    <td><input type="radio" class="" id="rating2" name="easy_to_use" value="2"></td>
+                    <td><input type="radio" class="" id="rating3" name="easy_to_use" value="3"></td>
+                    <td><input type="radio" class="" id="rating4" name="easy_to_use" value="4"></td>
+                    <td><input type="radio" class="" id="rating5" name="easy_to_use" value="5"></td> 
+                </div>
+            </tr><br>
+            <tr>
+                <div class="form-group">
+                    <td>is fun to use to practice my English pronunciation</td>
+                    <td><input type="radio" class="" id="rating1" name="fun_to_use" value="1"></td>
+                    <td><input type="radio" class="" id="rating2" name="fun_to_use" value="2"></td>
+                    <td><input type="radio" class="" id="rating3" name="fun_to_use" value="3"></td>
+                    <td><input type="radio" class="" id="rating4" name="fun_to_use" value="4"></td>
+                    <td><input type="radio" class="" id="rating5" name="fun_to_use" value="5"></td>
+                </div>
+            </tr><br>
+            <tr>
+                <div class="form-group">
+                    <td>provides feedback to help me improve my pronunciation</td>
+                    <td><input type="radio" class="" id="rating1" name="provides_feedback" value="1"></td>
+                    <td><input type="radio" class="" id="rating2" name="provides_feedback" value="2"></td>
+                    <td><input type="radio" class="" id="rating3" name="provides_feedback" value="3"></td>
+                    <td><input type="radio" class="" id="rating4" name="provides_feedback" value="4"></td>
+                    <td><input type="radio" class="" id="rating5" name="provides_feedback" value="5"></td> 
+                </div> 
+            </tr><br>
+            <tr>
+                <td<td>
+                    <td>includes helpful lessons on English sounds</td>
+                    <td><input type="radio" class="" id="rating1" name="is_helpful" value="1"></td>
+                    <td><input type="radio" class="" id="rating2" name="is_helpful" value="2"></td>
+                    <td><input type="radio" class="" id="rating3" name="is_helpful" value="3"></td>
+                    <td><input type="radio" class="" id="rating4" name="is_helpful" value="4"></td>
+                    <td><input type="radio" class="" id="rating5" name="is_helpful" value="5"></td> 
+                </div> 
+            </tr>
+        </table><br><br>
+        <label for="feedback">My favorite thing about SalukiSpeech is:</label>
+        <input type="text" name="likes" class="form-control" id="likes" placeholder="leave comments here"><br><br>
+
+        <label for="feedback">My favorite thing about SalukiSpeech is:</label>
+        <input type="text" name="dislikes" class="form-control" id="dislikes" placeholder="leave comments here"><br><br>
+
+
+        <button type="submit" class="btn btn-primary">Ok</button>
+    </form>
+</div>
+
+<style>
+    body {
+        background-color: black;
+    }
+
+    td, th, tr {
+        border:1px solid black;
+        width: 100%;
+    }   
+    td {
+        text-align: center;
+    }
+</style>
+<!-- {% endblock %} -->
