@@ -32,6 +32,7 @@ def profile():
     session['one_page'] = 'profile'
 
     posts = Transcript.query.filter_by(user_id=current_user.id)
+    print(Transcript.query.filter_by(user_id=current_user.id))
     # This loop serves a purpose to remove all of the transcripts that are insufficient
     # For example, a transcript with no prompt or no text would be frequently posted to the profile page
     # This is so that they do not show up, and are automatically deleted
@@ -135,6 +136,11 @@ def new_prompt():
         db.session.commit()
 
     return redirect(url_for('main.practice'))
+
+@main.route('/practice/practice_manual', methods=['GET'])
+@role_required(roles=['student'])
+def practice_manual():
+    return render_template('practice_manual.html')
 
 #individual sound practice room
 @main.route('/practice/<sound>')
