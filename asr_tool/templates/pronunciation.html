@@ -8,9 +8,13 @@
     <ul class="list-group">
         {% for sound in sounds %}
         <li class="list-group-item" style="text-align: center; width: 50%;">
-            <audio id={{ sound[1].id }} src="{{ url_for('static', filename= 'admin_uploads/' + sound[2] + '/' + sound[1].audio) }}" preload="auto"></audio>
-            <a href="{{ url_for('main.practice_sound', sound=sound[0]) }}"
-                onmouseenter="document.getElementById({{ sound[1].id }}).play()">{{ sound[0] }}</a>
+            {% if sound[2] %}
+                <audio id={{ sound[1].id }} src="{{ url_for('static', filename= 'admin_uploads/' + sound[2] + '/' + sound[1].audio) }}" preload="auto"></audio>
+                <a href="{{ url_for('main.practice_sound', sound=sound[0]) }}"
+                    onmouseenter="document.getElementById({{ sound[1].id }}).play()">{{ sound[0] }}</a>
+            {% else %}
+                <a href="{{ url_for('main.practice_sound', sound=sound[0]) }}">{{ sound[0] }}</a>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
