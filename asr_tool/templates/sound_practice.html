@@ -3,49 +3,66 @@
 <br><br><br>
 <div class="container">
     <a href="{{ url_for('main.practice') }}">Go back to practice room</a>
+
     <h1 style="color: white;">The English [{{ content.sound }}] sound: </h1>
     <p style="color: white;">{{ content.intro_text}}</p>
 
     <img src="{{ url_for('static', filename='/admin_uploads/images/' + content.illustration) }}" width="20%">
 
-
+    <br><br>
+    <hr><br><br>
     <h3 style="color: white;">Listen</h3>
     <p style="color: white;">Listen to these words with the {{ content.sound }} sound</p>
 
-    <audio id="sound1" src="{{ url_for('static', filename=('admin_uploads/' + content.audio_folder + content.example_audio_male)) }}" preload="auto"></audio>
-    <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound1').play();">Voice 1</button>
+    <audio id="sound1"
+        src="{{ url_for('static', filename=('admin_uploads/' + content.audio_folder + content.example_audio_male)) }}"
+        preload="auto"></audio>
+    <button type="button" class="btn btn-secondary" onclick="toggle('sound1')">Voice 1</button>
 
-    <audio id="sound2" src="{{ url_for('static', filename='admin_uploads/' + content.audio_folder + content.example_audio_female) }}" preload="auto"></audio>
-    <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound2').play();">Voice 2</button>
+    <audio id="sound2"
+        src="{{ url_for('static', filename='admin_uploads/' + content.audio_folder + content.example_audio_female) }}"
+        preload="auto"></audio>
+    <button type="button" class="btn btn-secondary" onclick="toggle('sound2')">Voice 2</button>
 
+    <br><br>
+    <hr><br><br>
     <h3 style="color: white;">Compare</h3>
+    <p style="color: white;">The next few problems will consist of playing the "Listen" button and determining if the
+        two words that were played sound the same, or different.</p>
     <ul class="list-group">
         {% for pair in min_pairs %}
         <li class="list-group-item" style="display: inline-block;">
-            <audio id={{ pair.id }} src="{{ url_for('static', filename='admin_uploads/' + content.audio_folder + pair.audio) }}" preload="auto"></audio>
-            <button type="button" class="btn btn-secondary" onclick="document.getElementById({{ pair.id }}).play();">Listen</button>
-            <button type="button" class="btn btn-secondary" onclick="min_pair_check('True', '{{ pair.same }}', {{pair.id}})">Same</button>
-            <button type="button" class="btn btn-secondary" onclick="min_pair_check('False', '{{ pair.same }}', {{pair.id}})">Different</button>
+            <audio id={{ pair.id }}
+                src="{{ url_for('static', filename='admin_uploads/' + content.audio_folder + pair.audio) }}"
+                preload="auto"></audio>
+            <button type="button" class="btn btn-secondary"
+                onclick="document.getElementById({{ pair.id }}).play();">Listen</button>
+            <button type="button" class="btn btn-secondary"
+                onclick="min_pair_check('True', '{{ pair.same }}', {{pair.id}})">Same</button>
+            <button type="button" class="btn btn-secondary"
+                onclick="min_pair_check('False', '{{ pair.same }}', {{pair.id}})">Different</button>
             <p id={{ pair.id ~ 'correct'}} style="display:none;">Correct!</p>
             <p id={{ pair.id ~ 'incorrect'}} style="display:none;">Try again</p>
         </li>
         {% endfor %}
     </ul>
 
-
+    <br><br>
+    <hr><br><br>
     <h3 style="color: white;">Speak</h3>
     <p style="color: white;">Now, it’s your turn. Try saying each of the words aloud.
         You can check each by turning on recognition in the text box next to it.
         You can also listen to all of the words again and try repeating after the speaker</p>
-    <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound1').play();">Voice 1</button>
-    <button type="button" class="btn btn-secondary" onclick="document.getElementById('sound2').play();">Voice 2</button>
+    <button type="button" class="btn btn-secondary" onclick="toggle('sound1')">Voice 1</button>
+    <button type="button" class="btn btn-secondary" onclick="toggle('sound2')">Voice 2</button>
     <ul class="list-group">
         {% for word in content.quiz_words.split(',') %}
         <li class="list-group-item" style="display: inline-block;">
             <p style="color: black;" id={{ word }}>say: <large>{{ word }}</large>
             </p>
             <!-- <button onclick="listen({{ word }})">Listen</button> -->
-            <button type="button" class="btn btn-secondary" type="button" id="mic-toggle" onclick="listen('{{ word }}')">
+            <button type="button" class="btn btn-secondary" type="button" id="mic-toggle"
+                onclick="listen('{{ word }}')">
                 <p style="color: white;" id={{ 'mic-toggle' ~ word }} style="display:inline;">Start Mic</p> <svg
                     xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill"
                     viewBox="0 0 16 16">
@@ -59,10 +76,32 @@
         </li>
         {% endfor %}
     </ul>
+    <br><br>
+    <hr><br><br>
+    <p style="color: white;">Ready to continue your practice? <a href="{{ url_for('main.practice') }}">Return to
+            practice room</a></p>
 </div>
 
-<p style="color: white;">Ready to continue your practice? <a href="{{ url_for('main.practice') }}">Return to practice room</a></p>
+<script src="static/js/pronunciation_practice.js?rev=<?php echo time();?>"></script>
+<script>
+    function toggle(id) {
+        var mediaPlayer = document.getElementById(id);
+        if (mediaPlayer.paused) {
+            mediaPlayer.play();
+            $('.pause-btn').show();
+            $('.play-btn').hide();
+        } else {
+            mediaPlayer.pause();
+            $('.play-btn').show();
+            $('.pause-btn').hide();
+        }
+    }
+</script>
 
-<script src="{{ url_for('static', filename='js/pronunciation_practice.js') }}"></script>
+<style>
+    hr {
+        border: 1px solid white;
+    }
+</style>
 
 {% endblock content %}
