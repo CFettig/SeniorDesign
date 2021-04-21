@@ -13,6 +13,7 @@
     <hr><br><br>
     <h3 style="color: white;">Listen</h3>
     <p style="color: white;">Listen to these words with the {{ content.sound }} sound</p>
+    <h3 style="color: white;">{{ content.quiz_words.replace(',', ', ') }}</h3>
 
     <audio id="sound1"
         src="{{ url_for('static', filename=('admin_uploads/' + content.audio_folder + content.example_audio_male)) }}"
@@ -24,11 +25,14 @@
         preload="auto"></audio>
     <button type="button" class="btn btn-secondary" onclick="toggle('sound2')">Voice 2</button>
 
+
+
     <br><br>
     <hr><br><br>
     <h3 style="color: white;">Compare</h3>
-    <p style="color: white;">The next few problems will consist of playing the "Listen" button and determining if the
-        two words that were played sound the same, or different.</p>
+    <!-- <p style="color: white;">The next few problems will consist of playing the "Listen" button and determining if the
+        two words that were played sound the same, or different.</p> -->
+    <p style="color: white;">{{ content.compare_instructions}}.</p>
     <ul class="list-group">
         {% for pair in min_pairs %}
         <li class="list-group-item" style="display: inline-block;">

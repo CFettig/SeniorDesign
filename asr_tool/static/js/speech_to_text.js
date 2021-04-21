@@ -28,11 +28,14 @@ asr.onresult = function (event) {
   interim_text = document.getElementById('interim-text');
   var transcript = '';
   var interim = '';
+  var new_string = '';
 
   for (var i = event.resultIndex; i < event.results.length; ++i) {
     if (event.results[i].isFinal) {
       //adds string to the span for final text
-      transcript += event.results[i][0].transcript;
+      new_string = event.results[i][0].transcript
+      transcript += new_string
+      // transcript += event.results[i][0].transcript;
     }
     else {
       //adds string to the span for changing text
@@ -41,20 +44,22 @@ asr.onresult = function (event) {
   }
   // Adding a space at the end of the transcript to avoid words being concatenated
   transcript += " ";
-  new_text.textContent += transcript;
+  words = new_string.split(" ")
+
+  for (var i = 0; i < words.length; i++) {
+    var new_node = document.createElement('span');
+    new_node.innerHTML = words[i] + " ";
+    new_node.id = words[i] + String(Math.floor(Math.random()));
+    new_node.setAttribute('onclick', "select_word('" + words[i] + "')")
+    
+    new_text.appendChild(new_node)
+  }
+
   interim_text.innerHTML = interim;
-  // console.log(JSON.stringify(new_text.textContent))
   send_transcript(transcript)
 }
 
-//custom context menu for selecting similar words
-var clickArea = document.getElementById('text-display')
-clickArea.oncontextmenu = rightClick
-
-
-function rightClick(e) {
-  e.preventDefault();
-
+function select_word(word) {
   context = document.getElementById('context-menu')
 
   if (context.style.display == "block") {
@@ -63,23 +68,18 @@ function rightClick(e) {
     context.style.display = "none"
   }
   else {
-    var select = window.getSelection().toString();
     // document.getElementById('user-selection').innerHTML = "I see: " + select
-    document.getElementById('user-selection').value = select
+    document.getElementById('user-selection').value = word
 
     context.style.display = "block"
-    context.style.left = e.pageX + "px";
-    context.style.top = e.pageY + "px";
   }
 }
 
 //ajax call to save transcription text to database
 function send_transcript(transcript) {
-  console.log(transcript)
   $.ajax({
     data: {
       "transcript": transcript,
-      // "prompt": document.getElementById('prompt').src
     },
     type: 'POST',
     url: '/save_transcript'

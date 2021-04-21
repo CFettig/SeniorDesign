@@ -32,9 +32,9 @@ def compare_words(actual, intended):
         return res
 
     elif list_actual and not list_intended:
-        raise Exception("{} was not found in the dictionary".format(intended))
+        raise Exception("The word '{}' was not found in the dictionary".format(intended))
     elif list_intended and not list_actual:
-        raise Exception("{} was not found in the dictionary".format(actual))
+        raise Exception("The word '{}' was not found in the dictionary".format(actual))
     else: 
         raise Exception("Neither word was found in the dicitonary")
 
