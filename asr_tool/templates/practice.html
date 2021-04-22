@@ -59,7 +59,7 @@
         <div id="text-display">
             {% if transcript %}
             <br>
-            <span id="prev-text">{% for word in transcript.text.split(' ') %}<span onclick="select_word(' {{ word }} ')">{{ word }}</span>{% endfor %}</span>
+            <span id="prev-text">{% for word in transcript.text.split(' ') %}<span onclick="select_word(' {{ word }} ')"> {{ word }} </span>{% endfor %}</span>
             <!-- <span id="prev-text">
                 {{ transcript.text }}</span> -->
             {% else %}

@@ -98,7 +98,7 @@ class LessonContent(db.Model):
     extend_existing=True
     sound = db.Column(db.String(3), primary_key=True)
     intro_text = db.Column(db.Text)
-    compare_instructions = db.Column(db.Text)
+    # compare_instructions = db.Column(db.Text)
     audio_folder = db.Column(db.String(100))
     illustration = db.Column(db.String(100))
     example_audio_male = db.Column(db.String(100))

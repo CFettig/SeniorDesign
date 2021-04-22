@@ -79,7 +79,7 @@ def practice():
     #POST request comes when user enters pair of words to practice
     if request.method=='POST':
             actual, intended = request.form.get('actual_word'), request.form.get('user_word')
-            return redirect(url_for('main.pronunciation', actual=actual, intended=intended))
+            return redirect(url_for('main.pronunciation', actual=actual.strip(), intended=intended.strip()))
     else:
         trans_id = session.get('transcript_id')
 
