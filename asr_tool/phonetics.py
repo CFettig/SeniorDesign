@@ -16,8 +16,8 @@ def compare_words(actual, intended):
     # list_actual = list(ist.transcribe(isleDict, actual, preference='longest').replace(' ', ''))
     # list_intended = list(ist.transcribe(isleDict, intended, preference='longest').replace(' ', ''))
 
-    list_actual = get_phonemes(actual)
-    list_intended = get_phonemes(intended)
+    list_actual = get_phonemes(actual.strip())
+    list_intended = get_phonemes(intended.strip())
 
     if list_actual and list_intended:
         list_actual, list_intended = prt.alignPronunciations(list_actual, list_intended)

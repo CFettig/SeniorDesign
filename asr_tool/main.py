@@ -328,54 +328,15 @@ def get_feedback():
     else:
         return render_template('feedback.html')
         
-"""
-the following routes replaced by admin routes
-
-#displays transcript information for all users
-@main.route('/view_research_data', methods=['GET'])
-@role_required(roles=['researcher'])
-def view_research_data():
-    data = {}
-    pairs = {}
-    transcripts = db.session.query(Transcript).filter(Transcript.user_id).all()
-
-    for transcript in transcripts:
-        if transcript.user_id in data:
-            data[transcript.user_id].append(transcript)
-        else:
-            data[transcript.user_id] = [transcript]
-            
-        if transcript.practiced_pairs:
-            pairs[transcript.id] = ''
-            for pair in PracticedPair.query.filter(PracticedPair.transcript_id==transcript.id):
-                pairs[transcript.id] += '|actual: ' + pair.actual_word + '|intended: ' + pair.intended_word
+@main.route('/same_sounds', methods=['GET', 'POST'])
+def same_sounds():
+    word1 = request.form.get('word1')
+    word2 = request.form.get('word2')
     
-    return render_template('data_view.html', data=data, pairs=pairs)
-
-#downloads all transcript data as csv file
-@main.route('/download_research_data', methods=['GET'])
-@role_required(roles=['researcher'])
-def download_research_data():
-    transcripts = db.session.query(Transcript).filter(User.id==Transcript.user_id).all()
-
-    output = io.StringIO()
-
-    writer = csv.writer(output, delimiter=";")
-    writer.writerow(['user', 'date','text','practiced_sounds','main_practice_time','sound_practice_time', 'practiced pairs'])
-
-    for transcript in transcripts:
-        line =  str(transcript.id) + ';' + str(transcript.date) + ';' +transcript.text + ';' +str(transcript.practiced_sounds) + ';' + str(transcript.main_practice_time) + ';' + str(transcript.sound_practice_time)
-            
-        if transcript.practiced_pairs:
-            for pair in PracticedPair.query.filter(PracticedPair.transcript_id==transcript.id):
-                line += ',' + 'actual: ' + pair.actual_word + '  intended: ' + pair.intended_word
-
-        writer.writerow([line])
-
-    output.seek(0)
-
-    return Response(output, mimetype="text/csv", headers={"Content-Disposition":"attachment;filename=practice_data.csv"})
-"""
+    if ''.join(get_phonemes(word1)) == ''.join(get_phonemes(word2)):
+        return {'result': True}
+    else:
+        return {'result': False}
 
 #method to update total time spent on page. does not account for inactivity
 def update_page(page):

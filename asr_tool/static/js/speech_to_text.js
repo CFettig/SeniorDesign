@@ -56,6 +56,7 @@ asr.onresult = function (event) {
   }
 
   interim_text.innerHTML = interim;
+  // console.log(JSON.stringify(new_text.textContent))
   send_transcript(transcript)
 }
 

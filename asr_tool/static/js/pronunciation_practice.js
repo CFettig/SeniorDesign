@@ -21,34 +21,65 @@ function min_pair_check(user, actual, id) {
     }
   }
 
-
+//runs asr for speaking activity
 var asr = new webkitSpeechRecognition();
 //will continue to record even when speaker pauses
 asr.continuous = false;
 
-var word = ''
+var word1 = ''
+var word2 = ''
 
 function listen(id) {
   document.getElementById('mic-toggle' + id).innerHTML = 'Stop mic'
-  word = id;
+  word1 = id;
   asr.start();
 }
 
 asr.onresult = function(event) {
   for (var i = event.resultIndex; i < event.results.length; ++i) {
     if (event.results[i].isFinal) {
-        if (event.results[i][0].transcript == word) {
-          document.getElementById(word + 'incorrect').style.display = 'none'
-          document.getElementById(word + 'correct').style.display = 'block'
-        }
-        else {
-          document.getElementById(word + 'correct').style.display = 'none'
-          document.getElementById(word + 'incorrect').style.display = 'block'
-        }
+      console.log(word1)
+      console.log(word2)
+      word2 = event.results[i][0].transcript
+
+      let res = get_result(word1, word2)
+        .then((data) => {
+          if (data['result']) {
+            document.getElementById(word1 + 'incorrect').style.display = 'none'
+            document.getElementById(word1 + 'correct').style.display = 'block'
+          }
+          else {
+              document.getElementById(word1 + 'correct').style.display = 'none'
+              document.getElementById(word1 + 'incorrect').style.display = 'block'
+            } 
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
-  document.getElementById('mic-toggle' + word).innerHTML = 'Start mic'
+  document.getElementById('mic-toggle' + word1).innerHTML = 'Start mic'
   asr.stop()
+}
+
+//gets phonetic representation of user's word to compare to answer
+function get_result(word1, word2) {
+  return new Promise((resolve, reject) => {
+   $.ajax({
+      data: {
+        "word1": word1,
+        "word2": word2,
+      },
+      type: 'POST',
+      url: '/same_sounds',
+    success: function(data) {
+      resolve(data);
+    },
+    error: function(error) {
+      reject(error)
+    },
+  })
+})
 }
 
 function toggle(id) {
