@@ -60,7 +60,7 @@
   <p>Start a practice session <a class="nav-link" href="{{ url_for('main.practice') }}">here</a></p>
 </div>
 {% endif %}
-<script src="static/js/student_profile.js"></script>
+<script src="{{ url_for('static', filename='js/student_profile.js')}}"></script>
 
 <style>
   h1 {
