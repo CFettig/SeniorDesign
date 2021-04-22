@@ -50,3 +50,16 @@ asr.onresult = function(event) {
   document.getElementById('mic-toggle' + word).innerHTML = 'Start mic'
   asr.stop()
 }
+
+function toggle(id) {
+  var mediaPlayer = document.getElementById(id);
+  if (mediaPlayer.paused) {
+      mediaPlayer.play();
+      $('.pause-btn').show();
+      $('.play-btn').hide();
+  } else {
+      mediaPlayer.pause();
+      $('.play-btn').show();
+      $('.pause-btn').hide();
+  }
+}
