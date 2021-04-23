@@ -86,7 +86,7 @@
             practice room</a></p>
 </div>
 
-<script src="{{ url_for('static', filename='js/pronunciation_practice.js')}}"></script>
+<script src="{{ url_for('static', filename='js/pronunciation_practice.js', version='rev=<?php echo time();?>')}}"></script>
 <!-- <script>
     function toggle(id) {
         var mediaPlayer = document.getElementById(id);

@@ -19,6 +19,6 @@
         </div>
     {% endfor %}
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/dataview.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/dataview.js'), version='rev=<?php echo time();?>' }}"></script>
 
 {% endblock content %}

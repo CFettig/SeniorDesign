@@ -19,7 +19,7 @@
         {% endfor %}
     </ul>
 </div>
-<script src="{{ url_for('static', filename='js/pronunciation_practice.js?rev=<?php echo time();?>')}}"></script>
+<script src="{{ url_for('static', filename='js/pronunciation_practice.js', version='rev=<?php echo time();?>')}}"></script>
 <style>
     li {
         padding: 0px;
