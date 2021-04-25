@@ -1,10 +1,11 @@
 from flask import Flask
 import os.path as path
 from flask_admin.contrib.fileadmin import FileAdmin
-from .extensions import mail, login_manager, db, admin
-from .adminviews import *
-from .models import *
+from asr_tool.extensions import mail, login_manager, db, admin
+from asr_tool.adminviews import *
+from asr_tool.models import *
 from flask_sqlalchemy import SQLAlchemy
+
 
 def create_app():
     app = Flask(__name__)
@@ -40,14 +41,14 @@ def create_app():
             return User.query.get(int(user_id))
 
     # blueprint for auth routes in our app
-    from .auth import auth as auth_blueprint
+    from asr_tool.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
     # blueprint for non-auth parts of app
-    from .main import main as main_blueprint
+    from asr_tool.main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    from .mailing import mailing as mailing_blueprint 
+    from asr_tool.mailing import mailing as mailing_blueprint 
     app.register_blueprint(mailing_blueprint)
-
+    
     return app

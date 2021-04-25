@@ -13,10 +13,6 @@ from asr_tool.models import User
 
 main = Blueprint('main', __name__)
 
-# @main.route('/test')
-# def test():
-#     return render_template('feedback.html')
-
 #home page
 @main.route('/')
 def index():
@@ -365,5 +361,5 @@ def update_page(page):
         
     session['last_page'] = page
 
-if __name__ == '__main__':
-    main.run()
+# if __name__ == '__main__':
+#     main.run()
