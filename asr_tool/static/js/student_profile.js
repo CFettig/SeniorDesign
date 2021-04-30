@@ -22,12 +22,15 @@ function send_email(trans_id) {
       })
         .done(function (data) {
           if (data.error) {
-            $('#errorAlert').text(data.error).show();
-            $('#successAlert').hide();
+            window.alert('')
           }
           else {
-            $('#successAlert').text(data.name).show();
-            $('#errorAlert').hide();
+            if (data=='failure') {
+              window.alert('There was an error sending your report. Make sure you entered a real email')
+            }
+            else {
+              window.alert('Your report has been sent')
+            }
           }
         });
 

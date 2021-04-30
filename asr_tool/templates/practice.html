@@ -3,21 +3,24 @@
 {% block content %}
 
 <br><br><br>
-<div class="card" style="width: 25rem; border-radius: 20px;" id="mydiv">
+<div id="browser-incompatible" class="card" style="display: none;">
+    <svg style="display:inline-block; margin: auto;" xmlns="http://www.w3.org/2000/svg" width="20%" height="20%" fill="currentColor" class="bi bi-mic-mute-fill" viewBox="0 0 16 16">
+        <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3-9v4.879L5.158 2.037A3.001 3.001 0 0 1 11 3z"/>
+        <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607zm-7.84-9.253 12 12 .708-.708-12-12-.708.708z"/>
+      </svg><br>
+    <small>The microphone only works in Google Chrome. Please log onto this page in a Chrome browser to practice</small>
+</div>
+<div id="mydiv" class="card">
     <img id="prompt" src="{{ prompt }}" style="border-radius: 20px;" class="card-img-top" alt="practicePic">
-    <small class="text-muted">Your input is being recorded for research purposes</small>
+    <small id="browser-incompatible" class="text-muted">Your input is being recorded for research purposes</small>
     <div class="card-body">
         <div>
-            <!-- <h5>{{ prompt }}</h5> -->
             {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <!-- <ul class=flashes> -->
-                {% for message in messages %}
-                <small class="alert-danger" role="alert">{{ message }}</small>
-                <!-- <li>{{ message }}</li> -->
-                {% endfor %}
-            <!-- </ul> -->
-            {% endif %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <small class="alert-danger" role="alert">{{ message }}</small>
+                    {% endfor %}
+                {% endif %}
             {% endwith %}
         </div>
         <div class="btn-group" role="group" aria-label="Basic example">
@@ -89,10 +92,15 @@
 
 <script src="{{ url_for('static', filename='js/speech_to_text.js', version='rev=<?php echo time();?>')}}"></script>
 <style>
-    #mydiv {
+    body {
+        text-align: center;
+    }
+    #mydiv, #browser-incompatible {
         text-align: center;
         justify-content: center;
         margin: 0 auto;
+        width: 25rem;
+        border-radius: 20px;
     }
 </style>
 {% endblock %}

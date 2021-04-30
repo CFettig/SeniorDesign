@@ -11,4 +11,9 @@ def send_email(to, subject, template, **kwargs):
         html=render_template(template, **kwargs),
         sender=current_app.config['MAIL_USERNAME']
     )
-    mail.send(msg)
+    
+    try: 
+        mail.send(msg)
+        return True
+    except:
+        return False
