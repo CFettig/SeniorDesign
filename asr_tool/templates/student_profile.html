@@ -5,19 +5,6 @@
 <br>
 <br>
 <br>
-{% with messages = get_flashed_messages() %}
-  <p>{{ messages }}</p>
-  {% if messages %}
-  <h1 style="color:white;">THERE IS A MESSAGE</h1>
-    <div class="alert alert-danger" role="alert">
-        {{ messages[0] }}
-    </div>
-  {% else %}
-  <h1 style="color:white;">THERE IS NO MESSAGE</h1>
-
-  {% endif %}
-{% endwith %}
-{% if posts %}
 {% if posts.count() != 0 %}
 {% for post in posts %}
 <div class="card-deck"
@@ -35,7 +22,8 @@
         </small>
         {% endif %}
       </p>
-      <button class="btn" onclick="show_input('{{ 'send-email-' ~ post.id }}')">Send Practice Report</button>
+      <button id="send-report" class="btn" onclick="show_input('{{ 'send-email-' ~ post.id }}')">Send Practice Report</button>
+      <small id="report-sent" style="display:none;">Your report has been sent</small>
 
       <div id='{{ 'send-email-' ~ post.id }}' style="display:none;">
         <li class="list-group-item">Send to: <input id='{{ 'recipient-' ~ post.id }}' type="text" name="recipient"></li>
@@ -63,7 +51,6 @@
   <hr>
   <p>Start a practice session <a class="nav-link" href="{{ url_for('main.practice') }}">here</a></p>
 </div>
-{% endif %}
 {% endif %}
 <script src="{{ url_for('static', filename='js/student_profile.js', version='rev=<?php echo time();?>')}}"></script>
 

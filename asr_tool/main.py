@@ -28,7 +28,6 @@ def profile():
     session['one_page'] = 'profile'
 
     posts = Transcript.query.filter_by(user_id=current_user.id)
-    print(Transcript.query.filter_by(user_id=current_user.id))
     # This loop serves a purpose to remove all of the transcripts that are insufficient
     # For example, a transcript with no prompt or no text would be frequently posted to the profile page
     # This is so that they do not show up, and are automatically deleted
@@ -42,9 +41,6 @@ def profile():
     return render_template('student_profile.html', posts=posts)
 
 #Delete transcript
-@main.route('/profile/delete/<int:transcriptid>')
-# This means that the session must be logged in
-@login_required
 def deleteTranscript(transcriptid):
 
     post = Transcript.query.get_or_404(transcriptid)
@@ -64,7 +60,7 @@ def deleteTranscript(transcriptid):
     db.session.delete(post)
     db.session.commit()
 
-    return redirect('/profile')
+    # return redirect(url_for('main.profile')
 
 #Main practice room 
 @main.route('/practice', methods=['GET', 'POST'])
@@ -269,16 +265,19 @@ def email_practice_report():
     
     transcript = Transcript.query.filter_by(id=trans_id).one()
 
-
     report = {
                 'name': current_user.email, 
                 'time': transcript.main_practice_time/60,
                 'sounds': transcript.practiced_sounds
                 }
 
-    send_email(recipient, 'SALUKISPEECH PRACTICE REPORT', 'practice_report.html', report=report)
-    
-    return 'success'
+    sent = send_email(recipient, 'SALUKISPEECH PRACTICE REPORT', 'practice_report.html', report=report)
+    print('*'*40 + str(sent))
+    if sent:
+        return 'success'
+    else:
+        return 'failure'
+
 
 #saves site feedback from users
 @main.route('/get_rating', methods=['GET', 'POST'])
