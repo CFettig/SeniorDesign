@@ -4,14 +4,12 @@ from datetime import datetime
 import pytz
 from werkzeug.security import generate_password_hash
 
-
-
 # User login info
 class User(UserMixin, db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), default=generate_password_hash('newuser', method='sha256'))
+    password = db.Column(db.String(100), default=generate_password_hash('N3wUser21', method='sha256'))
     role = db.Column(db.String(10))
     info = db.relationship("UserInfo", uselist=False, back_populates="user")
 

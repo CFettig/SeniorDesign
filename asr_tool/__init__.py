@@ -7,7 +7,6 @@ from asr_tool.models import *
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 
-
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
