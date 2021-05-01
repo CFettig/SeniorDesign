@@ -25,8 +25,6 @@ def login():
             return redirect(url_for('auth.login'))
 
         login_user(user, remember=remember)
-        print("%"*100)
-        print(current_user.role)
          
         session['logged_in'] = True
 
