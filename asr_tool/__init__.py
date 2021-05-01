@@ -33,7 +33,7 @@ def create_app():
         db.create_all()
 
         if not User.query.filter_by(email='salukispeech@gmail.com').first():
-            admin_user = User(email='salukispeech@gmail.com', role='admin', password=generate_password_hash(environ.get("ADMIN_PASSWORD"), method='sha256'))
+            admin_user = User(email=environ.get("ADMIN_USERNAME"), role='admin', password=generate_password_hash(environ.get("ADMIN_PASSWORD"), method='sha256'))
             db.session.add(admin_user)
             db.session.commit()
 
