@@ -35,7 +35,7 @@
                 placeholder="Confirm password">
         </div>
         <div class="form-group">
-            <object data="{{ url_for('static', filename='consent_form.pdf')}}" type="application/pdf">
+            <object data="{{ url_for('static', filename='consent_form.pdf')}}" width="500" height="300" type="application/pdf">
                 <embed src="{{ url_for('static', filename='consent_form.pdf')}}" type="application/pdf" />
             </object>
         </div>
