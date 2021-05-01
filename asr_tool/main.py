@@ -272,7 +272,6 @@ def email_practice_report():
                 }
 
     sent = send_email(recipient, 'SALUKISPEECH PRACTICE REPORT', 'practice_report.html', report=report)
-    print('*'*40 + str(sent))
     if sent:
         return 'success'
     else:
