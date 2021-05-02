@@ -58,7 +58,7 @@ class Feedback(db.Model):
 class Transcript(db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
-    prompt = db.Column(db.String(100))
+    prompt = db.Column(db.Text)
     text = db.Column(db.Text, default="")
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow().replace(tzinfo=pytz.utc))
     main_practice_time = db.Column(db.Float, default=0)

@@ -6,6 +6,7 @@ from asr_tool.adminviews import *
 from asr_tool.models import *
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+from logging import FileHandler, WARNING
 
 def create_app():
     app = Flask(__name__)
@@ -17,6 +18,10 @@ def create_app():
     mail.init_app(app)
 
     admin.init_app(app)
+
+    file_handler=FileHandler('errorlog.txt')
+    file_handler.setLevel(WARNING)
+    app.logger.addHandler(file_handler)
 
     file_path = path.join(path.dirname(__file__), 'static', 'admin_uploads')
     admin.add_view(FileView(file_path, '/static/', name='Files', category="Lessons"))
