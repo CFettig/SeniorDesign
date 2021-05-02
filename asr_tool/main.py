@@ -221,7 +221,7 @@ def pronunciation(actual, intended):
                 audio_folder = lesson_content.audio_folder
 
             sounds.append((item, MinPair.query.filter_by(
-                lesson_id=item, same=1).first(), audio_folder))
+                lesson_id=item, same=True).first(), audio_folder))
 
         return render_template('pronunciation.html', sounds=sounds)
 
