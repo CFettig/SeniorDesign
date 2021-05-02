@@ -4,14 +4,12 @@ from datetime import datetime
 import pytz
 from werkzeug.security import generate_password_hash
 
-
-
 # User login info
 class User(UserMixin, db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), default=generate_password_hash('newuser', method='sha256'))
+    password = db.Column(db.String(100), default=generate_password_hash('N3wUser21', method='sha256'))
     role = db.Column(db.String(10))
     info = db.relationship("UserInfo", uselist=False, back_populates="user")
 
@@ -60,7 +58,7 @@ class Feedback(db.Model):
 class Transcript(db.Model):
     extend_existing=True
     id = db.Column(db.Integer, primary_key=True)
-    prompt = db.Column(db.String(100))
+    prompt = db.Column(db.Text)
     text = db.Column(db.Text, default="")
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow().replace(tzinfo=pytz.utc))
     main_practice_time = db.Column(db.Float, default=0)

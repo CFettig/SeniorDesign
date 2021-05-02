@@ -85,6 +85,9 @@ class LessonContentView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.role == 'admin'
 
+    form_columns = ['sound', 'intro_text', 'audio_folder', 'illustration', 'example_audio_male',
+                 'example_audio_female', 'quiz_words', 'min_pair']
+
     can_delete = True 
     can_create = True
     can_edit = True

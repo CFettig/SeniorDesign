@@ -5,7 +5,8 @@ from asr_tool.extensions import mail, login_manager, db, admin
 from asr_tool.adminviews import *
 from asr_tool.models import *
 from flask_sqlalchemy import SQLAlchemy
-
+from os import environ
+from logging import FileHandler, WARNING
 
 def create_app():
     app = Flask(__name__)
@@ -17,6 +18,10 @@ def create_app():
     mail.init_app(app)
 
     admin.init_app(app)
+
+    file_handler=FileHandler('errorlog.txt')
+    file_handler.setLevel(WARNING)
+    app.logger.addHandler(file_handler)
 
     file_path = path.join(path.dirname(__file__), 'static', 'admin_uploads')
     admin.add_view(FileView(file_path, '/static/', name='Files', category="Lessons"))
@@ -31,10 +36,14 @@ def create_app():
     with app.app_context():
         db.create_all()
 
+        if not User.query.filter_by(email='salukispeech@gmail.com').first():
+            admin_user = User(email=environ.get("ADMIN_USERNAME"), role='admin', password=generate_password_hash(environ.get("ADMIN_PASSWORD"), method='sha256'))
+            db.session.add(admin_user)
+            db.session.commit()
+
         login_manager.login_view = 'auth.login'
         login_manager.init_app(app)
 
-        # from .models import User
         @login_manager.user_loader
         def load_user(user_id):
             user = User.query.get(int(user_id))

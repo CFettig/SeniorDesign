@@ -25,8 +25,6 @@ def login():
             return redirect(url_for('auth.login'))
 
         login_user(user, remember=remember)
-        print("%"*100)
-        print(current_user.role)
          
         session['logged_in'] = True
 
@@ -77,6 +75,8 @@ def signup():
 def demographics():
     if request.method=='POST':
         age = request.form.get('age')
+        if not age:
+            age = None
 
         gender = request.form.get('gender')
         if gender == 'other':
@@ -87,6 +87,9 @@ def demographics():
         native_lang += request.form.get('native-lang3') + '-'
 
         time_studying = request.form.get('time-studying')
+        if not time_studying:
+            time_studying = None
+
         ability = request.form.get('level')
 
         found_site = request.form.get('found-site')
