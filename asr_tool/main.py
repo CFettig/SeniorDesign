@@ -1,7 +1,9 @@
 from flask import Blueprint, session, redirect, render_template, url_for, request, flash
 from flask import Response
 from flask_login import login_required, current_user
-import csv, io, requests as req
+import csv
+import io
+import requests as req
 from datetime import datetime
 from random import randint
 from .extensions import db
@@ -13,14 +15,23 @@ from asr_tool.models import User
 
 main = Blueprint('main', __name__)
 
-#home page
+# home page
+
+
 @main.route('/')
 def index():
     update_page('index')
     return render_template('index.html')
 
+
+@main.route('/about')
+def about():
+    return render_template('about.html')
+
 # Student profile. Displays past transcripts
-@main.route('/profile', methods=['GET'])
+
+
+@main.route('/profile', methods=['GET', 'POST'])
 # This means that the session must be logged in and must be associated with one of the roles
 @role_required(roles=['student'])
 def profile():
@@ -37,10 +48,16 @@ def profile():
         else:
             pass
 
+    # If the user searches the profile page
+    if request.method == 'POST':
+        search = request.form['search']
+        posts = posts.filter(Transcript.text.contains(search))
+        return render_template('student_profile.html', posts=posts, search=search)
+
     # Sends all transcripts from current user id so that they are printed to the page
     return render_template('student_profile.html', posts=posts)
 
-#Delete transcript
+# Delete transcript
 def deleteTranscript(transcriptid):
 
     post = Transcript.query.get_or_404(transcriptid)
@@ -51,7 +68,8 @@ def deleteTranscript(transcriptid):
     # Check if transcript in question has practiced pairs and if so delete them first
     # The PracticedPair relation uses a foreign key from Transcript therefore it must be removed first
     if PracticedPair.query.filter_by(transcript_id=transcriptid).first():
-        practicepairs = PracticedPair.query.filter_by(transcript_id=transcriptid).all()
+        practicepairs = PracticedPair.query.filter_by(
+            transcript_id=transcriptid).all()
         for practicepair in practicepairs:
             db.session.delete(practicepair)
         db.session.commit()
@@ -62,25 +80,28 @@ def deleteTranscript(transcriptid):
 
     # return redirect(url_for('main.profile')
 
-#Main practice room 
+# Main practice room
+
+
 @main.route('/practice', methods=['GET', 'POST'])
 @role_required(roles=['student'])
 def practice():
     update_page('main_practice')
 
-    #POST request comes when user enters pair of words to practice
-    if request.method=='POST':
-            actual, intended = request.form.get('actual_word'), request.form.get('user_word')
-            return redirect(url_for('main.pronunciation', actual=actual.strip(), intended=intended.strip()))
+    # POST request comes when user enters pair of words to practice
+    if request.method == 'POST':
+        actual, intended = request.form.get(
+            'actual_word'), request.form.get('user_word')
+        return redirect(url_for('main.pronunciation', actual=actual.strip(), intended=intended.strip()))
     else:
         trans_id = session.get('transcript_id')
 
-        #getting existing transcript
+        # getting existing transcript
         if trans_id:
             transcript = Transcript.query.filter_by(id=trans_id).first()
             prompt = transcript.prompt
-        
-        #creating new transcript
+
+        # creating new transcript
         else:
             prompt = req.get("https://source.unsplash.com/random").url
 
@@ -88,7 +109,7 @@ def practice():
             db.session.add(transcript)
             db.session.commit()
 
-            #adding new transcript as current transcript in session
+            # adding new transcript as current transcript in session
             session['transcript_id'] = transcript.id
 
         return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
@@ -107,18 +128,20 @@ def practice():
     #         prompt = transcript.prompt
 
     #     #if creating new transcript, generate random prompt
-    #     else: 
+    #     else:
     #         prompt = req.get("https://source.unsplash.com/random").url
-            
+
     #     return render_template('practice.html', user=current_user, transcript=transcript, prompt=prompt)
 
-#generates new prompt for current transcript
+# generates new prompt for current transcript
+
+
 @main.route('/practice/new_prompt', methods=['GET'])
 @role_required(roles=['student'])
 def new_prompt():
     trans_id = session.get('transcript_id')
 
-    #only generates new prompt is there is a current transcript
+    # only generates new prompt is there is a current transcript
     if trans_id:
         new_prompt = req.get("https://source.unsplash.com/random").url
 
@@ -129,12 +152,15 @@ def new_prompt():
 
     return redirect(url_for('main.practice'))
 
+
 @main.route('/practice_manual', methods=['GET'])
 @role_required(roles=['student'])
 def practice_manual():
     return render_template('practice_manual.html')
 
-#individual sound practice room
+# individual sound practice room
+
+
 @main.route('/practice/<sound>')
 @role_required(roles=['teacher', 'student', 'admin'])
 def practice_sound(sound):
@@ -155,51 +181,57 @@ def practice_sound(sound):
         min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
 
         return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
-    
+
     else:
         return "this lesson content has not been made"
 
-#page of links to all sound lessons
+# page of links to all sound lessons
+
+
 @main.route('/all_lessons')
 @role_required(roles=['admin'])
 def all_lessons():
     sounds = db.session.query(LessonContent.sound)
 
-    return render_template('all_lessons.html', sounds=sounds)    
+    return render_template('all_lessons.html', sounds=sounds)
 
-#extracting sounds for user to practice
+# extracting sounds for user to practice
+
+
 @main.route('/pronunciation/<actual>/<intended>')
 @role_required(roles=['student'])
 def pronunciation(actual, intended):
     try:
         difference = compare_words(actual, intended)
 
-        #saving word pair to transcript
-        pair = PracticedPair(transcript_id=session.get('transcript_id'), actual_word=actual, intended_word=intended)
+        # saving word pair to transcript
+        pair = PracticedPair(transcript_id=session.get(
+            'transcript_id'), actual_word=actual, intended_word=intended)
         db.session.add(pair)
         db.session.commit()
-        
-        #getting sounds differing between two words
-        #adds min_pair for using as link sound
+
+        # getting sounds differing between two words
+        # adds min_pair for using as link sound
         sounds = []
         audio_folder = None
         for item in compare_words(actual, intended):
             lesson_content = LessonContent.query.filter_by(sound=item).first()
-            
+
             if lesson_content:
                 audio_folder = lesson_content.audio_folder
 
-            sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=1).first(), audio_folder))
-    
+            sounds.append((item, MinPair.query.filter_by(
+                lesson_id=item, same=1).first(), audio_folder))
+
         return render_template('pronunciation.html', sounds=sounds)
 
     # one or both of the words was not in the dictionary
     except Exception as e:
-        flash(str(e))    
+        flash(str(e))
         return redirect(url_for('main.practice'))
 
 
-#saving transcript
+# saving transcript
 @main.route('/save_transcript', methods=['POST'])
 @role_required(roles=['student'])
 def save_transcript():
@@ -207,44 +239,47 @@ def save_transcript():
     user_text = request.form['transcript'] + " "
     # prompt = request.form['prompt']
 
-    #getting current transcript id from session
+    # getting current transcript id from session
     transcript_id = session.get('transcript_id')
 
-    #adding text to an existing transcript
+    # adding text to an existing transcript
     if transcript_id:
         transcript = Transcript.query.filter_by(id=transcript_id).one()
         transcript.text += user_text
         db.session.add(transcript)
         db.session.commit()
 
-    #creating a new transcript and setting the session id
+    # creating a new transcript and setting the session id
     else:
-        new_transcript = Transcript(text=user_text, user_id=current_user.id, id=transcript_id)
+        new_transcript = Transcript(
+            text=user_text, user_id=current_user.id, id=transcript_id)
         db.session.add(new_transcript)
         db.session.commit()
 
-        #adding new transcript as current transcript in session
+        # adding new transcript as current transcript in session
         session['transcript_id'] = new_transcript.id
-    
+
     return "transcript added"
 
-#ending current practice room
+# ending current practice room
+
+
 @main.route('/end_practice', methods=['GET'])
 @role_required(roles=['student'])
 def end_practice():
     update_page('end_practice')
 
-    #removing current transcript from session
+    # removing current transcript from session
     if session.get('transcript_id'):
         session.pop('transcript_id')
-    
+
     user_info = UserInfo.query.filter_by(user_id=current_user.id).first()
 
     if not user_info:
         user_info = UserInfo(user_id=current_user.id, num_practice_sess=1)
-        
+
     else:
-        user_info.num_practice_sess += 1 
+        user_info.num_practice_sess += 1
 
     db.session.add(user_info)
     db.session.commit()
@@ -256,33 +291,36 @@ def end_practice():
 
     return redirect(url_for('main.profile'))
 
-#email practice report to teacher
+# email practice report to teacher
+
+
 @main.route('/email_practice_report', methods=['POST'])
 @role_required(roles=['student'])
 def email_practice_report():
     recipient = request.form['recipient']
     trans_id = request.form['trans_id']
-    
+
     transcript = Transcript.query.filter_by(id=trans_id).one()
 
     report = {
-                'name': current_user.email, 
-                'time': transcript.main_practice_time/60,
-                'sounds': transcript.practiced_sounds
-                }
+        'name': current_user.email,
+        'time': transcript.main_practice_time/60,
+        'sounds': transcript.practiced_sounds
+    }
 
-    sent = send_email(recipient, 'SALUKISPEECH PRACTICE REPORT', 'practice_report.html', report=report)
+    sent = send_email(recipient, 'SALUKISPEECH PRACTICE REPORT',
+                      'practice_report.html', report=report)
     if sent:
         return 'success'
     else:
         return 'failure'
 
 
-#saves site feedback from users
+# saves site feedback from users
 @main.route('/get_rating', methods=['GET', 'POST'])
 @role_required(roles=['student', 'admin', 'researcher'])
 def get_rating():
-    if request.method=='POST':
+    if request.method == 'POST':
         rating = request.form.get('rating')
         feedback = request.form.get('feedback')
 
@@ -296,19 +334,20 @@ def get_rating():
     else:
         return render_template('rating.html')
 
+
 @main.route('/get_feedback', methods=['GET', 'POST'])
 @role_required(roles=['student', 'admin', 'researcher'])
 def get_feedback():
-    if request.method=='POST':
-        easy_to_use = request.form.get('easy_to_use') 
+    if request.method == 'POST':
+        easy_to_use = request.form.get('easy_to_use')
         fun_to_use = request.form.get('fun_to_use')
         provides_feedback = request.form.get('provides_feedback')
         is_helpful = request.form.get('is_helpful')
         likes = request.form.get('likes')
         dislikes = request.form.get('dislikes')
 
-        new_feedback = Feedback(easy_to_use=easy_to_use, 
-                                fun_to_use=fun_to_use, 
+        new_feedback = Feedback(easy_to_use=easy_to_use,
+                                fun_to_use=fun_to_use,
                                 provides_feedback=provides_feedback,
                                 is_helpful=is_helpful,
                                 likes=likes,
@@ -321,21 +360,24 @@ def get_feedback():
 
     else:
         return render_template('feedback.html')
-        
+
+
 @main.route('/same_sounds', methods=['GET', 'POST'])
 def same_sounds():
     word1 = request.form.get('word1')
     word2 = request.form.get('word2')
-    
+
     if ''.join(get_phonemes(word1)) == ''.join(get_phonemes(word2)):
         return {'result': True}
     else:
         return {'result': False}
 
-#method to update total time spent on page. does not account for inactivity
+# method to update total time spent on page. does not account for inactivity
+
+
 def update_page(page):
     last_page = session.get('last_page')
-    
+
     if last_page != page:
         end_time = datetime.utcnow()
 
@@ -347,16 +389,18 @@ def update_page(page):
 
                 time_delta = end_time - session.get('start_time')
 
-                if last_page == 'main_practice':  
-                    transcript.main_practice_time += time_delta.seconds + time_delta.microseconds*0.000001
+                if last_page == 'main_practice':
+                    transcript.main_practice_time += time_delta.seconds + \
+                        time_delta.microseconds*0.000001
                 elif last_page == 'sound_practice':
-                    transcript.sound_practice_time += time_delta.seconds + time_delta.microseconds*0.000001
+                    transcript.sound_practice_time += time_delta.seconds + \
+                        time_delta.microseconds*0.000001
 
                 db.session.add(transcript)
                 db.session.commit()
 
         session['start_time'] = end_time
-        
+
     session['last_page'] = page
 
 # if __name__ == '__main__':
