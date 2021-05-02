@@ -19,6 +19,10 @@ def index():
     update_page('index')
     return render_template('index.html')
 
+@main.route('/about')
+def about():
+    return render_template('about.html')
+
 # Student profile. Displays past transcripts
 @main.route('/profile', methods=['GET'])
 # This means that the session must be logged in and must be associated with one of the roles
