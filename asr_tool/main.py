@@ -160,30 +160,32 @@ def practice_manual():
 
 # individual sound practice room
 
-
 @main.route('/practice/<sound>')
 @role_required(roles=['teacher', 'student', 'admin'])
 def practice_sound(sound):
     update_page('sound_practice')
 
-    trans_id = session.get('transcript_id')
-    if trans_id:
-        transcript = Transcript.query.filter_by(id=trans_id).first()
+    try:
+        trans_id = session.get('transcript_id')
+        if trans_id:
+            transcript = Transcript.query.filter_by(id=trans_id).first()
 
-        if sound not in transcript.practiced_sounds:
-            transcript.practiced_sounds += sound + ':'
+            if sound not in transcript.practiced_sounds:
+                transcript.practiced_sounds += sound + ':'
 
-        db.session.add(transcript)
-        db.session.commit()
+            db.session.add(transcript)
+            db.session.commit()
+        content = LessonContent.query.filter_by(sound=sound).first()
+        if content:
+            min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
 
-    content = LessonContent.query.filter_by(sound=sound).first()
-    if content:
-        min_pairs = MinPair.query.filter_by(lesson_id=content.sound)
+            return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
 
-        return render_template('sound_practice.html', content=content, min_pairs=min_pairs)
-
-    else:
-        return "this lesson content has not been made"
+        else:
+            return "this lesson content has not been made"
+    except Exception as e:
+        flash(str(e))
+        return render_template('error.html')
 
 # page of links to all sound lessons
 
@@ -220,8 +222,7 @@ def pronunciation(actual, intended):
             if lesson_content:
                 audio_folder = lesson_content.audio_folder
 
-            sounds.append((item, MinPair.query.filter_by(
-                lesson_id=item, same=True).first(), audio_folder))
+            sounds.append((item, MinPair.query.filter_by(lesson_id=item, same=True).first(), audio_folder))
 
         return render_template('pronunciation.html', sounds=sounds)
 
