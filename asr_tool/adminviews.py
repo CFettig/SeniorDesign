@@ -34,12 +34,13 @@ class UserView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.role=='admin'
 
-    can_delete = False 
+    can_delete = True 
     can_create = True
     can_edit = True
 
     form_columns = ['email', 'role']
     column_exclude_list = ['password', 'id',]
+    column_searchable_list = ['email', 'role']
 
 class UserInfoView(ModelView):
     def is_accessible(self):
@@ -49,6 +50,8 @@ class UserInfoView(ModelView):
     can_create = False
     can_edit = False
     can_export = True
+    column_searchable_list = ['gender', 'native_lang', 'self_assessed_eng_ability', 'how_found_site']
+
 
 class RatingView(ModelView):
     def is_accessible(self):
@@ -69,8 +72,7 @@ class TranscriptView(ModelView):
     can_export = True
 
     column_display_pk = True
-
-    # column_exclude_list = ['']
+    column_searchable_list = ['practiced_sounds', 'prompt', 'text']
 
 class PracticedPairView(ModelView):
     def is_accessible(self):
@@ -80,6 +82,7 @@ class PracticedPairView(ModelView):
     can_create = False
     can_edit = False
     can_export = True
+    column_searchable_list = ['actual_word', 'intended_word']
 
 class LessonContentView(ModelView):
     def is_accessible(self):
@@ -92,6 +95,7 @@ class LessonContentView(ModelView):
     can_create = True
     can_edit = True
     can_export = True
+    column_searchable_list = ['sound', 'intro_text', 'quiz_words']
 
 class MinPairView(ModelView):
     def is_accessible(self):
@@ -100,3 +104,4 @@ class MinPairView(ModelView):
     can_delete = True 
     can_create = True
     can_edit = True
+    column_searchable_list = ['audio', 'lesson_id']
