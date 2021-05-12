@@ -12,7 +12,7 @@
 </div>
 <div id="mydiv" class="card">
     <img id="prompt" src="{{ prompt }}" style="border-radius: 20px;" class="card-img-top" alt="practicePic">
-    <small id="browser-incompatible" class="text-muted">Your input is being recorded for research purposes</small>
+    <!-- <small id="browser-incompatible" class="text-muted">When you are ready, turn on the microphone and begin describing the picture. If you see that the program mistranscribes a word, click on it! The program will help direct you to an appropriate lesson to improve your pronunciation.</small> -->
     <div class="card-body">
         <div>
             {% with messages = get_flashed_messages() %}
@@ -88,6 +88,12 @@
         </div>
 
     </div>
+</div>
+<br>
+<div id="mydiv" class="card">
+    <br>
+    <small id="browser-incompatible" class="text-muted">When you are ready, turn on the microphone and begin describing the picture. If you see that the program mistranscribes a word, click on it! The program will help direct you to an appropriate lesson to improve your pronunciation.</small>
+    <br>
 </div>
 
 <script src="{{ url_for('static', filename='js/speech_to_text.js', version='rev=<?php echo time();?>')}}"></script>
